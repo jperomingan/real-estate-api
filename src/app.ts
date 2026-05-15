@@ -6,6 +6,7 @@ import swaggerUi from "@fastify/swagger-ui";
 import { env } from "./config/env.js";
 import { authRoutes } from "./modules/auth/auth.route.js";
 import { adminRoutes } from "./modules/admin/admin.route.js";
+import { propertyRoutes } from "./modules/property/property.route.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -80,6 +81,10 @@ export async function buildApp() {
 
     await app.register(adminRoutes, {
         prefix: "/api/admin",
+    });
+
+    await app.register(propertyRoutes, {
+        prefix: "/api/properties",
     });
 
     return app;

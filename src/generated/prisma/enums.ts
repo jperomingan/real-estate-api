@@ -27,3 +27,28 @@ export const UserStatus = {
 } as const
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const PropertyType = {
+  HOUSE_AND_LOT: 'HOUSE_AND_LOT',
+  CONDOMINIUM: 'CONDOMINIUM',
+  LOT_ONLY: 'LOT_ONLY',
+  APARTMENT: 'APARTMENT',
+  TOWNHOUSE: 'TOWNHOUSE',
+  COMMERCIAL: 'COMMERCIAL',
+  AGRICULTURAL: 'AGRICULTURAL',
+  INDUSTRIAL: 'INDUSTRIAL'
+} as const
+
+export type PropertyType = (typeof PropertyType)[keyof typeof PropertyType]
+
+
+export const PropertyStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  RESERVED: 'RESERVED',
+  SOLD: 'SOLD',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type PropertyStatus = (typeof PropertyStatus)[keyof typeof PropertyStatus]

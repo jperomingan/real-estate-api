@@ -26,6 +26,25 @@ enum UserStatus {
   INACTIVE
 }
 
+enum PropertyType {
+  HOUSE_AND_LOT
+  CONDOMINIUM
+  LOT_ONLY
+  APARTMENT
+  TOWNHOUSE
+  COMMERCIAL
+  AGRICULTURAL
+  INDUSTRIAL
+}
+
+enum PropertyStatus {
+  DRAFT
+  PUBLISHED
+  RESERVED
+  SOLD
+  ARCHIVED
+}
+
 model User {
   id           String     @id @default(uuid())
   firstName    String
@@ -36,9 +55,63 @@ model User {
   status       UserStatus @default(PENDING)
   phone        String?
   avatarUrl    String?
-
+  properties Property[] @relation("BrokerProperties")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
   @@map("users")
+}
+
+model Property {
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  type         PropertyType
+  status       PropertyStatus @default(DRAFT)
+
+  price        Decimal        @db.Decimal(15, 2)
+  lotAreaSqm   Decimal?       @db.Decimal(10, 2)
+  floorAreaSqm Decimal?       @db.Decimal(10, 2)
+
+  bedrooms     Int?
+  bathrooms    Int?
+
+  address      String
+  barangay     String?
+  city         String
+  province     String
+  zipCode      String?
+
+  latitude     Decimal?       @db.Decimal(10, 7)
+  longitude    Decimal?       @db.Decimal(10, 7)
+
+  brokerId     String
+  broker       User           @relation("BrokerProperties", fields: [brokerId], references: [id], onDelete: Restrict)
+
+  images       PropertyImage[]
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([brokerId])
+  @@index([status])
+  @@index([type])
+  @@index([city])
+  @@map("properties")
+}
+
+model PropertyImage {
+  id         String   @id @default(uuid())
+  url        String
+  altText    String?
+  sortOrder  Int      @default(0)
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([propertyId])
+  @@map("property_images")
 }
