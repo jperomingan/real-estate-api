@@ -45,6 +45,27 @@ enum PropertyStatus {
   ARCHIVED
 }
 
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  VIEWING_SCHEDULED
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+  ARCHIVED
+}
+
+enum LeadSource {
+  WEBSITE
+  FACEBOOK
+  REFERRAL
+  WALK_IN
+  PHONE_CALL
+  EMAIL
+  OTHER
+}
+
 model User {
   id           String     @id @default(uuid())
   firstName    String
@@ -56,6 +77,8 @@ model User {
   phone        String?
   avatarUrl    String?
   properties Property[] @relation("BrokerProperties")
+  brokerLeads Lead[] @relation("BrokerLeads")
+  clientLeads Lead[] @relation("ClientLeads")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -89,6 +112,7 @@ model Property {
   broker       User           @relation("BrokerProperties", fields: [brokerId], references: [id], onDelete: Restrict)
 
   images       PropertyImage[]
+  leads        Lead[]
 
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
@@ -98,6 +122,40 @@ model Property {
   @@index([type])
   @@index([city])
   @@map("properties")
+}
+
+model Lead {
+  id          String     @id @default(uuid())
+
+  firstName   String
+  lastName    String?
+  email       String?
+  phone       String
+  message     String?
+
+  source      LeadSource @default(WEBSITE)
+  status      LeadStatus @default(NEW)
+
+  budget      Decimal?   @db.Decimal(15, 2)
+  preferredDate DateTime?
+
+  propertyId  String?
+  property    Property?  @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+
+  brokerId    String
+  broker      User       @relation("BrokerLeads", fields: [brokerId], references: [id], onDelete: Restrict)
+
+  clientId    String?
+  client      User?      @relation("ClientLeads", fields: [clientId], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([propertyId])
+  @@index([brokerId])
+  @@index([clientId])
+  @@index([status])
+  @@map("leads")
 }
 
 model PropertyImage {

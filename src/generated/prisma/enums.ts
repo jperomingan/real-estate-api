@@ -52,3 +52,30 @@ export const PropertyStatus = {
 } as const
 
 export type PropertyStatus = (typeof PropertyStatus)[keyof typeof PropertyStatus]
+
+
+export const LeadStatus = {
+  NEW: 'NEW',
+  CONTACTED: 'CONTACTED',
+  QUALIFIED: 'QUALIFIED',
+  VIEWING_SCHEDULED: 'VIEWING_SCHEDULED',
+  NEGOTIATION: 'NEGOTIATION',
+  CLOSED_WON: 'CLOSED_WON',
+  CLOSED_LOST: 'CLOSED_LOST',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
+
+
+export const LeadSource = {
+  WEBSITE: 'WEBSITE',
+  FACEBOOK: 'FACEBOOK',
+  REFERRAL: 'REFERRAL',
+  WALK_IN: 'WALK_IN',
+  PHONE_CALL: 'PHONE_CALL',
+  EMAIL: 'EMAIL',
+  OTHER: 'OTHER'
+} as const
+
+export type LeadSource = (typeof LeadSource)[keyof typeof LeadSource]
