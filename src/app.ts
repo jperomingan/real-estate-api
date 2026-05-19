@@ -9,6 +9,7 @@ import { adminRoutes } from "./modules/admin/admin.route.js";
 import { propertyRoutes } from "./modules/property/property.route.js";
 import { leadRoutes } from "./modules/lead/lead.route.js";
 import { revenueRoutes } from "./modules/revenue/revenue.route.js";
+import { dashboardRoutes } from "./modules/dashboard/dashboard.route.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -95,6 +96,10 @@ export async function buildApp() {
 
     await app.register(revenueRoutes, {
         prefix: "/api/revenues",
+    });
+
+    await app.register(dashboardRoutes, {
+        prefix: "/api/dashboard",
     });
 
     return app;
