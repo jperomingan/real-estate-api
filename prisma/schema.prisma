@@ -66,6 +66,21 @@ enum LeadSource {
   OTHER
 }
 
+enum PaymentStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+enum CommissionStatus {
+  PENDING
+  PARTIAL
+  RELEASED
+  CANCELLED
+}
+
 model User {
   id           String     @id @default(uuid())
   firstName    String
@@ -79,6 +94,7 @@ model User {
   properties Property[] @relation("BrokerProperties")
   brokerLeads Lead[] @relation("BrokerLeads")
   clientLeads Lead[] @relation("ClientLeads")
+  brokerRevenues Revenue[] @relation("BrokerRevenues")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -113,7 +129,7 @@ model Property {
 
   images       PropertyImage[]
   leads        Lead[]
-
+  revenues     Revenue[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
@@ -147,7 +163,7 @@ model Lead {
 
   clientId    String?
   client      User?      @relation("ClientLeads", fields: [clientId], references: [id], onDelete: SetNull)
-
+  revenue     Revenue?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
@@ -156,6 +172,40 @@ model Lead {
   @@index([clientId])
   @@index([status])
   @@map("leads")
+}
+
+model Revenue {
+  id               String           @id @default(uuid())
+
+  grossSaleAmount  Decimal          @db.Decimal(15, 2)
+  commissionRate   Decimal          @db.Decimal(5, 2)
+  commissionAmount Decimal          @db.Decimal(15, 2)
+  paymentReceived  Decimal          @default(0) @db.Decimal(15, 2)
+
+  paymentStatus    PaymentStatus    @default(UNPAID)
+  commissionStatus CommissionStatus @default(PENDING)
+
+  saleDate         DateTime         @default(now())
+  notes            String?
+
+  propertyId       String
+  property         Property         @relation(fields: [propertyId], references: [id], onDelete: Restrict)
+
+  leadId           String?          @unique
+  lead             Lead?            @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  brokerId         String
+  broker           User             @relation("BrokerRevenues", fields: [brokerId], references: [id], onDelete: Restrict)
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([propertyId])
+  @@index([brokerId])
+  @@index([paymentStatus])
+  @@index([commissionStatus])
+  @@index([saleDate])
+  @@map("revenues")
 }
 
 model PropertyImage {

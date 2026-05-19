@@ -387,6 +387,7 @@ export const ModelName = {
   User: 'User',
   Property: 'Property',
   Lead: 'Lead',
+  Revenue: 'Revenue',
   PropertyImage: 'PropertyImage'
 } as const
 
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "property" | "lead" | "propertyImage"
+    modelProps: "user" | "property" | "lead" | "revenue" | "propertyImage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -629,6 +630,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Revenue: {
+      payload: Prisma.$RevenuePayload<ExtArgs>
+      fields: Prisma.RevenueFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RevenueFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RevenueFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>
+        }
+        findFirst: {
+          args: Prisma.RevenueFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RevenueFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>
+        }
+        findMany: {
+          args: Prisma.RevenueFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>[]
+        }
+        create: {
+          args: Prisma.RevenueCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>
+        }
+        createMany: {
+          args: Prisma.RevenueCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RevenueCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>[]
+        }
+        delete: {
+          args: Prisma.RevenueDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>
+        }
+        update: {
+          args: Prisma.RevenueUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>
+        }
+        deleteMany: {
+          args: Prisma.RevenueDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RevenueUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RevenueUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>[]
+        }
+        upsert: {
+          args: Prisma.RevenueUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RevenuePayload>
+        }
+        aggregate: {
+          args: Prisma.RevenueAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRevenue>
+        }
+        groupBy: {
+          args: Prisma.RevenueGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RevenueGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RevenueCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RevenueCountAggregateOutputType> | number
+        }
+      }
+    }
     PropertyImage: {
       payload: Prisma.$PropertyImagePayload<ExtArgs>
       fields: Prisma.PropertyImageFieldRefs
@@ -804,6 +879,26 @@ export const LeadScalarFieldEnum = {
 } as const
 
 export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+export const RevenueScalarFieldEnum = {
+  id: 'id',
+  grossSaleAmount: 'grossSaleAmount',
+  commissionRate: 'commissionRate',
+  commissionAmount: 'commissionAmount',
+  paymentReceived: 'paymentReceived',
+  paymentStatus: 'paymentStatus',
+  commissionStatus: 'commissionStatus',
+  saleDate: 'saleDate',
+  notes: 'notes',
+  propertyId: 'propertyId',
+  leadId: 'leadId',
+  brokerId: 'brokerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RevenueScalarFieldEnum = (typeof RevenueScalarFieldEnum)[keyof typeof RevenueScalarFieldEnum]
 
 
 export const PropertyImageScalarFieldEnum = {
@@ -990,6 +1085,34 @@ export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'PaymentStatus'
+ */
+export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentStatus[]'
+ */
+export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CommissionStatus'
+ */
+export type EnumCommissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommissionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CommissionStatus[]'
+ */
+export type ListEnumCommissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommissionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1115,6 +1238,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   property?: Prisma.PropertyOmit
   lead?: Prisma.LeadOmit
+  revenue?: Prisma.RevenueOmit
   propertyImage?: Prisma.PropertyImageOmit
 }
 

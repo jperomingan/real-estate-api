@@ -33,6 +33,11 @@ export type Property = Prisma.PropertyModel
  */
 export type Lead = Prisma.LeadModel
 /**
+ * Model Revenue
+ * 
+ */
+export type Revenue = Prisma.RevenueModel
+/**
  * Model PropertyImage
  * 
  */

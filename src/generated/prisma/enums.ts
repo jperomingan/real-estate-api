@@ -79,3 +79,24 @@ export const LeadSource = {
 } as const
 
 export type LeadSource = (typeof LeadSource)[keyof typeof LeadSource]
+
+
+export const PaymentStatus = {
+  UNPAID: 'UNPAID',
+  PARTIAL: 'PARTIAL',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const CommissionStatus = {
+  PENDING: 'PENDING',
+  PARTIAL: 'PARTIAL',
+  RELEASED: 'RELEASED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type CommissionStatus = (typeof CommissionStatus)[keyof typeof CommissionStatus]

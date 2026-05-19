@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   Property: 'Property',
   Lead: 'Lead',
+  Revenue: 'Revenue',
   PropertyImage: 'PropertyImage'
 } as const
 
@@ -135,6 +136,26 @@ export const LeadScalarFieldEnum = {
 } as const
 
 export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+export const RevenueScalarFieldEnum = {
+  id: 'id',
+  grossSaleAmount: 'grossSaleAmount',
+  commissionRate: 'commissionRate',
+  commissionAmount: 'commissionAmount',
+  paymentReceived: 'paymentReceived',
+  paymentStatus: 'paymentStatus',
+  commissionStatus: 'commissionStatus',
+  saleDate: 'saleDate',
+  notes: 'notes',
+  propertyId: 'propertyId',
+  leadId: 'leadId',
+  brokerId: 'brokerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RevenueScalarFieldEnum = (typeof RevenueScalarFieldEnum)[keyof typeof RevenueScalarFieldEnum]
 
 
 export const PropertyImageScalarFieldEnum = {
