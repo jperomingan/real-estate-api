@@ -71,3 +71,8 @@ export type PropertyImage = Prisma.PropertyImageModel
  * 
  */
 export type PropertyFavorite = Prisma.PropertyFavoriteModel
+/**
+ * Model ViewingAppointment
+ * 
+ */
+export type ViewingAppointment = Prisma.ViewingAppointmentModel

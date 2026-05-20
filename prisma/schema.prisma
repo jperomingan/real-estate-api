@@ -81,6 +81,15 @@ enum CommissionStatus {
   CANCELLED
 }
 
+enum ViewingStatus {
+  REQUESTED
+  CONFIRMED
+  RESCHEDULED
+  COMPLETED
+  CANCELLED
+  DECLINED
+}
+
 model User {
   id           String     @id @default(uuid())
   firstName    String
@@ -96,6 +105,8 @@ model User {
   clientLeads Lead[] @relation("ClientLeads")
   brokerRevenues Revenue[] @relation("BrokerRevenues")
   favoriteProperties PropertyFavorite[] @relation("UserPropertyFavorites")
+  brokerViewings ViewingAppointment[] @relation("BrokerViewings")
+  clientViewings ViewingAppointment[] @relation("ClientViewings")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -131,6 +142,7 @@ model Property {
   images       PropertyImage[]
   leads        Lead[]
   revenues     Revenue[]
+  viewings     ViewingAppointment[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
@@ -240,4 +252,39 @@ model PropertyFavorite {
   @@index([userId])
   @@index([propertyId])
   @@map("property_favorites")
+}
+
+model ViewingAppointment {
+  id              String        @id @default(uuid())
+
+  firstName       String
+  lastName        String?
+  email           String?
+  phone           String
+  message         String?
+
+  preferredDate   DateTime
+  confirmedDate   DateTime?
+
+  status          ViewingStatus @default(REQUESTED)
+  notes           String?
+
+  propertyId      String
+  property        Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  brokerId        String
+  broker          User          @relation("BrokerViewings", fields: [brokerId], references: [id], onDelete: Restrict)
+
+  clientId        String?
+  client          User?         @relation("ClientViewings", fields: [clientId], references: [id], onDelete: SetNull)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([propertyId])
+  @@index([brokerId])
+  @@index([clientId])
+  @@index([status])
+  @@index([preferredDate])
+  @@map("viewing_appointments")
 }

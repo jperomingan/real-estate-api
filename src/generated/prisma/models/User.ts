@@ -235,6 +235,8 @@ export type UserWhereInput = {
   clientLeads?: Prisma.LeadListRelationFilter
   brokerRevenues?: Prisma.RevenueListRelationFilter
   favoriteProperties?: Prisma.PropertyFavoriteListRelationFilter
+  brokerViewings?: Prisma.ViewingAppointmentListRelationFilter
+  clientViewings?: Prisma.ViewingAppointmentListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -254,6 +256,8 @@ export type UserOrderByWithRelationInput = {
   clientLeads?: Prisma.LeadOrderByRelationAggregateInput
   brokerRevenues?: Prisma.RevenueOrderByRelationAggregateInput
   favoriteProperties?: Prisma.PropertyFavoriteOrderByRelationAggregateInput
+  brokerViewings?: Prisma.ViewingAppointmentOrderByRelationAggregateInput
+  clientViewings?: Prisma.ViewingAppointmentOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -276,6 +280,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   clientLeads?: Prisma.LeadListRelationFilter
   brokerRevenues?: Prisma.RevenueListRelationFilter
   favoriteProperties?: Prisma.PropertyFavoriteListRelationFilter
+  brokerViewings?: Prisma.ViewingAppointmentListRelationFilter
+  clientViewings?: Prisma.ViewingAppointmentListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -329,6 +335,8 @@ export type UserCreateInput = {
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -348,6 +356,8 @@ export type UserUncheckedCreateInput = {
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type UserUpdateInput = {
@@ -367,6 +377,8 @@ export type UserUpdateInput = {
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -386,6 +398,8 @@ export type UserUncheckedUpdateInput = {
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -574,6 +588,36 @@ export type UserUpdateOneRequiredWithoutFavoritePropertiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFavoritePropertiesInput, Prisma.UserUpdateWithoutFavoritePropertiesInput>, Prisma.UserUncheckedUpdateWithoutFavoritePropertiesInput>
 }
 
+export type UserCreateNestedOneWithoutBrokerViewingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBrokerViewingsInput, Prisma.UserUncheckedCreateWithoutBrokerViewingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBrokerViewingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutClientViewingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientViewingsInput, Prisma.UserUncheckedCreateWithoutClientViewingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientViewingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBrokerViewingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBrokerViewingsInput, Prisma.UserUncheckedCreateWithoutBrokerViewingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBrokerViewingsInput
+  upsert?: Prisma.UserUpsertWithoutBrokerViewingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBrokerViewingsInput, Prisma.UserUpdateWithoutBrokerViewingsInput>, Prisma.UserUncheckedUpdateWithoutBrokerViewingsInput>
+}
+
+export type UserUpdateOneWithoutClientViewingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientViewingsInput, Prisma.UserUncheckedCreateWithoutClientViewingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientViewingsInput
+  upsert?: Prisma.UserUpsertWithoutClientViewingsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClientViewingsInput, Prisma.UserUpdateWithoutClientViewingsInput>, Prisma.UserUncheckedUpdateWithoutClientViewingsInput>
+}
+
 export type UserCreateWithoutPropertiesInput = {
   id?: string
   firstName: string
@@ -590,6 +634,8 @@ export type UserCreateWithoutPropertiesInput = {
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
 }
 
 export type UserUncheckedCreateWithoutPropertiesInput = {
@@ -608,6 +654,8 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type UserCreateOrConnectWithoutPropertiesInput = {
@@ -642,6 +690,8 @@ export type UserUpdateWithoutPropertiesInput = {
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPropertiesInput = {
@@ -660,6 +710,8 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type UserCreateWithoutBrokerLeadsInput = {
@@ -678,6 +730,8 @@ export type UserCreateWithoutBrokerLeadsInput = {
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
 }
 
 export type UserUncheckedCreateWithoutBrokerLeadsInput = {
@@ -696,6 +750,8 @@ export type UserUncheckedCreateWithoutBrokerLeadsInput = {
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type UserCreateOrConnectWithoutBrokerLeadsInput = {
@@ -719,6 +775,8 @@ export type UserCreateWithoutClientLeadsInput = {
   brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
 }
 
 export type UserUncheckedCreateWithoutClientLeadsInput = {
@@ -737,6 +795,8 @@ export type UserUncheckedCreateWithoutClientLeadsInput = {
   brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type UserCreateOrConnectWithoutClientLeadsInput = {
@@ -771,6 +831,8 @@ export type UserUpdateWithoutBrokerLeadsInput = {
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBrokerLeadsInput = {
@@ -789,6 +851,8 @@ export type UserUncheckedUpdateWithoutBrokerLeadsInput = {
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type UserUpsertWithoutClientLeadsInput = {
@@ -818,6 +882,8 @@ export type UserUpdateWithoutClientLeadsInput = {
   brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientLeadsInput = {
@@ -836,6 +902,8 @@ export type UserUncheckedUpdateWithoutClientLeadsInput = {
   brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type UserCreateWithoutBrokerRevenuesInput = {
@@ -854,6 +922,8 @@ export type UserCreateWithoutBrokerRevenuesInput = {
   brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
 }
 
 export type UserUncheckedCreateWithoutBrokerRevenuesInput = {
@@ -872,6 +942,8 @@ export type UserUncheckedCreateWithoutBrokerRevenuesInput = {
   brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type UserCreateOrConnectWithoutBrokerRevenuesInput = {
@@ -906,6 +978,8 @@ export type UserUpdateWithoutBrokerRevenuesInput = {
   brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBrokerRevenuesInput = {
@@ -924,6 +998,8 @@ export type UserUncheckedUpdateWithoutBrokerRevenuesInput = {
   brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type UserCreateWithoutFavoritePropertiesInput = {
@@ -942,6 +1018,8 @@ export type UserCreateWithoutFavoritePropertiesInput = {
   brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
 }
 
 export type UserUncheckedCreateWithoutFavoritePropertiesInput = {
@@ -960,6 +1038,8 @@ export type UserUncheckedCreateWithoutFavoritePropertiesInput = {
   brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type UserCreateOrConnectWithoutFavoritePropertiesInput = {
@@ -994,6 +1074,8 @@ export type UserUpdateWithoutFavoritePropertiesInput = {
   brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritePropertiesInput = {
@@ -1012,6 +1094,200 @@ export type UserUncheckedUpdateWithoutFavoritePropertiesInput = {
   brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type UserCreateWithoutBrokerViewingsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
+}
+
+export type UserUncheckedCreateWithoutBrokerViewingsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type UserCreateOrConnectWithoutBrokerViewingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBrokerViewingsInput, Prisma.UserUncheckedCreateWithoutBrokerViewingsInput>
+}
+
+export type UserCreateWithoutClientViewingsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+}
+
+export type UserUncheckedCreateWithoutClientViewingsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+}
+
+export type UserCreateOrConnectWithoutClientViewingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientViewingsInput, Prisma.UserUncheckedCreateWithoutClientViewingsInput>
+}
+
+export type UserUpsertWithoutBrokerViewingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBrokerViewingsInput, Prisma.UserUncheckedUpdateWithoutBrokerViewingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBrokerViewingsInput, Prisma.UserUncheckedCreateWithoutBrokerViewingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBrokerViewingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBrokerViewingsInput, Prisma.UserUncheckedUpdateWithoutBrokerViewingsInput>
+}
+
+export type UserUpdateWithoutBrokerViewingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBrokerViewingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type UserUpsertWithoutClientViewingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClientViewingsInput, Prisma.UserUncheckedUpdateWithoutClientViewingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientViewingsInput, Prisma.UserUncheckedCreateWithoutClientViewingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClientViewingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClientViewingsInput, Prisma.UserUncheckedUpdateWithoutClientViewingsInput>
+}
+
+export type UserUpdateWithoutClientViewingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClientViewingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
 }
 
 
@@ -1025,6 +1301,8 @@ export type UserCountOutputType = {
   clientLeads: number
   brokerRevenues: number
   favoriteProperties: number
+  brokerViewings: number
+  clientViewings: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1033,6 +1311,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   clientLeads?: boolean | UserCountOutputTypeCountClientLeadsArgs
   brokerRevenues?: boolean | UserCountOutputTypeCountBrokerRevenuesArgs
   favoriteProperties?: boolean | UserCountOutputTypeCountFavoritePropertiesArgs
+  brokerViewings?: boolean | UserCountOutputTypeCountBrokerViewingsArgs
+  clientViewings?: boolean | UserCountOutputTypeCountClientViewingsArgs
 }
 
 /**
@@ -1080,6 +1360,20 @@ export type UserCountOutputTypeCountFavoritePropertiesArgs<ExtArgs extends runti
   where?: Prisma.PropertyFavoriteWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBrokerViewingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ViewingAppointmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClientViewingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ViewingAppointmentWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1098,6 +1392,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   clientLeads?: boolean | Prisma.User$clientLeadsArgs<ExtArgs>
   brokerRevenues?: boolean | Prisma.User$brokerRevenuesArgs<ExtArgs>
   favoriteProperties?: boolean | Prisma.User$favoritePropertiesArgs<ExtArgs>
+  brokerViewings?: boolean | Prisma.User$brokerViewingsArgs<ExtArgs>
+  clientViewings?: boolean | Prisma.User$clientViewingsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1150,6 +1446,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   clientLeads?: boolean | Prisma.User$clientLeadsArgs<ExtArgs>
   brokerRevenues?: boolean | Prisma.User$brokerRevenuesArgs<ExtArgs>
   favoriteProperties?: boolean | Prisma.User$favoritePropertiesArgs<ExtArgs>
+  brokerViewings?: boolean | Prisma.User$brokerViewingsArgs<ExtArgs>
+  clientViewings?: boolean | Prisma.User$clientViewingsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1163,6 +1461,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     clientLeads: Prisma.$LeadPayload<ExtArgs>[]
     brokerRevenues: Prisma.$RevenuePayload<ExtArgs>[]
     favoriteProperties: Prisma.$PropertyFavoritePayload<ExtArgs>[]
+    brokerViewings: Prisma.$ViewingAppointmentPayload<ExtArgs>[]
+    clientViewings: Prisma.$ViewingAppointmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1575,6 +1875,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   clientLeads<T extends Prisma.User$clientLeadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   brokerRevenues<T extends Prisma.User$brokerRevenuesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$brokerRevenuesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RevenuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   favoriteProperties<T extends Prisma.User$favoritePropertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoritePropertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  brokerViewings<T extends Prisma.User$brokerViewingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$brokerViewingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ViewingAppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clientViewings<T extends Prisma.User$clientViewingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientViewingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ViewingAppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2125,6 +2427,54 @@ export type User$favoritePropertiesArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.PropertyFavoriteScalarFieldEnum | Prisma.PropertyFavoriteScalarFieldEnum[]
+}
+
+/**
+ * User.brokerViewings
+ */
+export type User$brokerViewingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ViewingAppointment
+   */
+  select?: Prisma.ViewingAppointmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ViewingAppointment
+   */
+  omit?: Prisma.ViewingAppointmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ViewingAppointmentInclude<ExtArgs> | null
+  where?: Prisma.ViewingAppointmentWhereInput
+  orderBy?: Prisma.ViewingAppointmentOrderByWithRelationInput | Prisma.ViewingAppointmentOrderByWithRelationInput[]
+  cursor?: Prisma.ViewingAppointmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ViewingAppointmentScalarFieldEnum | Prisma.ViewingAppointmentScalarFieldEnum[]
+}
+
+/**
+ * User.clientViewings
+ */
+export type User$clientViewingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ViewingAppointment
+   */
+  select?: Prisma.ViewingAppointmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ViewingAppointment
+   */
+  omit?: Prisma.ViewingAppointmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ViewingAppointmentInclude<ExtArgs> | null
+  where?: Prisma.ViewingAppointmentWhereInput
+  orderBy?: Prisma.ViewingAppointmentOrderByWithRelationInput | Prisma.ViewingAppointmentOrderByWithRelationInput[]
+  cursor?: Prisma.ViewingAppointmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ViewingAppointmentScalarFieldEnum | Prisma.ViewingAppointmentScalarFieldEnum[]
 }
 
 /**

@@ -56,7 +56,8 @@ export const ModelName = {
   Lead: 'Lead',
   Revenue: 'Revenue',
   PropertyImage: 'PropertyImage',
-  PropertyFavorite: 'PropertyFavorite'
+  PropertyFavorite: 'PropertyFavorite',
+  ViewingAppointment: 'ViewingAppointment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -180,6 +181,27 @@ export const PropertyFavoriteScalarFieldEnum = {
 } as const
 
 export type PropertyFavoriteScalarFieldEnum = (typeof PropertyFavoriteScalarFieldEnum)[keyof typeof PropertyFavoriteScalarFieldEnum]
+
+
+export const ViewingAppointmentScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  message: 'message',
+  preferredDate: 'preferredDate',
+  confirmedDate: 'confirmedDate',
+  status: 'status',
+  notes: 'notes',
+  propertyId: 'propertyId',
+  brokerId: 'brokerId',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ViewingAppointmentScalarFieldEnum = (typeof ViewingAppointmentScalarFieldEnum)[keyof typeof ViewingAppointmentScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -100,3 +100,15 @@ export const CommissionStatus = {
 } as const
 
 export type CommissionStatus = (typeof CommissionStatus)[keyof typeof CommissionStatus]
+
+
+export const ViewingStatus = {
+  REQUESTED: 'REQUESTED',
+  CONFIRMED: 'CONFIRMED',
+  RESCHEDULED: 'RESCHEDULED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  DECLINED: 'DECLINED'
+} as const
+
+export type ViewingStatus = (typeof ViewingStatus)[keyof typeof ViewingStatus]

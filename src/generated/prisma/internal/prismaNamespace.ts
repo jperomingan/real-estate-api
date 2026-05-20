@@ -389,7 +389,8 @@ export const ModelName = {
   Lead: 'Lead',
   Revenue: 'Revenue',
   PropertyImage: 'PropertyImage',
-  PropertyFavorite: 'PropertyFavorite'
+  PropertyFavorite: 'PropertyFavorite',
+  ViewingAppointment: 'ViewingAppointment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "property" | "lead" | "revenue" | "propertyImage" | "propertyFavorite"
+    modelProps: "user" | "property" | "lead" | "revenue" | "propertyImage" | "propertyFavorite" | "viewingAppointment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ViewingAppointment: {
+      payload: Prisma.$ViewingAppointmentPayload<ExtArgs>
+      fields: Prisma.ViewingAppointmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ViewingAppointmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ViewingAppointmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>
+        }
+        findFirst: {
+          args: Prisma.ViewingAppointmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ViewingAppointmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>
+        }
+        findMany: {
+          args: Prisma.ViewingAppointmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>[]
+        }
+        create: {
+          args: Prisma.ViewingAppointmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>
+        }
+        createMany: {
+          args: Prisma.ViewingAppointmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ViewingAppointmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>[]
+        }
+        delete: {
+          args: Prisma.ViewingAppointmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>
+        }
+        update: {
+          args: Prisma.ViewingAppointmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.ViewingAppointmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ViewingAppointmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ViewingAppointmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.ViewingAppointmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ViewingAppointmentPayload>
+        }
+        aggregate: {
+          args: Prisma.ViewingAppointmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateViewingAppointment>
+        }
+        groupBy: {
+          args: Prisma.ViewingAppointmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ViewingAppointmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ViewingAppointmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ViewingAppointmentCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -997,6 +1072,27 @@ export const PropertyFavoriteScalarFieldEnum = {
 } as const
 
 export type PropertyFavoriteScalarFieldEnum = (typeof PropertyFavoriteScalarFieldEnum)[keyof typeof PropertyFavoriteScalarFieldEnum]
+
+
+export const ViewingAppointmentScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  message: 'message',
+  preferredDate: 'preferredDate',
+  confirmedDate: 'confirmedDate',
+  status: 'status',
+  notes: 'notes',
+  propertyId: 'propertyId',
+  brokerId: 'brokerId',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ViewingAppointmentScalarFieldEnum = (typeof ViewingAppointmentScalarFieldEnum)[keyof typeof ViewingAppointmentScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1198,6 +1294,20 @@ export type ListEnumCommissionStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'ViewingStatus'
+ */
+export type EnumViewingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ViewingStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ViewingStatus[]'
+ */
+export type ListEnumViewingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ViewingStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1326,6 +1436,7 @@ export type GlobalOmitConfig = {
   revenue?: Prisma.RevenueOmit
   propertyImage?: Prisma.PropertyImageOmit
   propertyFavorite?: Prisma.PropertyFavoriteOmit
+  viewingAppointment?: Prisma.ViewingAppointmentOmit
 }
 
 /* Types for Logging */
