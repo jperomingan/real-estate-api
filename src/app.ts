@@ -10,6 +10,10 @@ import { propertyRoutes } from "./modules/property/property.route.js";
 import { leadRoutes } from "./modules/lead/lead.route.js";
 import { revenueRoutes } from "./modules/revenue/revenue.route.js";
 import { dashboardRoutes } from "./modules/dashboard/dashboard.route.js";
+import multipart from "@fastify/multipart";
+import fastifyStatic from "@fastify/static";
+import path from "node:path";
+import { propertyImageRoutes } from "./modules/property/property-image.route.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -90,6 +94,10 @@ export async function buildApp() {
         prefix: "/api/properties",
     });
 
+    await app.register(propertyImageRoutes, {
+        prefix: "/api/properties",
+    });
+
     await app.register(leadRoutes, {
         prefix: "/api/leads",
     });
@@ -100,6 +108,17 @@ export async function buildApp() {
 
     await app.register(dashboardRoutes, {
         prefix: "/api/dashboard",
+    });
+
+    await app.register(multipart, {
+        limits: {
+            fileSize: 5 * 1024 * 1024,
+        },
+    });
+
+    await app.register(fastifyStatic, {
+        root: path.join(process.cwd(), "uploads"),
+        prefix: "/uploads/",
     });
 
     return app;
