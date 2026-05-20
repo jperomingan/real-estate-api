@@ -54,12 +54,32 @@ export const propertyIdParamsSchema = z.object({
 
 export const propertyListQuerySchema = z.object({
     search: z.string().optional(),
+
     type: propertyTypeSchema.optional(),
     status: propertyStatusSchema.optional(),
+
     city: z.string().optional(),
     province: z.string().optional(),
+    barangay: z.string().optional(),
+
     minPrice: z.coerce.number().optional(),
     maxPrice: z.coerce.number().optional(),
+
+    minLotAreaSqm: z.coerce.number().optional(),
+    maxLotAreaSqm: z.coerce.number().optional(),
+
+    minFloorAreaSqm: z.coerce.number().optional(),
+    maxFloorAreaSqm: z.coerce.number().optional(),
+
+    bedrooms: z.coerce.number().int().min(0).optional(),
+    bathrooms: z.coerce.number().int().min(0).optional(),
+
+    sortBy: z
+        .enum(["createdAt", "price", "title", "city"])
+        .default("createdAt"),
+
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(100).default(20),
 });

@@ -107,35 +107,140 @@ export async function getProperties(query: {
     status?: string;
     city?: string;
     province?: string;
+    barangay?: string;
     minPrice?: number;
     maxPrice?: number;
+    minLotAreaSqm?: number;
+    maxLotAreaSqm?: number;
+    minFloorAreaSqm?: number;
+    maxFloorAreaSqm?: number;
+    bedrooms?: number;
+    bathrooms?: number;
+    sortBy: "createdAt" | "price" | "title" | "city";
+    sortOrder: "asc" | "desc";
     page: number;
     limit: number;
 }) {
     const where: any = {
         ...(query.type ? { type: query.type } : {}),
         ...(query.status ? { status: query.status } : { status: "PUBLISHED" }),
-        ...(query.city ? { city: { contains: query.city, mode: "insensitive" } } : {}),
-        ...(query.province
-            ? { province: { contains: query.province, mode: "insensitive" } }
+
+        ...(query.city
+            ? {
+                city: {
+                    contains: query.city,
+                    mode: "insensitive",
+                },
+            }
             : {}),
+
+        ...(query.province
+            ? {
+                province: {
+                    contains: query.province,
+                    mode: "insensitive",
+                },
+            }
+            : {}),
+
+        ...(query.barangay
+            ? {
+                barangay: {
+                    contains: query.barangay,
+                    mode: "insensitive",
+                },
+            }
+            : {}),
+
+        ...(query.bedrooms !== undefined
+            ? {
+                bedrooms: {
+                    gte: query.bedrooms,
+                },
+            }
+            : {}),
+
+        ...(query.bathrooms !== undefined
+            ? {
+                bathrooms: {
+                    gte: query.bathrooms,
+                },
+            }
+            : {}),
+
         ...(query.search
             ? {
                 OR: [
-                    { title: { contains: query.search, mode: "insensitive" } },
-                    { description: { contains: query.search, mode: "insensitive" } },
-                    { address: { contains: query.search, mode: "insensitive" } },
-                    { city: { contains: query.search, mode: "insensitive" } },
-                    { province: { contains: query.search, mode: "insensitive" } },
+                    {
+                        title: {
+                            contains: query.search,
+                            mode: "insensitive",
+                        },
+                    },
+                    {
+                        description: {
+                            contains: query.search,
+                            mode: "insensitive",
+                        },
+                    },
+                    {
+                        address: {
+                            contains: query.search,
+                            mode: "insensitive",
+                        },
+                    },
+                    {
+                        barangay: {
+                            contains: query.search,
+                            mode: "insensitive",
+                        },
+                    },
+                    {
+                        city: {
+                            contains: query.search,
+                            mode: "insensitive",
+                        },
+                    },
+                    {
+                        province: {
+                            contains: query.search,
+                            mode: "insensitive",
+                        },
+                    },
                 ],
             }
             : {}),
     };
 
-    if (query.minPrice || query.maxPrice) {
+    if (query.minPrice !== undefined || query.maxPrice !== undefined) {
         where.price = {
-            ...(query.minPrice ? { gte: query.minPrice } : {}),
-            ...(query.maxPrice ? { lte: query.maxPrice } : {}),
+            ...(query.minPrice !== undefined ? { gte: query.minPrice } : {}),
+            ...(query.maxPrice !== undefined ? { lte: query.maxPrice } : {}),
+        };
+    }
+
+    if (query.minLotAreaSqm !== undefined || query.maxLotAreaSqm !== undefined) {
+        where.lotAreaSqm = {
+            ...(query.minLotAreaSqm !== undefined
+                ? { gte: query.minLotAreaSqm }
+                : {}),
+            ...(query.maxLotAreaSqm !== undefined
+                ? { lte: query.maxLotAreaSqm }
+                : {}),
+        };
+    }
+
+    if (
+        query.minFloorAreaSqm !== undefined ||
+        query.maxFloorAreaSqm !== undefined
+    ) {
+        where.floorAreaSqm = {
+            ...(query.minFloorAreaSqm !== undefined
+                ? { gte: query.minFloorAreaSqm }
+                : {}),
+            ...(query.maxFloorAreaSqm !== undefined
+                ? { lte: query.maxFloorAreaSqm }
+                : {}),
         };
     }
 
@@ -146,7 +251,7 @@ export async function getProperties(query: {
             where,
             select: propertySelect,
             orderBy: {
-                createdAt: "desc",
+                [query.sortBy]: query.sortOrder,
             },
             skip,
             take: query.limit,
@@ -163,6 +268,24 @@ export async function getProperties(query: {
             limit: query.limit,
             total,
             totalPages: Math.ceil(total / query.limit),
+        },
+        filters: {
+            search: query.search,
+            type: query.type,
+            status: query.status ?? "PUBLISHED",
+            city: query.city,
+            province: query.province,
+            barangay: query.barangay,
+            minPrice: query.minPrice,
+            maxPrice: query.maxPrice,
+            minLotAreaSqm: query.minLotAreaSqm,
+            maxLotAreaSqm: query.maxLotAreaSqm,
+            minFloorAreaSqm: query.minFloorAreaSqm,
+            maxFloorAreaSqm: query.maxFloorAreaSqm,
+            bedrooms: query.bedrooms,
+            bathrooms: query.bathrooms,
+            sortBy: query.sortBy,
+            sortOrder: query.sortOrder,
         },
     };
 }

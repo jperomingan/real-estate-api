@@ -109,6 +109,7 @@ export async function propertyRoutes(app: FastifyInstance) {
                     type: "object",
                     properties: {
                         search: { type: "string" },
+
                         type: {
                             type: "string",
                             enum: [
@@ -122,18 +123,42 @@ export async function propertyRoutes(app: FastifyInstance) {
                                 "INDUSTRIAL",
                             ],
                         },
+
                         status: {
                             type: "string",
                             enum: ["DRAFT", "PUBLISHED", "RESERVED", "SOLD", "ARCHIVED"],
                         },
+
                         city: { type: "string" },
                         province: { type: "string" },
+                        barangay: { type: "string" },
+
                         minPrice: { type: "number" },
                         maxPrice: { type: "number" },
+
+                        minLotAreaSqm: { type: "number" },
+                        maxLotAreaSqm: { type: "number" },
+
+                        minFloorAreaSqm: { type: "number" },
+                        maxFloorAreaSqm: { type: "number" },
+
+                        bedrooms: { type: "number" },
+                        bathrooms: { type: "number" },
+
+                        sortBy: {
+                            type: "string",
+                            enum: ["createdAt", "price", "title", "city"],
+                        },
+
+                        sortOrder: {
+                            type: "string",
+                            enum: ["asc", "desc"],
+                        },
+
                         page: { type: "number" },
                         limit: { type: "number" },
                     },
-                },
+                }
             },
         },
         async (request, reply) => {
