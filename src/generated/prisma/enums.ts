@@ -112,3 +112,17 @@ export const ViewingStatus = {
 } as const
 
 export type ViewingStatus = (typeof ViewingStatus)[keyof typeof ViewingStatus]
+
+
+export const NotificationType = {
+  LEAD_CREATED: 'LEAD_CREATED',
+  VIEWING_REQUESTED: 'VIEWING_REQUESTED',
+  VIEWING_UPDATED: 'VIEWING_UPDATED',
+  REVENUE_CREATED: 'REVENUE_CREATED',
+  PROPERTY_UPDATED: 'PROPERTY_UPDATED',
+  ACCOUNT_APPROVED: 'ACCOUNT_APPROVED',
+  ACCOUNT_REJECTED: 'ACCOUNT_REJECTED',
+  GENERAL: 'GENERAL'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

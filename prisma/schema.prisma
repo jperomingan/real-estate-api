@@ -90,6 +90,17 @@ enum ViewingStatus {
   DECLINED
 }
 
+enum NotificationType {
+  LEAD_CREATED
+  VIEWING_REQUESTED
+  VIEWING_UPDATED
+  REVENUE_CREATED
+  PROPERTY_UPDATED
+  ACCOUNT_APPROVED
+  ACCOUNT_REJECTED
+  GENERAL
+}
+
 model User {
   id           String     @id @default(uuid())
   firstName    String
@@ -100,13 +111,14 @@ model User {
   status       UserStatus @default(PENDING)
   phone        String?
   avatarUrl    String?
-  properties Property[] @relation("BrokerProperties")
-  brokerLeads Lead[] @relation("BrokerLeads")
-  clientLeads Lead[] @relation("ClientLeads")
+  properties   Property[] @relation("BrokerProperties")
+  brokerLeads  Lead[] @relation("BrokerLeads")
+  clientLeads  Lead[] @relation("ClientLeads")
   brokerRevenues Revenue[] @relation("BrokerRevenues")
   favoriteProperties PropertyFavorite[] @relation("UserPropertyFavorites")
   brokerViewings ViewingAppointment[] @relation("BrokerViewings")
   clientViewings ViewingAppointment[] @relation("ClientViewings")
+  notifications Notification[] @relation("UserNotifications")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -287,4 +299,26 @@ model ViewingAppointment {
   @@index([status])
   @@index([preferredDate])
   @@map("viewing_appointments")
+}
+
+model Notification {
+  id           String           @id @default(uuid())
+
+  type         NotificationType @default(GENERAL)
+  title        String
+  message      String
+  isRead       Boolean          @default(false)
+
+  targetUserId String
+  targetUser   User             @relation("UserNotifications", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  metadata     Json?
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([targetUserId])
+  @@index([isRead])
+  @@index([type])
+  @@map("notifications")
 }

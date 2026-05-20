@@ -52,3 +52,8 @@ export type PropertyFavorite = Prisma.PropertyFavoriteModel
  * 
  */
 export type ViewingAppointment = Prisma.ViewingAppointmentModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

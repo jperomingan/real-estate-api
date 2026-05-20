@@ -1,6 +1,7 @@
 import { prisma } from "../../lib/prisma.js";
 import { CreateViewingInput } from "./viewing.schema.js";
 import { JwtUser } from "./viewing.middleware.js";
+import { createNotification } from "../notification/notification.service.js";
 
 const viewingSelect = {
     id: true,
@@ -64,7 +65,7 @@ export async function createViewingAppointment(
         throw new Error("Viewing can only be requested for published properties.");
     }
 
-    return prisma.viewingAppointment.create({
+    const viewing = await prisma.viewingAppointment.create({
         data: {
             propertyId: input.propertyId,
             brokerId: property.brokerId,
@@ -79,6 +80,19 @@ export async function createViewingAppointment(
         },
         select: viewingSelect,
     });
+
+    await createNotification({
+        targetUserId: property.brokerId,
+        type: "VIEWING_REQUESTED",
+        title: "New Viewing Request",
+        message: `${input.firstName} requested a property viewing.`,
+        metadata: {
+            viewingId: viewing.id,
+            propertyId: input.propertyId,
+        },
+    });
+
+    return viewing;
 }
 
 export async function getViewingAppointments(

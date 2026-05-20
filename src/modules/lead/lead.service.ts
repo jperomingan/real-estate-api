@@ -1,6 +1,7 @@
 import { prisma } from "../../lib/prisma.js";
 import { CreateLeadInput } from "./lead.schema.js";
 import { JwtUser } from "./lead.middleware.js";
+import { createNotification } from "../notification/notification.service.js";
 
 const leadSelect = {
     id: true,
@@ -78,7 +79,7 @@ export async function createLead(input: CreateLeadInput, user?: JwtUser) {
         throw new Error("Lead must be assigned to a broker or admin.");
     }
 
-    return prisma.lead.create({
+    const lead = await prisma.lead.create({
         data: {
             firstName: input.firstName,
             lastName: input.lastName,
@@ -94,6 +95,19 @@ export async function createLead(input: CreateLeadInput, user?: JwtUser) {
         },
         select: leadSelect,
     });
+
+    await createNotification({
+        targetUserId: brokerId,
+        type: "LEAD_CREATED",
+        title: "New Lead Received",
+        message: `${input.firstName} submitted a new property inquiry.`,
+        metadata: {
+            leadId: lead.id,
+            propertyId: input.propertyId,
+        },
+    });
+
+    return lead;
 }
 
 export async function getLeads(
