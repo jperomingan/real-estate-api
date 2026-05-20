@@ -234,6 +234,7 @@ export type UserWhereInput = {
   brokerLeads?: Prisma.LeadListRelationFilter
   clientLeads?: Prisma.LeadListRelationFilter
   brokerRevenues?: Prisma.RevenueListRelationFilter
+  favoriteProperties?: Prisma.PropertyFavoriteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -252,6 +253,7 @@ export type UserOrderByWithRelationInput = {
   brokerLeads?: Prisma.LeadOrderByRelationAggregateInput
   clientLeads?: Prisma.LeadOrderByRelationAggregateInput
   brokerRevenues?: Prisma.RevenueOrderByRelationAggregateInput
+  favoriteProperties?: Prisma.PropertyFavoriteOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +275,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   brokerLeads?: Prisma.LeadListRelationFilter
   clientLeads?: Prisma.LeadListRelationFilter
   brokerRevenues?: Prisma.RevenueListRelationFilter
+  favoriteProperties?: Prisma.PropertyFavoriteListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -325,6 +328,7 @@ export type UserCreateInput = {
   brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -343,6 +347,7 @@ export type UserUncheckedCreateInput = {
   brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -361,6 +366,7 @@ export type UserUpdateInput = {
   brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -379,6 +385,7 @@ export type UserUncheckedUpdateInput = {
   brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -553,6 +560,20 @@ export type UserUpdateOneRequiredWithoutBrokerRevenuesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBrokerRevenuesInput, Prisma.UserUpdateWithoutBrokerRevenuesInput>, Prisma.UserUncheckedUpdateWithoutBrokerRevenuesInput>
 }
 
+export type UserCreateNestedOneWithoutFavoritePropertiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFavoritePropertiesInput, Prisma.UserUncheckedCreateWithoutFavoritePropertiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoritePropertiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFavoritePropertiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFavoritePropertiesInput, Prisma.UserUncheckedCreateWithoutFavoritePropertiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoritePropertiesInput
+  upsert?: Prisma.UserUpsertWithoutFavoritePropertiesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFavoritePropertiesInput, Prisma.UserUpdateWithoutFavoritePropertiesInput>, Prisma.UserUncheckedUpdateWithoutFavoritePropertiesInput>
+}
+
 export type UserCreateWithoutPropertiesInput = {
   id?: string
   firstName: string
@@ -568,6 +589,7 @@ export type UserCreateWithoutPropertiesInput = {
   brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPropertiesInput = {
@@ -585,6 +607,7 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPropertiesInput = {
@@ -618,6 +641,7 @@ export type UserUpdateWithoutPropertiesInput = {
   brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPropertiesInput = {
@@ -635,6 +659,7 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBrokerLeadsInput = {
@@ -652,6 +677,7 @@ export type UserCreateWithoutBrokerLeadsInput = {
   properties?: Prisma.PropertyCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBrokerLeadsInput = {
@@ -669,6 +695,7 @@ export type UserUncheckedCreateWithoutBrokerLeadsInput = {
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBrokerLeadsInput = {
@@ -691,6 +718,7 @@ export type UserCreateWithoutClientLeadsInput = {
   properties?: Prisma.PropertyCreateNestedManyWithoutBrokerInput
   brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
   brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutClientLeadsInput = {
@@ -708,6 +736,7 @@ export type UserUncheckedCreateWithoutClientLeadsInput = {
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutBrokerInput
   brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
   brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutClientLeadsInput = {
@@ -741,6 +770,7 @@ export type UserUpdateWithoutBrokerLeadsInput = {
   properties?: Prisma.PropertyUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBrokerLeadsInput = {
@@ -758,6 +788,7 @@ export type UserUncheckedUpdateWithoutBrokerLeadsInput = {
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutClientLeadsInput = {
@@ -786,6 +817,7 @@ export type UserUpdateWithoutClientLeadsInput = {
   properties?: Prisma.PropertyUpdateManyWithoutBrokerNestedInput
   brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
   brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientLeadsInput = {
@@ -803,6 +835,7 @@ export type UserUncheckedUpdateWithoutClientLeadsInput = {
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutBrokerNestedInput
   brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
   brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBrokerRevenuesInput = {
@@ -820,6 +853,7 @@ export type UserCreateWithoutBrokerRevenuesInput = {
   properties?: Prisma.PropertyCreateNestedManyWithoutBrokerInput
   brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBrokerRevenuesInput = {
@@ -837,6 +871,7 @@ export type UserUncheckedCreateWithoutBrokerRevenuesInput = {
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutBrokerInput
   brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
   clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBrokerRevenuesInput = {
@@ -870,6 +905,7 @@ export type UserUpdateWithoutBrokerRevenuesInput = {
   properties?: Prisma.PropertyUpdateManyWithoutBrokerNestedInput
   brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBrokerRevenuesInput = {
@@ -887,6 +923,95 @@ export type UserUncheckedUpdateWithoutBrokerRevenuesInput = {
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutBrokerNestedInput
   brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
   clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutFavoritePropertiesInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+}
+
+export type UserUncheckedCreateWithoutFavoritePropertiesInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+}
+
+export type UserCreateOrConnectWithoutFavoritePropertiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFavoritePropertiesInput, Prisma.UserUncheckedCreateWithoutFavoritePropertiesInput>
+}
+
+export type UserUpsertWithoutFavoritePropertiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFavoritePropertiesInput, Prisma.UserUncheckedUpdateWithoutFavoritePropertiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFavoritePropertiesInput, Prisma.UserUncheckedCreateWithoutFavoritePropertiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFavoritePropertiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFavoritePropertiesInput, Prisma.UserUncheckedUpdateWithoutFavoritePropertiesInput>
+}
+
+export type UserUpdateWithoutFavoritePropertiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFavoritePropertiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
 }
 
 
@@ -899,6 +1024,7 @@ export type UserCountOutputType = {
   brokerLeads: number
   clientLeads: number
   brokerRevenues: number
+  favoriteProperties: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -906,6 +1032,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   brokerLeads?: boolean | UserCountOutputTypeCountBrokerLeadsArgs
   clientLeads?: boolean | UserCountOutputTypeCountClientLeadsArgs
   brokerRevenues?: boolean | UserCountOutputTypeCountBrokerRevenuesArgs
+  favoriteProperties?: boolean | UserCountOutputTypeCountFavoritePropertiesArgs
 }
 
 /**
@@ -946,6 +1073,13 @@ export type UserCountOutputTypeCountBrokerRevenuesArgs<ExtArgs extends runtime.T
   where?: Prisma.RevenueWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFavoritePropertiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PropertyFavoriteWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -963,6 +1097,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   brokerLeads?: boolean | Prisma.User$brokerLeadsArgs<ExtArgs>
   clientLeads?: boolean | Prisma.User$clientLeadsArgs<ExtArgs>
   brokerRevenues?: boolean | Prisma.User$brokerRevenuesArgs<ExtArgs>
+  favoriteProperties?: boolean | Prisma.User$favoritePropertiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1014,6 +1149,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   brokerLeads?: boolean | Prisma.User$brokerLeadsArgs<ExtArgs>
   clientLeads?: boolean | Prisma.User$clientLeadsArgs<ExtArgs>
   brokerRevenues?: boolean | Prisma.User$brokerRevenuesArgs<ExtArgs>
+  favoriteProperties?: boolean | Prisma.User$favoritePropertiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1026,6 +1162,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     brokerLeads: Prisma.$LeadPayload<ExtArgs>[]
     clientLeads: Prisma.$LeadPayload<ExtArgs>[]
     brokerRevenues: Prisma.$RevenuePayload<ExtArgs>[]
+    favoriteProperties: Prisma.$PropertyFavoritePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1437,6 +1574,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   brokerLeads<T extends Prisma.User$brokerLeadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$brokerLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clientLeads<T extends Prisma.User$clientLeadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   brokerRevenues<T extends Prisma.User$brokerRevenuesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$brokerRevenuesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RevenuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  favoriteProperties<T extends Prisma.User$favoritePropertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoritePropertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1963,6 +2101,30 @@ export type User$brokerRevenuesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.RevenueScalarFieldEnum | Prisma.RevenueScalarFieldEnum[]
+}
+
+/**
+ * User.favoriteProperties
+ */
+export type User$favoritePropertiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PropertyFavorite
+   */
+  select?: Prisma.PropertyFavoriteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PropertyFavorite
+   */
+  omit?: Prisma.PropertyFavoriteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PropertyFavoriteInclude<ExtArgs> | null
+  where?: Prisma.PropertyFavoriteWhereInput
+  orderBy?: Prisma.PropertyFavoriteOrderByWithRelationInput | Prisma.PropertyFavoriteOrderByWithRelationInput[]
+  cursor?: Prisma.PropertyFavoriteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PropertyFavoriteScalarFieldEnum | Prisma.PropertyFavoriteScalarFieldEnum[]
 }
 
 /**

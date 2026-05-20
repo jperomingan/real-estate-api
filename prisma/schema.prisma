@@ -95,6 +95,7 @@ model User {
   brokerLeads Lead[] @relation("BrokerLeads")
   clientLeads Lead[] @relation("ClientLeads")
   brokerRevenues Revenue[] @relation("BrokerRevenues")
+  favoriteProperties PropertyFavorite[] @relation("UserPropertyFavorites")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -126,7 +127,7 @@ model Property {
 
   brokerId     String
   broker       User           @relation("BrokerProperties", fields: [brokerId], references: [id], onDelete: Restrict)
-
+  favoritedBy PropertyFavorite[] @relation("PropertyFavorites")
   images       PropertyImage[]
   leads        Lead[]
   revenues     Revenue[]
@@ -222,4 +223,21 @@ model PropertyImage {
 
   @@index([propertyId])
   @@map("property_images")
+}
+
+model PropertyFavorite {
+  id         String   @id @default(uuid())
+
+  userId     String
+  user       User     @relation("UserPropertyFavorites", fields: [userId], references: [id], onDelete: Cascade)
+
+  propertyId String
+  property   Property @relation("PropertyFavorites", fields: [propertyId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, propertyId])
+  @@index([userId])
+  @@index([propertyId])
+  @@map("property_favorites")
 }

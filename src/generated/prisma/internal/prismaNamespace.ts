@@ -388,7 +388,8 @@ export const ModelName = {
   Property: 'Property',
   Lead: 'Lead',
   Revenue: 'Revenue',
-  PropertyImage: 'PropertyImage'
+  PropertyImage: 'PropertyImage',
+  PropertyFavorite: 'PropertyFavorite'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "property" | "lead" | "revenue" | "propertyImage"
+    modelProps: "user" | "property" | "lead" | "revenue" | "propertyImage" | "propertyFavorite"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PropertyFavorite: {
+      payload: Prisma.$PropertyFavoritePayload<ExtArgs>
+      fields: Prisma.PropertyFavoriteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PropertyFavoriteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PropertyFavoriteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>
+        }
+        findFirst: {
+          args: Prisma.PropertyFavoriteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PropertyFavoriteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>
+        }
+        findMany: {
+          args: Prisma.PropertyFavoriteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>[]
+        }
+        create: {
+          args: Prisma.PropertyFavoriteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>
+        }
+        createMany: {
+          args: Prisma.PropertyFavoriteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PropertyFavoriteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>[]
+        }
+        delete: {
+          args: Prisma.PropertyFavoriteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>
+        }
+        update: {
+          args: Prisma.PropertyFavoriteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>
+        }
+        deleteMany: {
+          args: Prisma.PropertyFavoriteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PropertyFavoriteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PropertyFavoriteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>[]
+        }
+        upsert: {
+          args: Prisma.PropertyFavoriteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyFavoritePayload>
+        }
+        aggregate: {
+          args: Prisma.PropertyFavoriteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePropertyFavorite>
+        }
+        groupBy: {
+          args: Prisma.PropertyFavoriteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertyFavoriteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PropertyFavoriteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertyFavoriteCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -912,6 +987,16 @@ export const PropertyImageScalarFieldEnum = {
 } as const
 
 export type PropertyImageScalarFieldEnum = (typeof PropertyImageScalarFieldEnum)[keyof typeof PropertyImageScalarFieldEnum]
+
+
+export const PropertyFavoriteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  propertyId: 'propertyId',
+  createdAt: 'createdAt'
+} as const
+
+export type PropertyFavoriteScalarFieldEnum = (typeof PropertyFavoriteScalarFieldEnum)[keyof typeof PropertyFavoriteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1240,6 +1325,7 @@ export type GlobalOmitConfig = {
   lead?: Prisma.LeadOmit
   revenue?: Prisma.RevenueOmit
   propertyImage?: Prisma.PropertyImageOmit
+  propertyFavorite?: Prisma.PropertyFavoriteOmit
 }
 
 /* Types for Logging */

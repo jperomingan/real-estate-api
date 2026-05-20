@@ -361,6 +361,7 @@ export type PropertyWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   broker?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  favoritedBy?: Prisma.PropertyFavoriteListRelationFilter
   images?: Prisma.PropertyImageListRelationFilter
   leads?: Prisma.LeadListRelationFilter
   revenues?: Prisma.RevenueListRelationFilter
@@ -388,6 +389,7 @@ export type PropertyOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   broker?: Prisma.UserOrderByWithRelationInput
+  favoritedBy?: Prisma.PropertyFavoriteOrderByRelationAggregateInput
   images?: Prisma.PropertyImageOrderByRelationAggregateInput
   leads?: Prisma.LeadOrderByRelationAggregateInput
   revenues?: Prisma.RevenueOrderByRelationAggregateInput
@@ -418,6 +420,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   broker?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  favoritedBy?: Prisma.PropertyFavoriteListRelationFilter
   images?: Prisma.PropertyImageListRelationFilter
   leads?: Prisma.LeadListRelationFilter
   revenues?: Prisma.RevenueListRelationFilter
@@ -498,6 +501,7 @@ export type PropertyCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   broker: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  favoritedBy?: Prisma.PropertyFavoriteCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueCreateNestedManyWithoutPropertyInput
@@ -524,6 +528,7 @@ export type PropertyUncheckedCreateInput = {
   brokerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageUncheckedCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutPropertyInput
@@ -550,6 +555,7 @@ export type PropertyUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   broker?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  favoritedBy?: Prisma.PropertyFavoriteUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUpdateManyWithoutPropertyNestedInput
@@ -576,6 +582,7 @@ export type PropertyUncheckedUpdateInput = {
   brokerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUncheckedUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUncheckedUpdateManyWithoutPropertyNestedInput
@@ -876,6 +883,20 @@ export type PropertyUpdateOneRequiredWithoutImagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutImagesInput, Prisma.PropertyUpdateWithoutImagesInput>, Prisma.PropertyUncheckedUpdateWithoutImagesInput>
 }
 
+export type PropertyCreateNestedOneWithoutFavoritedByInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutFavoritedByInput, Prisma.PropertyUncheckedCreateWithoutFavoritedByInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutFavoritedByInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneRequiredWithoutFavoritedByNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutFavoritedByInput, Prisma.PropertyUncheckedCreateWithoutFavoritedByInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutFavoritedByInput
+  upsert?: Prisma.PropertyUpsertWithoutFavoritedByInput
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutFavoritedByInput, Prisma.PropertyUpdateWithoutFavoritedByInput>, Prisma.PropertyUncheckedUpdateWithoutFavoritedByInput>
+}
+
 export type PropertyCreateWithoutBrokerInput = {
   id?: string
   title: string
@@ -896,6 +917,7 @@ export type PropertyCreateWithoutBrokerInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  favoritedBy?: Prisma.PropertyFavoriteCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueCreateNestedManyWithoutPropertyInput
@@ -921,6 +943,7 @@ export type PropertyUncheckedCreateWithoutBrokerInput = {
   longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageUncheckedCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutPropertyInput
@@ -999,6 +1022,7 @@ export type PropertyCreateWithoutLeadsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   broker: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  favoritedBy?: Prisma.PropertyFavoriteCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueCreateNestedManyWithoutPropertyInput
 }
@@ -1024,6 +1048,7 @@ export type PropertyUncheckedCreateWithoutLeadsInput = {
   brokerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageUncheckedCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutPropertyInput
 }
@@ -1065,6 +1090,7 @@ export type PropertyUpdateWithoutLeadsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   broker?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  favoritedBy?: Prisma.PropertyFavoriteUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUpdateManyWithoutPropertyNestedInput
 }
@@ -1090,6 +1116,7 @@ export type PropertyUncheckedUpdateWithoutLeadsInput = {
   brokerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUncheckedUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUncheckedUpdateManyWithoutPropertyNestedInput
 }
@@ -1115,6 +1142,7 @@ export type PropertyCreateWithoutRevenuesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   broker: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  favoritedBy?: Prisma.PropertyFavoriteCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadCreateNestedManyWithoutPropertyInput
 }
@@ -1140,6 +1168,7 @@ export type PropertyUncheckedCreateWithoutRevenuesInput = {
   brokerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.PropertyImageUncheckedCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutPropertyInput
 }
@@ -1181,6 +1210,7 @@ export type PropertyUpdateWithoutRevenuesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   broker?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  favoritedBy?: Prisma.PropertyFavoriteUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUpdateManyWithoutPropertyNestedInput
 }
@@ -1206,6 +1236,7 @@ export type PropertyUncheckedUpdateWithoutRevenuesInput = {
   brokerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUncheckedUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutPropertyNestedInput
 }
@@ -1231,6 +1262,7 @@ export type PropertyCreateWithoutImagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   broker: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  favoritedBy?: Prisma.PropertyFavoriteCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueCreateNestedManyWithoutPropertyInput
 }
@@ -1256,6 +1288,7 @@ export type PropertyUncheckedCreateWithoutImagesInput = {
   brokerId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutPropertyInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutPropertyInput
   revenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutPropertyInput
 }
@@ -1297,6 +1330,7 @@ export type PropertyUpdateWithoutImagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   broker?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  favoritedBy?: Prisma.PropertyFavoriteUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUpdateManyWithoutPropertyNestedInput
 }
@@ -1322,6 +1356,127 @@ export type PropertyUncheckedUpdateWithoutImagesInput = {
   brokerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutPropertyNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutPropertyNestedInput
+  revenues?: Prisma.RevenueUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyCreateWithoutFavoritedByInput = {
+  id?: string
+  title: string
+  description?: string | null
+  type: $Enums.PropertyType
+  status?: $Enums.PropertyStatus
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lotAreaSqm?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  floorAreaSqm?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  bedrooms?: number | null
+  bathrooms?: number | null
+  address: string
+  barangay?: string | null
+  city: string
+  province: string
+  zipCode?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  broker: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  images?: Prisma.PropertyImageCreateNestedManyWithoutPropertyInput
+  leads?: Prisma.LeadCreateNestedManyWithoutPropertyInput
+  revenues?: Prisma.RevenueCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutFavoritedByInput = {
+  id?: string
+  title: string
+  description?: string | null
+  type: $Enums.PropertyType
+  status?: $Enums.PropertyStatus
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lotAreaSqm?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  floorAreaSqm?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  bedrooms?: number | null
+  bathrooms?: number | null
+  address: string
+  barangay?: string | null
+  city: string
+  province: string
+  zipCode?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  brokerId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  images?: Prisma.PropertyImageUncheckedCreateNestedManyWithoutPropertyInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutPropertyInput
+  revenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutFavoritedByInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutFavoritedByInput, Prisma.PropertyUncheckedCreateWithoutFavoritedByInput>
+}
+
+export type PropertyUpsertWithoutFavoritedByInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutFavoritedByInput, Prisma.PropertyUncheckedUpdateWithoutFavoritedByInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutFavoritedByInput, Prisma.PropertyUncheckedCreateWithoutFavoritedByInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutFavoritedByInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutFavoritedByInput, Prisma.PropertyUncheckedUpdateWithoutFavoritedByInput>
+}
+
+export type PropertyUpdateWithoutFavoritedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lotAreaSqm?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  floorAreaSqm?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.StringFieldUpdateOperationsInput | string
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  broker?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  images?: Prisma.PropertyImageUpdateManyWithoutPropertyNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutPropertyNestedInput
+  revenues?: Prisma.RevenueUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutFavoritedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lotAreaSqm?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  floorAreaSqm?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  barangay?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.StringFieldUpdateOperationsInput | string
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  brokerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.PropertyImageUncheckedUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUncheckedUpdateManyWithoutPropertyNestedInput
 }
@@ -1368,6 +1523,7 @@ export type PropertyUpdateWithoutBrokerInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUpdateManyWithoutPropertyNestedInput
@@ -1393,6 +1549,7 @@ export type PropertyUncheckedUpdateWithoutBrokerInput = {
   longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favoritedBy?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.PropertyImageUncheckedUpdateManyWithoutPropertyNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutPropertyNestedInput
   revenues?: Prisma.RevenueUncheckedUpdateManyWithoutPropertyNestedInput
@@ -1426,12 +1583,14 @@ export type PropertyUncheckedUpdateManyWithoutBrokerInput = {
  */
 
 export type PropertyCountOutputType = {
+  favoritedBy: number
   images: number
   leads: number
   revenues: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  favoritedBy?: boolean | PropertyCountOutputTypeCountFavoritedByArgs
   images?: boolean | PropertyCountOutputTypeCountImagesArgs
   leads?: boolean | PropertyCountOutputTypeCountLeadsArgs
   revenues?: boolean | PropertyCountOutputTypeCountRevenuesArgs
@@ -1445,6 +1604,13 @@ export type PropertyCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
    * Select specific fields to fetch from the PropertyCountOutputType
    */
   select?: Prisma.PropertyCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PropertyCountOutputType without action
+ */
+export type PropertyCountOutputTypeCountFavoritedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PropertyFavoriteWhereInput
 }
 
 /**
@@ -1491,6 +1657,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   broker?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  favoritedBy?: boolean | Prisma.Property$favoritedByArgs<ExtArgs>
   images?: boolean | Prisma.Property$imagesArgs<ExtArgs>
   leads?: boolean | Prisma.Property$leadsArgs<ExtArgs>
   revenues?: boolean | Prisma.Property$revenuesArgs<ExtArgs>
@@ -1571,6 +1738,7 @@ export type PropertySelectScalar = {
 export type PropertyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "type" | "status" | "price" | "lotAreaSqm" | "floorAreaSqm" | "bedrooms" | "bathrooms" | "address" | "barangay" | "city" | "province" | "zipCode" | "latitude" | "longitude" | "brokerId" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
 export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   broker?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  favoritedBy?: boolean | Prisma.Property$favoritedByArgs<ExtArgs>
   images?: boolean | Prisma.Property$imagesArgs<ExtArgs>
   leads?: boolean | Prisma.Property$leadsArgs<ExtArgs>
   revenues?: boolean | Prisma.Property$revenuesArgs<ExtArgs>
@@ -1587,6 +1755,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Property"
   objects: {
     broker: Prisma.$UserPayload<ExtArgs>
+    favoritedBy: Prisma.$PropertyFavoritePayload<ExtArgs>[]
     images: Prisma.$PropertyImagePayload<ExtArgs>[]
     leads: Prisma.$LeadPayload<ExtArgs>[]
     revenues: Prisma.$RevenuePayload<ExtArgs>[]
@@ -2007,6 +2176,7 @@ readonly fields: PropertyFieldRefs;
 export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   broker<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  favoritedBy<T extends Prisma.Property$favoritedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$favoritedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   images<T extends Prisma.Property$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   leads<T extends Prisma.Property$leadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   revenues<T extends Prisma.Property$revenuesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$revenuesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RevenuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2457,6 +2627,30 @@ export type PropertyDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Properties to delete.
    */
   limit?: number
+}
+
+/**
+ * Property.favoritedBy
+ */
+export type Property$favoritedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PropertyFavorite
+   */
+  select?: Prisma.PropertyFavoriteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PropertyFavorite
+   */
+  omit?: Prisma.PropertyFavoriteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PropertyFavoriteInclude<ExtArgs> | null
+  where?: Prisma.PropertyFavoriteWhereInput
+  orderBy?: Prisma.PropertyFavoriteOrderByWithRelationInput | Prisma.PropertyFavoriteOrderByWithRelationInput[]
+  cursor?: Prisma.PropertyFavoriteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PropertyFavoriteScalarFieldEnum | Prisma.PropertyFavoriteScalarFieldEnum[]
 }
 
 /**

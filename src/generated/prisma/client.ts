@@ -66,3 +66,8 @@ export type Revenue = Prisma.RevenueModel
  * 
  */
 export type PropertyImage = Prisma.PropertyImageModel
+/**
+ * Model PropertyFavorite
+ * 
+ */
+export type PropertyFavorite = Prisma.PropertyFavoriteModel

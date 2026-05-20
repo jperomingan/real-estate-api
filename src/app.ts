@@ -14,6 +14,7 @@ import multipart from "@fastify/multipart";
 import fastifyStatic from "@fastify/static";
 import path from "node:path";
 import { propertyImageRoutes } from "./modules/property/property-image.route.js";
+import { favoriteRoutes } from "./modules/favorite/favorite.route.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -92,6 +93,10 @@ export async function buildApp() {
 
     await app.register(propertyRoutes, {
         prefix: "/api/properties",
+    });
+
+    await app.register(favoriteRoutes, {
+        prefix: "/api/favorites",
     });
 
     await app.register(propertyImageRoutes, {
