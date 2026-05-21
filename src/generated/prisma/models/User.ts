@@ -238,6 +238,7 @@ export type UserWhereInput = {
   brokerViewings?: Prisma.ViewingAppointmentListRelationFilter
   clientViewings?: Prisma.ViewingAppointmentListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -260,6 +261,7 @@ export type UserOrderByWithRelationInput = {
   brokerViewings?: Prisma.ViewingAppointmentOrderByRelationAggregateInput
   clientViewings?: Prisma.ViewingAppointmentOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -285,6 +287,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   brokerViewings?: Prisma.ViewingAppointmentListRelationFilter
   clientViewings?: Prisma.ViewingAppointmentListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -341,6 +344,7 @@ export type UserCreateInput = {
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -363,6 +367,7 @@ export type UserUncheckedCreateInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUpdateInput = {
@@ -385,6 +390,7 @@ export type UserUpdateInput = {
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -407,6 +413,7 @@ export type UserUncheckedUpdateInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -639,6 +646,22 @@ export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
 }
 
+export type UserCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutAuditLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
 export type UserCreateWithoutPropertiesInput = {
   id?: string
   firstName: string
@@ -658,6 +681,7 @@ export type UserCreateWithoutPropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutPropertiesInput = {
@@ -679,6 +703,7 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutPropertiesInput = {
@@ -716,6 +741,7 @@ export type UserUpdateWithoutPropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPropertiesInput = {
@@ -737,6 +763,7 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserCreateWithoutBrokerLeadsInput = {
@@ -758,6 +785,7 @@ export type UserCreateWithoutBrokerLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutBrokerLeadsInput = {
@@ -779,6 +807,7 @@ export type UserUncheckedCreateWithoutBrokerLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutBrokerLeadsInput = {
@@ -805,6 +834,7 @@ export type UserCreateWithoutClientLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutClientLeadsInput = {
@@ -826,6 +856,7 @@ export type UserUncheckedCreateWithoutClientLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutClientLeadsInput = {
@@ -863,6 +894,7 @@ export type UserUpdateWithoutBrokerLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBrokerLeadsInput = {
@@ -884,6 +916,7 @@ export type UserUncheckedUpdateWithoutBrokerLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUpsertWithoutClientLeadsInput = {
@@ -916,6 +949,7 @@ export type UserUpdateWithoutClientLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientLeadsInput = {
@@ -937,6 +971,7 @@ export type UserUncheckedUpdateWithoutClientLeadsInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserCreateWithoutBrokerRevenuesInput = {
@@ -958,6 +993,7 @@ export type UserCreateWithoutBrokerRevenuesInput = {
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutBrokerRevenuesInput = {
@@ -979,6 +1015,7 @@ export type UserUncheckedCreateWithoutBrokerRevenuesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutBrokerRevenuesInput = {
@@ -1016,6 +1053,7 @@ export type UserUpdateWithoutBrokerRevenuesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBrokerRevenuesInput = {
@@ -1037,6 +1075,7 @@ export type UserUncheckedUpdateWithoutBrokerRevenuesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserCreateWithoutFavoritePropertiesInput = {
@@ -1058,6 +1097,7 @@ export type UserCreateWithoutFavoritePropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutFavoritePropertiesInput = {
@@ -1079,6 +1119,7 @@ export type UserUncheckedCreateWithoutFavoritePropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutFavoritePropertiesInput = {
@@ -1116,6 +1157,7 @@ export type UserUpdateWithoutFavoritePropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritePropertiesInput = {
@@ -1137,6 +1179,7 @@ export type UserUncheckedUpdateWithoutFavoritePropertiesInput = {
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserCreateWithoutBrokerViewingsInput = {
@@ -1158,6 +1201,7 @@ export type UserCreateWithoutBrokerViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutBrokerViewingsInput = {
@@ -1179,6 +1223,7 @@ export type UserUncheckedCreateWithoutBrokerViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutBrokerViewingsInput = {
@@ -1205,6 +1250,7 @@ export type UserCreateWithoutClientViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutClientViewingsInput = {
@@ -1226,6 +1272,7 @@ export type UserUncheckedCreateWithoutClientViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutClientViewingsInput = {
@@ -1263,6 +1310,7 @@ export type UserUpdateWithoutBrokerViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBrokerViewingsInput = {
@@ -1284,6 +1332,7 @@ export type UserUncheckedUpdateWithoutBrokerViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUpsertWithoutClientViewingsInput = {
@@ -1316,6 +1365,7 @@ export type UserUpdateWithoutClientViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientViewingsInput = {
@@ -1337,6 +1387,7 @@ export type UserUncheckedUpdateWithoutClientViewingsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1358,6 +1409,7 @@ export type UserCreateWithoutNotificationsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
   brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1379,6 +1431,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
   brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1416,6 +1469,7 @@ export type UserUpdateWithoutNotificationsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
   brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1437,6 +1491,111 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
   clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+}
+
+export type UserCreateWithoutAuditLogsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentCreateNestedManyWithoutClientInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  phone?: string | null
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutBrokerInput
+  brokerLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutBrokerInput
+  clientLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutClientInput
+  brokerRevenues?: Prisma.RevenueUncheckedCreateNestedManyWithoutBrokerInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutBrokerInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedCreateNestedManyWithoutClientInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type UserUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type UserUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUpdateManyWithoutClientNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutBrokerNestedInput
+  brokerLeads?: Prisma.LeadUncheckedUpdateManyWithoutBrokerNestedInput
+  clientLeads?: Prisma.LeadUncheckedUpdateManyWithoutClientNestedInput
+  brokerRevenues?: Prisma.RevenueUncheckedUpdateManyWithoutBrokerNestedInput
+  favoriteProperties?: Prisma.PropertyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  brokerViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutBrokerNestedInput
+  clientViewings?: Prisma.ViewingAppointmentUncheckedUpdateManyWithoutClientNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 
@@ -1453,6 +1612,7 @@ export type UserCountOutputType = {
   brokerViewings: number
   clientViewings: number
   notifications: number
+  auditLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1464,6 +1624,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   brokerViewings?: boolean | UserCountOutputTypeCountBrokerViewingsArgs
   clientViewings?: boolean | UserCountOutputTypeCountClientViewingsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
 }
 
 /**
@@ -1532,6 +1693,13 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1553,6 +1721,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   brokerViewings?: boolean | Prisma.User$brokerViewingsArgs<ExtArgs>
   clientViewings?: boolean | Prisma.User$clientViewingsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1608,6 +1777,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   brokerViewings?: boolean | Prisma.User$brokerViewingsArgs<ExtArgs>
   clientViewings?: boolean | Prisma.User$clientViewingsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1624,6 +1794,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     brokerViewings: Prisma.$ViewingAppointmentPayload<ExtArgs>[]
     clientViewings: Prisma.$ViewingAppointmentPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2039,6 +2210,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   brokerViewings<T extends Prisma.User$brokerViewingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$brokerViewingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ViewingAppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clientViewings<T extends Prisma.User$clientViewingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientViewingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ViewingAppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2661,6 +2833,30 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.auditLogs
+ */
+export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
 }
 
 /**

@@ -57,3 +57,8 @@ export type ViewingAppointment = Prisma.ViewingAppointmentModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel

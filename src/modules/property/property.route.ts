@@ -12,10 +12,8 @@ import {
     getPropertyById,
     updateProperty,
 } from "./property.service.js";
-import {
-    JwtUser,
-    requirePropertyManager,
-} from "./property.middleware.js";
+import { JwtUser, requirePropertyManager } from "./property.middleware.js";
+import { createAuditLog } from "../audit/audit.service.js";
 
 export async function propertyRoutes(app: FastifyInstance) {
     app.post(
@@ -85,6 +83,22 @@ export async function propertyRoutes(app: FastifyInstance) {
             try {
                 const user = request.user as JwtUser;
                 const property = await createProperty(bodyResult.data, user);
+
+                await createAuditLog({
+                    action: "CREATE",
+                    resourceType: "Property",
+                    resourceId: property.id,
+                    description: `Property created: ${property.title}`,
+                    actorUserId: user.id,
+                    newValues: {
+                        title: property.title,
+                        type: property.type,
+                        status: property.status,
+                        price: property.price.toString(),
+                    },
+                    ipAddress: request.ip,
+                    userAgent: request.headers["user-agent"],
+                });
 
                 return reply.status(201).send({
                     message: "Property created successfully",

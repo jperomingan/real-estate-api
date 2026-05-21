@@ -126,3 +126,17 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const AuditAction = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT',
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
+  STATUS_CHANGE: 'STATUS_CHANGE'
+} as const
+
+export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]

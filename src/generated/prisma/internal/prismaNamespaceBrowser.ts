@@ -58,7 +58,8 @@ export const ModelName = {
   PropertyImage: 'PropertyImage',
   PropertyFavorite: 'PropertyFavorite',
   ViewingAppointment: 'ViewingAppointment',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  AuditLog: 'AuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -218,6 +219,24 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  description: 'description',
+  oldValues: 'oldValues',
+  newValues: 'newValues',
+  metadata: 'metadata',
+  actorUserId: 'actorUserId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
 export const SortOrder = {

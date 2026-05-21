@@ -17,6 +17,7 @@ import { propertyImageRoutes } from "./modules/property/property-image.route.js"
 import { favoriteRoutes } from "./modules/favorite/favorite.route.js";
 import { viewingRoutes } from "./modules/viewing/viewing.route.js";
 import { notificationRoutes } from "./modules/notification/notification.route.js";
+import { auditRoutes } from "./modules/audit/audit.route.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -115,6 +116,10 @@ export async function buildApp() {
 
     await app.register(notificationRoutes, {
         prefix: "/api/notifications",
+    });
+
+    await app.register(auditRoutes, {
+        prefix: "/api/audit",
     });
 
     await app.register(revenueRoutes, {

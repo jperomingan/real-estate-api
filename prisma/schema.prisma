@@ -101,6 +101,17 @@ enum NotificationType {
   GENERAL
 }
 
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  APPROVE
+  REJECT
+  LOGIN
+  LOGOUT
+  STATUS_CHANGE
+}
+
 model User {
   id           String     @id @default(uuid())
   firstName    String
@@ -119,6 +130,7 @@ model User {
   brokerViewings ViewingAppointment[] @relation("BrokerViewings")
   clientViewings ViewingAppointment[] @relation("ClientViewings")
   notifications Notification[] @relation("UserNotifications")
+  auditLogs    AuditLog[] @relation("UserAuditLogs")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -321,4 +333,33 @@ model Notification {
   @@index([isRead])
   @@index([type])
   @@map("notifications")
+}
+
+model AuditLog {
+  id           String      @id @default(uuid())
+
+  action       AuditAction
+  resourceType String
+  resourceId   String?
+
+  description  String?
+
+  oldValues    Json?
+  newValues    Json?
+  metadata     Json?
+
+  actorUserId  String?
+  actorUser    User?       @relation("UserAuditLogs", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  ipAddress    String?
+  userAgent    String?
+
+  createdAt    DateTime    @default(now())
+
+  @@index([actorUserId])
+  @@index([action])
+  @@index([resourceType])
+  @@index([resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
 }
