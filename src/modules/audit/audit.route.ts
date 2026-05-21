@@ -1,13 +1,13 @@
 import { FastifyInstance } from "fastify";
 import { auditIdParamsSchema, auditListQuerySchema } from "./audit.schema.js";
 import { getAuditLogById, getAuditLogs } from "./audit.service.js";
-import { requireAdminUser } from "./audit.middleware.js";
+import { requirePermission } from "../permission/permission.middleware.js";
 
 export async function auditRoutes(app: FastifyInstance) {
     app.get(
         "/",
         {
-            preHandler: requireAdminUser,
+            preHandler: requirePermission("VIEW_AUDIT_LOGS"),
             schema: {
                 tags: ["Audit Logs"],
                 summary: "List audit logs",
@@ -61,7 +61,7 @@ export async function auditRoutes(app: FastifyInstance) {
     app.get(
         "/:id",
         {
-            preHandler: requireAdminUser,
+            preHandler: requirePermission("VIEW_AUDIT_LOGS"),
             schema: {
                 tags: ["Audit Logs"],
                 summary: "Get audit log by ID",

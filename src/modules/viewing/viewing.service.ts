@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { CreateViewingInput } from "./viewing.schema.js";
-import { JwtUser } from "./viewing.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 import { createNotification } from "../notification/notification.service.js";
 
 const viewingSelect = {

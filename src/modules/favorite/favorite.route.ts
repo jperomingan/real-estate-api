@@ -9,16 +9,14 @@ import {
     getUserFavorites,
     removePropertyFromFavorites,
 } from "./favorite.service.js";
-import {
-    JwtUser,
-    requireAuthenticatedUser,
-} from "./favorite.middleware.js";
+import { requirePermission } from "../permission/permission.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 export async function favoriteRoutes(app: FastifyInstance) {
     app.get(
         "/",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("SAVE_PROPERTIES"),
             schema: {
                 tags: ["Favorites"],
                 summary: "Get current user's saved properties",
@@ -58,7 +56,7 @@ export async function favoriteRoutes(app: FastifyInstance) {
     app.post(
         "/:propertyId",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("SAVE_PROPERTIES"),
             schema: {
                 tags: ["Favorites"],
                 summary: "Save property to favorites",
@@ -110,7 +108,7 @@ export async function favoriteRoutes(app: FastifyInstance) {
     app.delete(
         "/:propertyId",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("SAVE_PROPERTIES"),
             schema: {
                 tags: ["Favorites"],
                 summary: "Remove property from favorites",
@@ -158,7 +156,7 @@ export async function favoriteRoutes(app: FastifyInstance) {
     app.get(
         "/:propertyId/status",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("SAVE_PROPERTIES"),
             schema: {
                 tags: ["Favorites"],
                 summary: "Check if property is saved by current user",

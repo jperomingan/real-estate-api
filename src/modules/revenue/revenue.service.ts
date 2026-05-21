@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { CreateRevenueInput } from "./revenue.schema.js";
-import { JwtUser } from "./revenue.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 const revenueSelect = {
     id: true,

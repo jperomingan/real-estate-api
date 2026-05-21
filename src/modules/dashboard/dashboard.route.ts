@@ -7,16 +7,14 @@ import {
     getMonthlyRevenue,
     getPropertyStats,
 } from "./dashboard.service.js";
-import {
-    JwtUser,
-    requireRevenueManager,
-} from "../revenue/revenue.middleware.js";
+import { requirePermission } from "../permission/permission.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 export async function dashboardRoutes(app: FastifyInstance) {
     app.get(
         "/summary",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("VIEW_DASHBOARD"),
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get dashboard summary",
@@ -53,7 +51,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     app.get(
         "/monthly-revenue",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("VIEW_DASHBOARD"),
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get monthly revenue",
@@ -90,7 +88,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     app.get(
         "/lead-conversion",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("VIEW_DASHBOARD"),
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get lead conversion statistics",
@@ -127,7 +125,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     app.get(
         "/property-stats",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("VIEW_DASHBOARD"),
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get property statistics",
@@ -148,7 +146,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     app.get(
         "/broker-performance",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("VIEW_DASHBOARD"),
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get broker performance",

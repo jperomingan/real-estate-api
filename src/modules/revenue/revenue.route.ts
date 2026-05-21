@@ -15,13 +15,14 @@ import {
     updateRevenueCommissionStatus,
     updateRevenuePaymentStatus,
 } from "./revenue.service.js";
-import { JwtUser, requireRevenueManager } from "./revenue.middleware.js";
+import { requirePermission } from "../permission/permission.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 export async function revenueRoutes(app: FastifyInstance) {
     app.post(
         "/",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
                 summary: "Create revenue record from a closed sale",
@@ -82,7 +83,7 @@ export async function revenueRoutes(app: FastifyInstance) {
     app.get(
         "/summary",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
                 summary: "Get revenue summary",
@@ -103,7 +104,7 @@ export async function revenueRoutes(app: FastifyInstance) {
     app.get(
         "/",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
                 summary: "List revenue records",
@@ -153,7 +154,7 @@ export async function revenueRoutes(app: FastifyInstance) {
     app.get(
         "/:id",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
                 summary: "Get revenue record by ID",
@@ -205,7 +206,7 @@ export async function revenueRoutes(app: FastifyInstance) {
     app.patch(
         "/:id/payment-status",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
                 summary: "Update payment status",
@@ -274,7 +275,7 @@ export async function revenueRoutes(app: FastifyInstance) {
     app.patch(
         "/:id/commission-status",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
                 summary: "Update commission status",
@@ -342,7 +343,7 @@ export async function revenueRoutes(app: FastifyInstance) {
     app.delete(
         "/:id",
         {
-            preHandler: requireRevenueManager,
+            preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
                 summary: "Delete revenue record",

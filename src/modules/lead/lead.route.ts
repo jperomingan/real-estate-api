@@ -12,7 +12,8 @@ import {
     getLeads,
     updateLeadStatus,
 } from "./lead.service.js";
-import { JwtUser, requireLeadManager } from "./lead.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
+import { requirePermission } from "../permission/permission.middleware.js";
 
 export async function leadRoutes(app: FastifyInstance) {
     app.post(
@@ -87,7 +88,7 @@ export async function leadRoutes(app: FastifyInstance) {
     app.get(
         "/",
         {
-            preHandler: requireLeadManager,
+            preHandler: requirePermission("MANAGE_LEADS"),
             schema: {
                 tags: ["Leads"],
                 summary: "List leads",
@@ -152,7 +153,7 @@ export async function leadRoutes(app: FastifyInstance) {
     app.get(
         "/:id",
         {
-            preHandler: requireLeadManager,
+            preHandler: requirePermission("MANAGE_LEADS"),
             schema: {
                 tags: ["Leads"],
                 summary: "Get lead by ID",
@@ -201,7 +202,7 @@ export async function leadRoutes(app: FastifyInstance) {
     app.patch(
         "/:id/status",
         {
-            preHandler: requireLeadManager,
+            preHandler: requirePermission("MANAGE_LEADS"),
             schema: {
                 tags: ["Leads"],
                 summary: "Update lead status",
@@ -276,7 +277,7 @@ export async function leadRoutes(app: FastifyInstance) {
     app.delete(
         "/:id",
         {
-            preHandler: requireLeadManager,
+            preHandler: requirePermission("MANAGE_LEADS"),
             schema: {
                 tags: ["Leads"],
                 summary: "Delete lead",

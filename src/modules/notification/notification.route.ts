@@ -10,16 +10,14 @@ import {
     markAllNotificationsAsRead,
     markNotificationAsRead,
 } from "./notification.service.js";
-import {
-    JwtUser,
-    requireAuthenticatedUser,
-} from "./notification.middleware.js";
+import { requirePermission } from "../permission/permission.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 export async function notificationRoutes(app: FastifyInstance) {
     app.get(
         "/",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("MANAGE_NOTIFICATIONS"),
             schema: {
                 tags: ["Notifications"],
                 summary: "Get current user's notifications",
@@ -70,7 +68,7 @@ export async function notificationRoutes(app: FastifyInstance) {
     app.get(
         "/unread-count",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("MANAGE_NOTIFICATIONS"),
             schema: {
                 tags: ["Notifications"],
                 summary: "Get unread notification count",
@@ -91,7 +89,7 @@ export async function notificationRoutes(app: FastifyInstance) {
     app.patch(
         "/read-all",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("MANAGE_NOTIFICATIONS"),
             schema: {
                 tags: ["Notifications"],
                 summary: "Mark all notifications as read",
@@ -112,7 +110,7 @@ export async function notificationRoutes(app: FastifyInstance) {
     app.patch(
         "/:id/read",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("MANAGE_NOTIFICATIONS"),
             schema: {
                 tags: ["Notifications"],
                 summary: "Mark notification as read",
@@ -161,7 +159,7 @@ export async function notificationRoutes(app: FastifyInstance) {
     app.delete(
         "/:id",
         {
-            preHandler: requireAuthenticatedUser,
+            preHandler: requirePermission("MANAGE_NOTIFICATIONS"),
             schema: {
                 tags: ["Notifications"],
                 summary: "Delete notification",

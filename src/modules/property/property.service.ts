@@ -3,7 +3,7 @@ import {
     CreatePropertyInput,
     UpdatePropertyInput,
 } from "./property.schema.js";
-import { JwtUser } from "./property.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 const propertySelect = {
     id: true,

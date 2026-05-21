@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { CreateLeadInput } from "./lead.schema.js";
-import { JwtUser } from "./lead.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 import { createNotification } from "../notification/notification.service.js";
 
 const leadSelect = {

@@ -4,11 +4,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { pipeline } from "node:stream/promises";
 import { prisma } from "../../lib/prisma.js";
-import { JwtUser, requirePropertyManager } from "./property.middleware.js";
 import {
     deletePropertyImageParamsSchema,
     propertyImageParamsSchema,
 } from "./property-image.schema.js";
+import { JwtUser } from "../permission/permission.types.js";
+import { requirePermission } from "../permission/permission.middleware.js";
 
 const UPLOAD_DIR = path.join(process.cwd(), "uploads", "properties");
 
@@ -34,7 +35,7 @@ export async function propertyImageRoutes(app: FastifyInstance) {
     app.post(
         "/:id/images",
         {
-            preHandler: requirePropertyManager,
+            preHandler: requirePermission("MANAGE_PROPERTIES"),
             schema: {
                 tags: ["Property Images"],
                 summary: "Upload property image",
@@ -148,7 +149,7 @@ export async function propertyImageRoutes(app: FastifyInstance) {
     app.delete(
         "/:propertyId/images/:imageId",
         {
-            preHandler: requirePropertyManager,
+            preHandler: requirePermission("MANAGE_PROPERTIES"),
             schema: {
                 tags: ["Property Images"],
                 summary: "Delete property image",

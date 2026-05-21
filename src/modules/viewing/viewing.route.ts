@@ -14,7 +14,8 @@ import {
     rescheduleViewingAppointment,
     updateViewingStatus,
 } from "./viewing.service.js";
-import { JwtUser, requireViewingManager } from "./viewing.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
+import { requirePermission } from "../permission/permission.middleware.js";
 
 export async function viewingRoutes(app: FastifyInstance) {
     app.post(
@@ -78,7 +79,7 @@ export async function viewingRoutes(app: FastifyInstance) {
     app.get(
         "/",
         {
-            preHandler: requireViewingManager,
+            preHandler: requirePermission("MANAGE_VIEWINGS"),
             schema: {
                 tags: ["Viewings"],
                 summary: "List viewing appointments",
@@ -131,7 +132,7 @@ export async function viewingRoutes(app: FastifyInstance) {
     app.get(
         "/:id",
         {
-            preHandler: requireViewingManager,
+            preHandler: requirePermission("MANAGE_VIEWINGS"),
             schema: {
                 tags: ["Viewings"],
                 summary: "Get viewing appointment by ID",
@@ -186,7 +187,7 @@ export async function viewingRoutes(app: FastifyInstance) {
     app.patch(
         "/:id/status",
         {
-            preHandler: requireViewingManager,
+            preHandler: requirePermission("MANAGE_VIEWINGS"),
             schema: {
                 tags: ["Viewings"],
                 summary: "Update viewing status",
@@ -262,7 +263,7 @@ export async function viewingRoutes(app: FastifyInstance) {
     app.patch(
         "/:id/reschedule",
         {
-            preHandler: requireViewingManager,
+            preHandler: requirePermission("MANAGE_VIEWINGS"),
             schema: {
                 tags: ["Viewings"],
                 summary: "Reschedule viewing appointment",
@@ -328,7 +329,7 @@ export async function viewingRoutes(app: FastifyInstance) {
     app.delete(
         "/:id",
         {
-            preHandler: requireViewingManager,
+            preHandler: requirePermission("MANAGE_VIEWINGS"),
             schema: {
                 tags: ["Viewings"],
                 summary: "Delete viewing appointment",

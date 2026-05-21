@@ -5,7 +5,7 @@ import {
     userIdParamsSchema,
     userListQuerySchema,
 } from "./admin.schema.js";
-import { requireAdmin } from "./admin.middleware.js";
+import { requirePermission } from "../permission/permission.middleware.js";
 
 const userSelect = {
     id: true,
@@ -24,7 +24,7 @@ export async function adminRoutes(app: FastifyInstance) {
     app.get(
         "/users",
         {
-            preHandler: requireAdmin,
+            preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
                 summary: "List users",
@@ -132,7 +132,7 @@ export async function adminRoutes(app: FastifyInstance) {
     app.get(
         "/users/:id",
         {
-            preHandler: requireAdmin,
+            preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
                 summary: "Get user by ID",
@@ -182,7 +182,7 @@ export async function adminRoutes(app: FastifyInstance) {
     app.patch(
         "/users/:id/approve",
         {
-            preHandler: requireAdmin,
+            preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
                 summary: "Approve broker account",
@@ -241,7 +241,7 @@ export async function adminRoutes(app: FastifyInstance) {
     app.patch(
         "/users/:id/reject",
         {
-            preHandler: requireAdmin,
+            preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
                 summary: "Reject broker account",
@@ -300,7 +300,7 @@ export async function adminRoutes(app: FastifyInstance) {
     app.patch(
         "/users/:id/status",
         {
-            preHandler: requireAdmin,
+            preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
                 summary: "Update user status",
@@ -377,7 +377,7 @@ export async function adminRoutes(app: FastifyInstance) {
     app.delete(
         "/users/:id",
         {
-            preHandler: requireAdmin,
+            preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
                 summary: "Delete user",

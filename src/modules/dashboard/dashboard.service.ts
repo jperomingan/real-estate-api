@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma.js";
-import { JwtUser } from "../revenue/revenue.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 function toNumber(value: unknown) {
     return Number(value ?? 0);

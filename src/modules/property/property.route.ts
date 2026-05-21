@@ -12,14 +12,15 @@ import {
     getPropertyById,
     updateProperty,
 } from "./property.service.js";
-import { JwtUser, requirePropertyManager } from "./property.middleware.js";
 import { createAuditLog } from "../audit/audit.service.js";
+import { requirePermission } from "../permission/permission.middleware.js";
+import { JwtUser } from "../permission/permission.types.js";
 
 export async function propertyRoutes(app: FastifyInstance) {
     app.post(
         "/",
         {
-            preHandler: requirePropertyManager,
+            preHandler: requirePermission("MANAGE_PROPERTIES"),
             schema: {
                 tags: ["Properties"],
                 summary: "Create property",
@@ -237,7 +238,7 @@ export async function propertyRoutes(app: FastifyInstance) {
     app.patch(
         "/:id",
         {
-            preHandler: requirePropertyManager,
+            preHandler: requirePermission("MANAGE_PROPERTIES"),
             schema: {
                 tags: ["Properties"],
                 summary: "Update property",
@@ -293,7 +294,7 @@ export async function propertyRoutes(app: FastifyInstance) {
     app.delete(
         "/:id",
         {
-            preHandler: requirePropertyManager,
+            preHandler: requirePermission("MANAGE_PROPERTIES"),
             schema: {
                 tags: ["Properties"],
                 summary: "Delete property",
