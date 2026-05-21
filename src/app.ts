@@ -18,11 +18,14 @@ import { favoriteRoutes } from "./modules/favorite/favorite.route.js";
 import { viewingRoutes } from "./modules/viewing/viewing.route.js";
 import { notificationRoutes } from "./modules/notification/notification.route.js";
 import { auditRoutes } from "./modules/audit/audit.route.js";
+import { errorHandlerPlugin } from "./plugins/error-handler.js";
 
 export async function buildApp() {
     const app = Fastify({
         logger: true,
     });
+
+    await app.register(errorHandlerPlugin);
 
     await app.register(cors, {
         origin: true,

@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { sendError, sendSuccess } from "../../utils/api-response.js";
 import { loginSchema, registerSchema } from "./auth.schema.js";
 import { getCurrentUser, loginUser, registerUser } from "./auth.service.js";
 
@@ -16,22 +17,28 @@ export async function registerController(
     const result = registerSchema.safeParse(request.body);
 
     if (!result.success) {
-        return reply.status(400).send({
+        return sendError({
+            reply,
             message: "Validation error",
             errors: result.error.flatten().fieldErrors,
+            statusCode: 400,
         });
     }
 
     try {
         const data = await registerUser(request.server, result.data);
 
-        return reply.status(201).send({
+        return sendSuccess({
+            reply,
             message: "Registration successful",
             data,
+            statusCode: 201,
         });
     } catch (error) {
-        return reply.status(400).send({
+        return sendError({
+            reply,
             message: error instanceof Error ? error.message : "Registration failed",
+            statusCode: 400,
         });
     }
 }
@@ -43,22 +50,27 @@ export async function loginController(
     const result = loginSchema.safeParse(request.body);
 
     if (!result.success) {
-        return reply.status(400).send({
+        return sendError({
+            reply,
             message: "Validation error",
             errors: result.error.flatten().fieldErrors,
+            statusCode: 400,
         });
     }
 
     try {
         const data = await loginUser(request.server, result.data);
 
-        return reply.send({
+        return sendSuccess({
+            reply,
             message: "Login successful",
             data,
         });
     } catch (error) {
-        return reply.status(401).send({
+        return sendError({
+            reply,
             message: error instanceof Error ? error.message : "Login failed",
+            statusCode: 401,
         });
     }
 }
@@ -75,18 +87,23 @@ export async function meController(
         const user = await getCurrentUser(jwtUser.id);
 
         if (!user) {
-            return reply.status(404).send({
+            return sendError({
+                reply,
                 message: "User not found",
+                statusCode: 404,
             });
         }
 
-        return reply.send({
+        return sendSuccess({
+            reply,
             message: "Current user fetched successfully",
             data: user,
         });
     } catch {
-        return reply.status(401).send({
+        return sendError({
+            reply,
             message: "Unauthorized",
+            statusCode: 401,
         });
     }
 }
