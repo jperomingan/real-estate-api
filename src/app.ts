@@ -45,8 +45,8 @@ export async function buildApp() {
             },
             servers: [
                 {
-                    url: "http://localhost:4000",
-                    description: "Local development server",
+                    url: env.APP_URL,
+                    description: "API server",
                 },
             ],
             components: {
