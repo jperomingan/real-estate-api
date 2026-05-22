@@ -19,13 +19,17 @@ import { viewingRoutes } from "./modules/viewing/viewing.route.js";
 import { notificationRoutes } from "./modules/notification/notification.route.js";
 import { auditRoutes } from "./modules/audit/audit.route.js";
 import { errorHandlerPlugin } from "./plugins/error-handler.js";
+import { requestLoggerPlugin } from "./plugins/request-logger.js";
 
 export async function buildApp() {
     const app = Fastify({
-        logger: true,
+        logger: {
+            level: env.NODE_ENV === "production" ? "info" : "debug",
+        },
     });
 
     await app.register(errorHandlerPlugin);
+    await app.register(requestLoggerPlugin);
 
     await app.register(cors, {
         origin: true,
