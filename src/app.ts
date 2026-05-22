@@ -21,6 +21,7 @@ import { auditRoutes } from "./modules/audit/audit.route.js";
 import { errorHandlerPlugin } from "./plugins/error-handler.js";
 import { requestLoggerPlugin } from "./plugins/request-logger.js";
 import rateLimit from "@fastify/rate-limit";
+import { securityHeadersPlugin } from "./plugins/security-headers.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -31,6 +32,7 @@ export async function buildApp() {
 
     await app.register(errorHandlerPlugin);
     await app.register(requestLoggerPlugin);
+    await app.register(securityHeadersPlugin);
 
     await app.register(rateLimit, {
         global: true,
