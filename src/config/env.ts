@@ -30,6 +30,10 @@ const envSchema = z.object({
         .string()
         .url("APP_URL must be a valid URL")
         .default("http://localhost:4000"),
+
+    ALLOWED_ORIGINS: z
+        .string()
+        .default("http://localhost:3000,http://localhost:5173,http://localhost:4000"),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -51,6 +55,9 @@ if (!parsedEnv.success) {
 }
 
 export const env = parsedEnv.data;
+export const allowedOrigins = env.ALLOWED_ORIGINS.split(",").map((origin) =>
+    origin.trim()
+);
 
 export const isDevelopment = env.NODE_ENV === "development";
 export const isProduction = env.NODE_ENV === "production";

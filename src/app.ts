@@ -22,6 +22,7 @@ import { errorHandlerPlugin } from "./plugins/error-handler.js";
 import { requestLoggerPlugin } from "./plugins/request-logger.js";
 import rateLimit from "@fastify/rate-limit";
 import { securityHeadersPlugin } from "./plugins/security-headers.js";
+import { corsPlugin } from "./plugins/cors.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -60,10 +61,7 @@ export async function buildApp() {
         },
     });
 
-    await app.register(cors, {
-        origin: true,
-        credentials: true,
-    });
+    await app.register(corsPlugin);
 
     await app.register(jwt, {
         secret: env.JWT_SECRET,
