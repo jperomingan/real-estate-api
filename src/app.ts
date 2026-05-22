@@ -20,6 +20,7 @@ import { notificationRoutes } from "./modules/notification/notification.route.js
 import { auditRoutes } from "./modules/audit/audit.route.js";
 import { errorHandlerPlugin } from "./plugins/error-handler.js";
 import { requestLoggerPlugin } from "./plugins/request-logger.js";
+import { rateLimitPlugin } from "./plugins/rate-limit.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -30,6 +31,7 @@ export async function buildApp() {
 
     await app.register(errorHandlerPlugin);
     await app.register(requestLoggerPlugin);
+    await app.register(rateLimitPlugin);
 
     await app.register(cors, {
         origin: true,

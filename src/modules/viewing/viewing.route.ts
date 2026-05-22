@@ -21,6 +21,12 @@ export async function viewingRoutes(app: FastifyInstance) {
     app.post(
         "/",
         {
+            config: {
+                rateLimit: {
+                    max: 20,
+                    timeWindow: "1 hour",
+                },
+            },
             schema: {
                 tags: ["Viewings"],
                 summary: "Request a property viewing appointment",

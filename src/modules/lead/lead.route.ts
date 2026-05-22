@@ -19,6 +19,12 @@ export async function leadRoutes(app: FastifyInstance) {
     app.post(
         "/",
         {
+            config: {
+                rateLimit: {
+                    max: 20,
+                    timeWindow: "1 hour",
+                },
+            },
             schema: {
                 tags: ["Leads"],
                 summary: "Create lead or property inquiry",
