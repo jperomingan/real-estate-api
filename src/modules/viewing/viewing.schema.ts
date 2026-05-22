@@ -1,4 +1,9 @@
 import { z } from "zod";
+import {
+    emptyStringToUndefined,
+    normalizeOptionalEmail,
+    trimString,
+} from "../../utils/sanitize.js";
 
 export const viewingStatusSchema = z.enum([
     "REQUESTED",
@@ -12,11 +17,30 @@ export const viewingStatusSchema = z.enum([
 export const createViewingSchema = z.object({
     propertyId: z.string().uuid("Invalid property ID"),
 
-    firstName: z.string().min(2, "First name is required"),
-    lastName: z.string().optional(),
-    email: z.string().email().optional(),
-    phone: z.string().min(5, "Phone number is required"),
-    message: z.string().optional(),
+    firstName: z.preprocess(
+        trimString,
+        z.string().min(2, "First name is required")
+    ),
+
+    lastName: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional()
+    ),
+
+    email: z.preprocess(
+        normalizeOptionalEmail,
+        z.string().email().optional()
+    ),
+
+    phone: z.preprocess(
+        trimString,
+        z.string().min(5, "Phone number is required")
+    ),
+
+    message: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional()
+    ),
 
     preferredDate: z.coerce.date(),
 });

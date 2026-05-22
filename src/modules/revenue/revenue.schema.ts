@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { emptyStringToUndefined } from "../../utils/sanitize.js";
 
 export const paymentStatusSchema = z.enum([
     "UNPAID",
@@ -28,7 +29,10 @@ export const createRevenueSchema = z.object({
     commissionStatus: commissionStatusSchema.default("PENDING"),
 
     saleDate: z.coerce.date().optional(),
-    notes: z.string().optional(),
+    notes: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional()
+    ),
 });
 
 export const revenueIdParamsSchema = z.object({

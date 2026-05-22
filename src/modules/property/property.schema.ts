@@ -1,4 +1,8 @@
 import { z } from "zod";
+import {
+    emptyStringToUndefined,
+    trimString,
+} from "../../utils/sanitize.js";
 
 export const propertyTypeSchema = z.enum([
     "HOUSE_AND_LOT",
@@ -20,8 +24,16 @@ export const propertyStatusSchema = z.enum([
 ]);
 
 export const createPropertySchema = z.object({
-    title: z.string().min(3, "Title is required"),
-    description: z.string().optional(),
+    title: z.preprocess(
+        trimString,
+        z.string().min(3, "Title is required")
+    ),
+
+    description: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional()
+    ),
+
     type: propertyTypeSchema,
     status: propertyStatusSchema.default("DRAFT"),
 
@@ -32,11 +44,30 @@ export const createPropertySchema = z.object({
     bedrooms: z.coerce.number().int().min(0).optional(),
     bathrooms: z.coerce.number().int().min(0).optional(),
 
-    address: z.string().min(3, "Address is required"),
-    barangay: z.string().optional(),
-    city: z.string().min(2, "City is required"),
-    province: z.string().min(2, "Province is required"),
-    zipCode: z.string().optional(),
+    address: z.preprocess(
+        trimString,
+        z.string().min(3, "Address is required")
+    ),
+
+    barangay: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional()
+    ),
+
+    city: z.preprocess(
+        trimString,
+        z.string().min(2, "City is required")
+    ),
+
+    province: z.preprocess(
+        trimString,
+        z.string().min(2, "Province is required")
+    ),
+
+    zipCode: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional()
+    ),
 
     latitude: z.coerce.number().optional(),
     longitude: z.coerce.number().optional(),
