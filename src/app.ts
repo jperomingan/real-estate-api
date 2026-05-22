@@ -20,7 +20,7 @@ import { notificationRoutes } from "./modules/notification/notification.route.js
 import { auditRoutes } from "./modules/audit/audit.route.js";
 import { errorHandlerPlugin } from "./plugins/error-handler.js";
 import { requestLoggerPlugin } from "./plugins/request-logger.js";
-import { rateLimitPlugin } from "./plugins/rate-limit.js";
+import rateLimit from "@fastify/rate-limit";
 
 export async function buildApp() {
     const app = Fastify({
@@ -31,7 +31,32 @@ export async function buildApp() {
 
     await app.register(errorHandlerPlugin);
     await app.register(requestLoggerPlugin);
-    await app.register(rateLimitPlugin);
+
+    await app.register(rateLimit, {
+        global: true,
+        max: 300,
+        timeWindow: "1 minute",
+        hook: "onRequest",
+        errorResponseBuilder: (
+            _request: unknown,
+            context: {
+                after: string;
+                max: number;
+                ttl: number;
+            }
+        ) => {
+            return {
+                success: false,
+                message: `Too many requests. Please try again in ${context.after}.`,
+                errors: {
+                    statusCode: 429,
+                    limit: context.max,
+                    remaining: 0,
+                    reset: context.ttl,
+                },
+            };
+        },
+    });
 
     await app.register(cors, {
         origin: true,

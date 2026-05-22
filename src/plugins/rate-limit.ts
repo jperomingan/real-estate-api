@@ -3,11 +3,9 @@ import { FastifyInstance } from "fastify";
 
 export async function rateLimitPlugin(app: FastifyInstance) {
     await app.register(rateLimit, {
-        global: true,
-        max: 300,
-        timeWindow: "1 minute",
-        hook: "onRequest",
-        errorResponseBuilder: (request, context) => {
+        global: false,
+        hook: "preHandler",
+        errorResponseBuilder: (_request, context) => {
             return {
                 success: false,
                 message: `Too many requests. Please try again in ${context.after}.`,

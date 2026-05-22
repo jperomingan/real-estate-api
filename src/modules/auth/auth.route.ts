@@ -9,12 +9,10 @@ export async function authRoutes(app: FastifyInstance) {
     app.post(
         "/register",
         {
-            config: {
-                rateLimit: {
-                    max: 10,
-                    timeWindow: "1 hour",
-                },
-            },
+            preHandler: app.rateLimit({
+                max: 10,
+                timeWindow: "1 hour",
+            }),
             schema: {
                 tags: ["Auth"],
                 summary: "Register a broker or client account",
