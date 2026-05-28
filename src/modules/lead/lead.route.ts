@@ -12,6 +12,16 @@ import {
     getLeads,
     updateLeadStatus,
 } from "./lead.service.js";
+import {
+    createLeadBodySchema,
+    leadDeleteResponseSchema,
+    leadErrorResponseSchema,
+    leadListQuerySchemaForSwagger,
+    leadListResponseSchema,
+    leadParamsSchema,
+    leadSuccessResponseSchema,
+    updateLeadStatusBodySchema,
+} from "./lead.swagger.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 
@@ -28,32 +38,12 @@ export async function leadRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Leads"],
                 summary: "Create lead or property inquiry",
-                body: {
-                    type: "object",
-                    required: ["firstName", "phone"],
-                    properties: {
-                        firstName: { type: "string" },
-                        lastName: { type: "string" },
-                        email: { type: "string" },
-                        phone: { type: "string" },
-                        message: { type: "string" },
-                        source: {
-                            type: "string",
-                            enum: [
-                                "WEBSITE",
-                                "FACEBOOK",
-                                "REFERRAL",
-                                "WALK_IN",
-                                "PHONE_CALL",
-                                "EMAIL",
-                                "OTHER",
-                            ],
-                        },
-                        budget: { type: "number" },
-                        preferredDate: { type: "string" },
-                        propertyId: { type: "string" },
-                        brokerId: { type: "string" },
-                    },
+                description:
+                    "Creates a lead from a property inquiry. Public users can submit leads. If propertyId is provided, the lead is assigned to the property's broker.",
+                body: createLeadBodySchema,
+                response: {
+                    201: leadSuccessResponseSchema,
+                    400: leadErrorResponseSchema,
                 },
             },
         },
@@ -98,41 +88,15 @@ export async function leadRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Leads"],
                 summary: "List leads",
+                description:
+                    "Returns leads for admins or approved brokers. Brokers only see their own assigned leads.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        search: { type: "string" },
-                        status: {
-                            type: "string",
-                            enum: [
-                                "NEW",
-                                "CONTACTED",
-                                "QUALIFIED",
-                                "VIEWING_SCHEDULED",
-                                "NEGOTIATION",
-                                "CLOSED_WON",
-                                "CLOSED_LOST",
-                                "ARCHIVED",
-                            ],
-                        },
-                        source: {
-                            type: "string",
-                            enum: [
-                                "WEBSITE",
-                                "FACEBOOK",
-                                "REFERRAL",
-                                "WALK_IN",
-                                "PHONE_CALL",
-                                "EMAIL",
-                                "OTHER",
-                            ],
-                        },
-                        propertyId: { type: "string" },
-                        brokerId: { type: "string" },
-                        page: { type: "number" },
-                        limit: { type: "number" },
-                    },
+                querystring: leadListQuerySchemaForSwagger,
+                response: {
+                    200: leadListResponseSchema,
+                    400: leadErrorResponseSchema,
+                    401: leadErrorResponseSchema,
+                    403: leadErrorResponseSchema,
                 },
             },
         },
@@ -163,13 +127,16 @@ export async function leadRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Leads"],
                 summary: "Get lead by ID",
+                description:
+                    "Returns one lead record. Brokers can only view their own assigned leads.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: leadParamsSchema,
+                response: {
+                    200: leadSuccessResponseSchema,
+                    400: leadErrorResponseSchema,
+                    401: leadErrorResponseSchema,
+                    403: leadErrorResponseSchema,
+                    404: leadErrorResponseSchema,
                 },
             },
         },
@@ -212,32 +179,17 @@ export async function leadRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Leads"],
                 summary: "Update lead status",
+                description:
+                    "Updates the status of a lead. Useful for tracking lead progress from NEW to CLOSED_WON or CLOSED_LOST.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
-                },
-                body: {
-                    type: "object",
-                    required: ["status"],
-                    properties: {
-                        status: {
-                            type: "string",
-                            enum: [
-                                "NEW",
-                                "CONTACTED",
-                                "QUALIFIED",
-                                "VIEWING_SCHEDULED",
-                                "NEGOTIATION",
-                                "CLOSED_WON",
-                                "CLOSED_LOST",
-                                "ARCHIVED",
-                            ],
-                        },
-                    },
+                params: leadParamsSchema,
+                body: updateLeadStatusBodySchema,
+                response: {
+                    200: leadSuccessResponseSchema,
+                    400: leadErrorResponseSchema,
+                    401: leadErrorResponseSchema,
+                    403: leadErrorResponseSchema,
+                    404: leadErrorResponseSchema,
                 },
             },
         },
@@ -287,13 +239,16 @@ export async function leadRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Leads"],
                 summary: "Delete lead",
+                description:
+                    "Deletes a lead record. Admins can delete any lead. Brokers can delete only their own leads.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: leadParamsSchema,
+                response: {
+                    200: leadDeleteResponseSchema,
+                    400: leadErrorResponseSchema,
+                    401: leadErrorResponseSchema,
+                    403: leadErrorResponseSchema,
+                    404: leadErrorResponseSchema,
                 },
             },
         },
