@@ -7,6 +7,15 @@ import {
     getMonthlyRevenue,
     getPropertyStats,
 } from "./dashboard.service.js";
+import {
+    brokerPerformanceResponseSchema,
+    dashboardErrorResponseSchema,
+    dashboardQuerySchemaForSwagger,
+    dashboardSummaryResponseSchema,
+    leadConversionResponseSchema,
+    monthlyRevenueResponseSchema,
+    propertyStatsResponseSchema,
+} from "./dashboard.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
 
@@ -18,13 +27,15 @@ export async function dashboardRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get dashboard summary",
+                description:
+                    "Returns high-level dashboard totals for properties, leads, revenue, commission, and receivables.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        dateFrom: { type: "string" },
-                        dateTo: { type: "string" },
-                    },
+                querystring: dashboardQuerySchemaForSwagger,
+                response: {
+                    200: dashboardSummaryResponseSchema,
+                    400: dashboardErrorResponseSchema,
+                    401: dashboardErrorResponseSchema,
+                    403: dashboardErrorResponseSchema,
                 },
             },
         },
@@ -55,13 +66,15 @@ export async function dashboardRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get monthly revenue",
+                description:
+                    "Returns revenue grouped by month, including gross sales, commission, payment received, and count.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        dateFrom: { type: "string" },
-                        dateTo: { type: "string" },
-                    },
+                querystring: dashboardQuerySchemaForSwagger,
+                response: {
+                    200: monthlyRevenueResponseSchema,
+                    400: dashboardErrorResponseSchema,
+                    401: dashboardErrorResponseSchema,
+                    403: dashboardErrorResponseSchema,
                 },
             },
         },
@@ -92,13 +105,15 @@ export async function dashboardRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get lead conversion statistics",
+                description:
+                    "Returns lead counts and percentage breakdown by lead status.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        dateFrom: { type: "string" },
-                        dateTo: { type: "string" },
-                    },
+                querystring: dashboardQuerySchemaForSwagger,
+                response: {
+                    200: leadConversionResponseSchema,
+                    400: dashboardErrorResponseSchema,
+                    401: dashboardErrorResponseSchema,
+                    403: dashboardErrorResponseSchema,
                 },
             },
         },
@@ -129,7 +144,14 @@ export async function dashboardRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get property statistics",
+                description:
+                    "Returns property count grouped by status, type, and location.",
                 security: [{ bearerAuth: [] }],
+                response: {
+                    200: propertyStatsResponseSchema,
+                    401: dashboardErrorResponseSchema,
+                    403: dashboardErrorResponseSchema,
+                },
             },
         },
         async (request, reply) => {
@@ -150,13 +172,15 @@ export async function dashboardRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Dashboard"],
                 summary: "Get broker performance",
+                description:
+                    "Returns broker sales performance ranked by total gross sales.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        dateFrom: { type: "string" },
-                        dateTo: { type: "string" },
-                    },
+                querystring: dashboardQuerySchemaForSwagger,
+                response: {
+                    200: brokerPerformanceResponseSchema,
+                    400: dashboardErrorResponseSchema,
+                    401: dashboardErrorResponseSchema,
+                    403: dashboardErrorResponseSchema,
                 },
             },
         },
