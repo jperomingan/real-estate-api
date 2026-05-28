@@ -1,5 +1,6 @@
 import { Prisma } from "../../generated/prisma/client.js";
 import { prisma } from "../../lib/prisma.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 type AuditAction =
     | "CREATE"
@@ -92,7 +93,7 @@ export async function getAuditLogs(query: {
             : {}),
     };
 
-    const skip = (query.page - 1) * query.limit;
+    const skip = getPaginationOffset(query.page, query.limit);
 
     const [items, total] = await prisma.$transaction([
         prisma.auditLog.findMany({

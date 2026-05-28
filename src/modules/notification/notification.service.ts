@@ -1,5 +1,6 @@
 import { Prisma } from "../../generated/prisma/client.js";
 import { prisma } from "../../lib/prisma.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 type CreateNotificationInput = {
     targetUserId: string;
@@ -57,7 +58,7 @@ export async function getNotifications(
         ...(query.type ? { type: query.type } : {}),
     };
 
-    const skip = (query.page - 1) * query.limit;
+    const skip = getPaginationOffset(query.page, query.limit);
 
     const [items, total] = await prisma.$transaction([
         prisma.notification.findMany({
@@ -76,12 +77,11 @@ export async function getNotifications(
 
     return {
         items,
-        pagination: {
+        pagination: buildPagination({
             page: query.page,
             limit: query.limit,
             total,
-            totalPages: Math.ceil(total / query.limit),
-        },
+        }),
     };
 }
 

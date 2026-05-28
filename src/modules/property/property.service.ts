@@ -4,6 +4,7 @@ import {
     UpdatePropertyInput,
 } from "./property.schema.js";
 import { JwtUser } from "../permission/permission.types.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 const propertySelect = {
     id: true,
@@ -244,7 +245,7 @@ export async function getProperties(query: {
         };
     }
 
-    const skip = (query.page - 1) * query.limit;
+    const skip = getPaginationOffset(query.page, query.limit);
 
     const [properties, total] = await prisma.$transaction([
         prisma.property.findMany({
@@ -263,12 +264,11 @@ export async function getProperties(query: {
 
     return {
         items: properties,
-        pagination: {
+        pagination: buildPagination({
             page: query.page,
             limit: query.limit,
             total,
-            totalPages: Math.ceil(total / query.limit),
-        },
+        }),
         filters: {
             search: query.search,
             type: query.type,

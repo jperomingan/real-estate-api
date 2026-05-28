@@ -1,4 +1,5 @@
 import { prisma } from "../../lib/prisma.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 const favoriteSelect = {
     id: true,
@@ -194,7 +195,7 @@ export async function getUserFavorites(
         },
     };
 
-    const skip = (query.page - 1) * query.limit;
+    const skip = getPaginationOffset(query.page, query.limit);
 
     const [items, total] = await prisma.$transaction([
         prisma.propertyFavorite.findMany({
@@ -213,11 +214,10 @@ export async function getUserFavorites(
 
     return {
         items,
-        pagination: {
+        pagination: buildPagination({
             page: query.page,
             limit: query.limit,
             total,
-            totalPages: Math.ceil(total / query.limit),
-        },
+        })
     };
 }

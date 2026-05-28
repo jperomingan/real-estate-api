@@ -2,6 +2,7 @@ import { prisma } from "../../lib/prisma.js";
 import { CreateViewingInput } from "./viewing.schema.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { createNotification } from "../notification/notification.service.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 const viewingSelect = {
     id: true,
@@ -146,7 +147,7 @@ export async function getViewingAppointments(
         where.brokerId = user.id;
     }
 
-    const skip = (query.page - 1) * query.limit;
+    const skip = getPaginationOffset(query.page, query.limit);
 
     const [items, total] = await prisma.$transaction([
         prisma.viewingAppointment.findMany({
@@ -165,12 +166,11 @@ export async function getViewingAppointments(
 
     return {
         items,
-        pagination: {
+        pagination: buildPagination({
             page: query.page,
             limit: query.limit,
             total,
-            totalPages: Math.ceil(total / query.limit),
-        },
+        }),
     };
 }
 

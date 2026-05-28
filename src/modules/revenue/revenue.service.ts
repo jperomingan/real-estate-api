@@ -1,6 +1,7 @@
 import { prisma } from "../../lib/prisma.js";
 import { CreateRevenueInput } from "./revenue.schema.js";
 import { JwtUser } from "../permission/permission.types.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 const revenueSelect = {
     id: true,
@@ -193,7 +194,7 @@ export async function getRevenues(
         where.brokerId = user.id;
     }
 
-    const skip = (query.page - 1) * query.limit;
+    const skip = getPaginationOffset(query.page, query.limit);
 
     const [items, total] = await prisma.$transaction([
         prisma.revenue.findMany({
@@ -212,12 +213,11 @@ export async function getRevenues(
 
     return {
         items,
-        pagination: {
+        pagination: buildPagination({
             page: query.page,
             limit: query.limit,
             total,
-            totalPages: Math.ceil(total / query.limit),
-        },
+        }),
     };
 }
 

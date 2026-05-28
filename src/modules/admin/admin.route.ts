@@ -6,6 +6,7 @@ import {
     userListQuerySchema,
 } from "./admin.schema.js";
 import { requirePermission } from "../permission/permission.middleware.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 const userSelect = {
     id: true,
@@ -97,7 +98,7 @@ export async function adminRoutes(app: FastifyInstance) {
                     : {}),
             };
 
-            const skip = (page - 1) * limit;
+            const skip = getPaginationOffset(page, limit);
 
             const [users, total] = await prisma.$transaction([
                 prisma.user.findMany({
@@ -118,12 +119,11 @@ export async function adminRoutes(app: FastifyInstance) {
                 message: "Users fetched successfully",
                 data: {
                     items: users,
-                    pagination: {
+                    pagination: buildPagination({
                         page,
                         limit,
                         total,
-                        totalPages: Math.ceil(total / limit),
-                    },
+                    }),
                 },
             });
         }

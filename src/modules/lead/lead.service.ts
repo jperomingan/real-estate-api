@@ -2,6 +2,7 @@ import { prisma } from "../../lib/prisma.js";
 import { CreateLeadInput } from "./lead.schema.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { createNotification } from "../notification/notification.service.js";
+import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
 const leadSelect = {
     id: true,
@@ -143,7 +144,7 @@ export async function getLeads(
         where.brokerId = user.id;
     }
 
-    const skip = (query.page - 1) * query.limit;
+    const skip = getPaginationOffset(query.page, query.limit);
 
     const [items, total] = await prisma.$transaction([
         prisma.lead.findMany({
