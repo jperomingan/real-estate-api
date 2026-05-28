@@ -12,9 +12,19 @@ import {
     getPropertyById,
     updateProperty,
 } from "./property.service.js";
+import {
+    createPropertyBodySchema,
+    propertyErrorResponseSchema,
+    propertyListQuerySchemaForSwagger,
+    propertyListResponseSchema,
+    propertyParamsSchema,
+    propertySuccessResponseSchema,
+    updatePropertyBodySchema,
+} from "./property.swagger.js";
 import { createAuditLog } from "../audit/audit.service.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
+import { successResponseSchema } from "../../utils/swagger-schemas.js";
 
 export async function propertyRoutes(app: FastifyInstance) {
     app.post(
@@ -24,50 +34,15 @@ export async function propertyRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Properties"],
                 summary: "Create property",
+                description:
+                    "Creates a new property listing. Only admins and approved brokers can create properties.",
                 security: [{ bearerAuth: [] }],
-                body: {
-                    type: "object",
-                    required: ["title", "type", "price", "address", "city", "province"],
-                    properties: {
-                        title: { type: "string", description: "Property title" },
-                        description: { type: "string" },
-                        type: {
-                            type: "string",
-                            enum: [
-                                "HOUSE_AND_LOT",
-                                "CONDOMINIUM",
-                                "LOT_ONLY",
-                                "APARTMENT",
-                                "TOWNHOUSE",
-                                "COMMERCIAL",
-                                "AGRICULTURAL",
-                                "INDUSTRIAL",
-                            ],
-                        },
-                        status: {
-                            type: "string",
-                            enum: ["DRAFT", "PUBLISHED", "RESERVED", "SOLD", "ARCHIVED"],
-                        },
-                        price: { type: "number" },
-                        lotAreaSqm: { type: "number" },
-                        floorAreaSqm: { type: "number" },
-                        bedrooms: { type: "number" },
-                        bathrooms: { type: "number" },
-                        address: { type: "string" },
-                        barangay: { type: "string" },
-                        city: { type: "string" },
-                        province: { type: "string" },
-                        zipCode: { type: "string" },
-                        latitude: { type: "number" },
-                        longitude: { type: "number" },
-                        brokerId: { type: "string" },
-                        imageUrls: {
-                            type: "array",
-                            items: {
-                                type: "string",
-                            },
-                        },
-                    },
+                body: createPropertyBodySchema,
+                response: {
+                    201: propertySuccessResponseSchema,
+                    400: propertyErrorResponseSchema,
+                    401: propertyErrorResponseSchema,
+                    403: propertyErrorResponseSchema,
                 },
             },
         },
@@ -119,61 +94,14 @@ export async function propertyRoutes(app: FastifyInstance) {
         {
             schema: {
                 tags: ["Properties"],
-                summary: "List published properties",
-                querystring: {
-                    type: "object",
-                    properties: {
-                        search: { type: "string" },
-
-                        type: {
-                            type: "string",
-                            enum: [
-                                "HOUSE_AND_LOT",
-                                "CONDOMINIUM",
-                                "LOT_ONLY",
-                                "APARTMENT",
-                                "TOWNHOUSE",
-                                "COMMERCIAL",
-                                "AGRICULTURAL",
-                                "INDUSTRIAL",
-                            ],
-                        },
-
-                        status: {
-                            type: "string",
-                            enum: ["DRAFT", "PUBLISHED", "RESERVED", "SOLD", "ARCHIVED"],
-                        },
-
-                        city: { type: "string" },
-                        province: { type: "string" },
-                        barangay: { type: "string" },
-
-                        minPrice: { type: "number" },
-                        maxPrice: { type: "number" },
-
-                        minLotAreaSqm: { type: "number" },
-                        maxLotAreaSqm: { type: "number" },
-
-                        minFloorAreaSqm: { type: "number" },
-                        maxFloorAreaSqm: { type: "number" },
-
-                        bedrooms: { type: "number" },
-                        bathrooms: { type: "number" },
-
-                        sortBy: {
-                            type: "string",
-                            enum: ["createdAt", "price", "title", "city"],
-                        },
-
-                        sortOrder: {
-                            type: "string",
-                            enum: ["asc", "desc"],
-                        },
-
-                        page: { type: "number" },
-                        limit: { type: "number" },
-                    },
-                }
+                summary: "List properties",
+                description:
+                    "Returns published properties by default. Supports search, filters, sorting, and pagination.",
+                querystring: propertyListQuerySchemaForSwagger,
+                response: {
+                    200: propertyListResponseSchema,
+                    400: propertyErrorResponseSchema,
+                },
             },
         },
         async (request, reply) => {
@@ -201,12 +129,12 @@ export async function propertyRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Properties"],
                 summary: "Get property by ID",
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                description: "Returns full details of a single property.",
+                params: propertyParamsSchema,
+                response: {
+                    200: propertySuccessResponseSchema,
+                    400: propertyErrorResponseSchema,
+                    404: propertyErrorResponseSchema,
                 },
             },
         },
@@ -242,13 +170,17 @@ export async function propertyRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Properties"],
                 summary: "Update property",
+                description:
+                    "Updates an existing property. Admins can update any property. Brokers can update their own properties only.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: propertyParamsSchema,
+                body: updatePropertyBodySchema,
+                response: {
+                    200: propertySuccessResponseSchema,
+                    400: propertyErrorResponseSchema,
+                    401: propertyErrorResponseSchema,
+                    403: propertyErrorResponseSchema,
+                    404: propertyErrorResponseSchema,
                 },
             },
         },
@@ -298,13 +230,19 @@ export async function propertyRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Properties"],
                 summary: "Delete property",
+                description:
+                    "Deletes a property. Admins can delete any property. Brokers can delete their own properties only.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: propertyParamsSchema,
+                response: {
+                    200: successResponseSchema({
+                        type: "object",
+                        properties: {},
+                    }),
+                    400: propertyErrorResponseSchema,
+                    401: propertyErrorResponseSchema,
+                    403: propertyErrorResponseSchema,
+                    404: propertyErrorResponseSchema,
                 },
             },
         },
