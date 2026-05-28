@@ -15,6 +15,18 @@ import {
     updateRevenueCommissionStatus,
     updateRevenuePaymentStatus,
 } from "./revenue.service.js";
+import {
+    createRevenueBodySchema,
+    revenueDeleteResponseSchema,
+    revenueErrorResponseSchema,
+    revenueListQuerySchemaForSwagger,
+    revenueListResponseSchema,
+    revenueParamsSchema,
+    revenueSuccessResponseSchema,
+    revenueSummaryResponseSchema,
+    updateCommissionStatusBodySchema,
+    updatePaymentStatusBodySchema,
+} from "./revenue.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
 
@@ -25,29 +37,16 @@ export async function revenueRoutes(app: FastifyInstance) {
             preHandler: requirePermission("MANAGE_REVENUES"),
             schema: {
                 tags: ["Revenue"],
-                summary: "Create revenue record from a closed sale",
+                summary: "Create revenue record",
+                description:
+                    "Creates a revenue record from a closed sale. If leadId is provided, the lead must be CLOSED_WON.",
                 security: [{ bearerAuth: [] }],
-                body: {
-                    type: "object",
-                    required: ["propertyId", "grossSaleAmount", "commissionRate"],
-                    properties: {
-                        propertyId: { type: "string" },
-                        leadId: { type: "string" },
-                        brokerId: { type: "string" },
-                        grossSaleAmount: { type: "number" },
-                        commissionRate: { type: "number" },
-                        paymentReceived: { type: "number" },
-                        paymentStatus: {
-                            type: "string",
-                            enum: ["UNPAID", "PARTIAL", "PAID", "CANCELLED", "REFUNDED"],
-                        },
-                        commissionStatus: {
-                            type: "string",
-                            enum: ["PENDING", "PARTIAL", "RELEASED", "CANCELLED"],
-                        },
-                        saleDate: { type: "string" },
-                        notes: { type: "string" },
-                    },
+                body: createRevenueBodySchema,
+                response: {
+                    201: revenueSuccessResponseSchema,
+                    400: revenueErrorResponseSchema,
+                    401: revenueErrorResponseSchema,
+                    403: revenueErrorResponseSchema,
                 },
             },
         },
@@ -87,7 +86,14 @@ export async function revenueRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Revenue"],
                 summary: "Get revenue summary",
+                description:
+                    "Returns summarized gross sales, commission, payment received, receivables, and status counts.",
                 security: [{ bearerAuth: [] }],
+                response: {
+                    200: revenueSummaryResponseSchema,
+                    401: revenueErrorResponseSchema,
+                    403: revenueErrorResponseSchema,
+                },
             },
         },
         async (request, reply) => {
@@ -108,26 +114,15 @@ export async function revenueRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Revenue"],
                 summary: "List revenue records",
+                description:
+                    "Returns revenue records with filters by property, broker, payment status, commission status, and sale date.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        search: { type: "string" },
-                        propertyId: { type: "string" },
-                        brokerId: { type: "string" },
-                        paymentStatus: {
-                            type: "string",
-                            enum: ["UNPAID", "PARTIAL", "PAID", "CANCELLED", "REFUNDED"],
-                        },
-                        commissionStatus: {
-                            type: "string",
-                            enum: ["PENDING", "PARTIAL", "RELEASED", "CANCELLED"],
-                        },
-                        dateFrom: { type: "string" },
-                        dateTo: { type: "string" },
-                        page: { type: "number" },
-                        limit: { type: "number" },
-                    },
+                querystring: revenueListQuerySchemaForSwagger,
+                response: {
+                    200: revenueListResponseSchema,
+                    400: revenueErrorResponseSchema,
+                    401: revenueErrorResponseSchema,
+                    403: revenueErrorResponseSchema,
                 },
             },
         },
@@ -158,13 +153,16 @@ export async function revenueRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Revenue"],
                 summary: "Get revenue record by ID",
+                description:
+                    "Returns a single revenue record. Brokers can only view their own revenue records.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: revenueParamsSchema,
+                response: {
+                    200: revenueSuccessResponseSchema,
+                    400: revenueErrorResponseSchema,
+                    401: revenueErrorResponseSchema,
+                    403: revenueErrorResponseSchema,
+                    404: revenueErrorResponseSchema,
                 },
             },
         },
@@ -210,24 +208,17 @@ export async function revenueRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Revenue"],
                 summary: "Update payment status",
+                description:
+                    "Updates payment status and optionally updates the payment received amount.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
-                },
-                body: {
-                    type: "object",
-                    required: ["paymentStatus"],
-                    properties: {
-                        paymentStatus: {
-                            type: "string",
-                            enum: ["UNPAID", "PARTIAL", "PAID", "CANCELLED", "REFUNDED"],
-                        },
-                        paymentReceived: { type: "number" },
-                    },
+                params: revenueParamsSchema,
+                body: updatePaymentStatusBodySchema,
+                response: {
+                    200: revenueSuccessResponseSchema,
+                    400: revenueErrorResponseSchema,
+                    401: revenueErrorResponseSchema,
+                    403: revenueErrorResponseSchema,
+                    404: revenueErrorResponseSchema,
                 },
             },
         },
@@ -279,23 +270,17 @@ export async function revenueRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Revenue"],
                 summary: "Update commission status",
+                description:
+                    "Updates the commission release status for a revenue record.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
-                },
-                body: {
-                    type: "object",
-                    required: ["commissionStatus"],
-                    properties: {
-                        commissionStatus: {
-                            type: "string",
-                            enum: ["PENDING", "PARTIAL", "RELEASED", "CANCELLED"],
-                        },
-                    },
+                params: revenueParamsSchema,
+                body: updateCommissionStatusBodySchema,
+                response: {
+                    200: revenueSuccessResponseSchema,
+                    400: revenueErrorResponseSchema,
+                    401: revenueErrorResponseSchema,
+                    403: revenueErrorResponseSchema,
+                    404: revenueErrorResponseSchema,
                 },
             },
         },
@@ -347,13 +332,16 @@ export async function revenueRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Revenue"],
                 summary: "Delete revenue record",
+                description:
+                    "Deletes a revenue record. Admins can delete any record. Brokers can delete only their own records.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: revenueParamsSchema,
+                response: {
+                    200: revenueDeleteResponseSchema,
+                    400: revenueErrorResponseSchema,
+                    401: revenueErrorResponseSchema,
+                    403: revenueErrorResponseSchema,
+                    404: revenueErrorResponseSchema,
                 },
             },
         },
