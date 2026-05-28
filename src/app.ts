@@ -71,13 +71,64 @@ export async function buildApp() {
         openapi: {
             info: {
                 title: "Real Estate Management System API",
-                description: "Backend API for Real Estate Management System with Lead and Revenue Tracking",
+                description:
+                    "Backend API for real estate property management, lead tracking, viewing appointments, revenue tracking, notifications, audit logs, and dashboard analytics.",
                 version: "1.0.0",
             },
             servers: [
                 {
                     url: env.APP_URL,
                     description: "API server",
+                },
+            ],
+            tags: [
+                {
+                    name: "Health",
+                    description: "Server health check endpoints",
+                },
+                {
+                    name: "Auth",
+                    description: "Authentication and current user APIs",
+                },
+                {
+                    name: "Admin",
+                    description: "Admin user management APIs",
+                },
+                {
+                    name: "Properties",
+                    description: "Property listing and management APIs",
+                },
+                {
+                    name: "Property Images",
+                    description: "Property image upload and delete APIs",
+                },
+                {
+                    name: "Leads",
+                    description: "Lead and inquiry management APIs",
+                },
+                {
+                    name: "Viewings",
+                    description: "Property viewing appointment APIs",
+                },
+                {
+                    name: "Revenue",
+                    description: "Sales, commission, and payment tracking APIs",
+                },
+                {
+                    name: "Dashboard",
+                    description: "Dashboard analytics and summary APIs",
+                },
+                {
+                    name: "Favorites",
+                    description: "Saved properties APIs",
+                },
+                {
+                    name: "Notifications",
+                    description: "User notification APIs",
+                },
+                {
+                    name: "Audit Logs",
+                    description: "System audit trail APIs",
                 },
             ],
             components: {
@@ -96,29 +147,43 @@ export async function buildApp() {
         routePrefix: "/docs",
     });
 
-    app.get("/health", {
-        schema: {
-            tags: ["Health"],
-            summary: "Check if backend server is running",
-            response: {
-                200: {
-                    type: "object",
-                    properties: {
-                        status: { type: "string" },
-                        service: { type: "string" },
-                        timestamp: { type: "string" },
+    app.get(
+        "/health",
+        {
+            schema: {
+                tags: ["Health"],
+                summary: "Check if backend server is running",
+                response: {
+                    200: {
+                        type: "object",
+                        properties: {
+                            success: { type: "boolean" },
+                            message: { type: "string" },
+                            data: {
+                                type: "object",
+                                properties: {
+                                    status: { type: "string" },
+                                    service: { type: "string" },
+                                    timestamp: { type: "string" },
+                                },
+                            },
+                        },
                     },
                 },
             },
         },
-        handler: async () => {
+        async () => {
             return {
-                status: "ok",
-                service: "real-estate-api",
-                timestamp: new Date().toISOString(),
+                success: true,
+                message: "Backend API is running",
+                data: {
+                    status: "ok",
+                    service: "real-estate-api",
+                    timestamp: new Date().toISOString(),
+                },
             };
-        },
-    });
+        }
+    );
 
     await app.register(authRoutes, {
         prefix: "/api/auth",
