@@ -129,3 +129,19 @@ export async function createTestLead(brokerId: string, propertyId?: string) {
         },
     });
 }
+
+export async function createTestViewing(propertyId: string, brokerId: string) {
+    return prisma.viewingAppointment.create({
+        data: {
+            propertyId,
+            brokerId,
+            firstName: "Maria",
+            lastName: "Santos",
+            email: "maria@test.com",
+            phone: "09123456789",
+            message: "I want to schedule a viewing.",
+            preferredDate: new Date("2026-07-01T10:00:00.000Z"),
+            status: "REQUESTED",
+        },
+    });
+}
