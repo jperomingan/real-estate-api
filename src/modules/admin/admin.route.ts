@@ -5,6 +5,15 @@ import {
     userIdParamsSchema,
     userListQuerySchema,
 } from "./admin.schema.js";
+import {
+    adminDeleteResponseSchema,
+    adminErrorResponseSchema,
+    adminUserListQuerySchemaForSwagger,
+    adminUserListResponseSchema,
+    adminUserParamsSchema,
+    adminUserSuccessResponseSchema,
+    updateUserStatusBodySchema,
+} from "./admin.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
 
@@ -29,31 +38,15 @@ export async function adminRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Admin"],
                 summary: "List users",
+                description:
+                    "Returns registered users with optional search, role filter, status filter, and pagination. Admin access only.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        search: {
-                            type: "string",
-                            description: "Search by first name, last name, or email",
-                        },
-                        role: {
-                            type: "string",
-                            enum: ["ADMIN", "BROKER", "CLIENT"],
-                        },
-                        status: {
-                            type: "string",
-                            enum: ["PENDING", "APPROVED", "REJECTED", "ACTIVE", "INACTIVE"],
-                        },
-                        page: {
-                            type: "number",
-                            description: "Page number",
-                        },
-                        limit: {
-                            type: "number",
-                            description: "Items per page",
-                        },
-                    },
+                querystring: adminUserListQuerySchemaForSwagger,
+                response: {
+                    200: adminUserListResponseSchema,
+                    400: adminErrorResponseSchema,
+                    401: adminErrorResponseSchema,
+                    403: adminErrorResponseSchema,
                 },
             },
         },
@@ -136,16 +129,15 @@ export async function adminRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Admin"],
                 summary: "Get user by ID",
+                description: "Returns one user record by ID. Admin access only.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: {
-                            type: "string",
-                            description: "User ID",
-                        },
-                    },
+                params: adminUserParamsSchema,
+                response: {
+                    200: adminUserSuccessResponseSchema,
+                    400: adminErrorResponseSchema,
+                    401: adminErrorResponseSchema,
+                    403: adminErrorResponseSchema,
+                    404: adminErrorResponseSchema,
                 },
             },
         },
@@ -185,17 +177,17 @@ export async function adminRoutes(app: FastifyInstance) {
             preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
-                summary: "Approve broker account",
+                summary: "Approve user account",
+                description:
+                    "Approves a user account, commonly used for approving broker registration.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: {
-                            type: "string",
-                            description: "User ID",
-                        },
-                    },
+                params: adminUserParamsSchema,
+                response: {
+                    200: adminUserSuccessResponseSchema,
+                    400: adminErrorResponseSchema,
+                    401: adminErrorResponseSchema,
+                    403: adminErrorResponseSchema,
+                    404: adminErrorResponseSchema,
                 },
             },
         },
@@ -244,17 +236,17 @@ export async function adminRoutes(app: FastifyInstance) {
             preHandler: requirePermission("MANAGE_USERS"),
             schema: {
                 tags: ["Admin"],
-                summary: "Reject broker account",
+                summary: "Reject user account",
+                description:
+                    "Rejects a user account, commonly used for rejecting broker registration.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: {
-                            type: "string",
-                            description: "User ID",
-                        },
-                    },
+                params: adminUserParamsSchema,
+                response: {
+                    200: adminUserSuccessResponseSchema,
+                    400: adminErrorResponseSchema,
+                    401: adminErrorResponseSchema,
+                    403: adminErrorResponseSchema,
+                    404: adminErrorResponseSchema,
                 },
             },
         },
@@ -304,26 +296,17 @@ export async function adminRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Admin"],
                 summary: "Update user status",
+                description:
+                    "Updates a user account status to PENDING, APPROVED, REJECTED, ACTIVE, or INACTIVE.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: {
-                            type: "string",
-                            description: "User ID",
-                        },
-                    },
-                },
-                body: {
-                    type: "object",
-                    required: ["status"],
-                    properties: {
-                        status: {
-                            type: "string",
-                            enum: ["PENDING", "APPROVED", "REJECTED", "ACTIVE", "INACTIVE"],
-                        },
-                    },
+                params: adminUserParamsSchema,
+                body: updateUserStatusBodySchema,
+                response: {
+                    200: adminUserSuccessResponseSchema,
+                    400: adminErrorResponseSchema,
+                    401: adminErrorResponseSchema,
+                    403: adminErrorResponseSchema,
+                    404: adminErrorResponseSchema,
                 },
             },
         },
@@ -381,16 +364,16 @@ export async function adminRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Admin"],
                 summary: "Delete user",
+                description:
+                    "Deletes a user account. Admin cannot delete their own account from this endpoint.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: {
-                            type: "string",
-                            description: "User ID",
-                        },
-                    },
+                params: adminUserParamsSchema,
+                response: {
+                    200: adminDeleteResponseSchema,
+                    400: adminErrorResponseSchema,
+                    401: adminErrorResponseSchema,
+                    403: adminErrorResponseSchema,
+                    404: adminErrorResponseSchema,
                 },
             },
         },

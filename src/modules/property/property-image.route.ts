@@ -8,6 +8,14 @@ import {
     deletePropertyImageParamsSchema,
     propertyImageParamsSchema,
 } from "./property-image.schema.js";
+import {
+    deletePropertyImageParamsSchemaForSwagger,
+    propertyImageDeleteResponseSchema,
+    propertyImageErrorResponseSchema,
+    propertyImageSuccessResponseSchema,
+    uploadPropertyImageBodySchema,
+    uploadPropertyImageParamsSchema,
+} from "./property-image.swagger.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 
@@ -39,13 +47,18 @@ export async function propertyImageRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Property Images"],
                 summary: "Upload property image",
+                description:
+                    "Uploads an image file for a property. Only admins and approved brokers can upload. Brokers can upload only to their own properties.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                consumes: ["multipart/form-data"],
+                params: uploadPropertyImageParamsSchema,
+                body: uploadPropertyImageBodySchema,
+                response: {
+                    201: propertyImageSuccessResponseSchema,
+                    400: propertyImageErrorResponseSchema,
+                    401: propertyImageErrorResponseSchema,
+                    403: propertyImageErrorResponseSchema,
+                    404: propertyImageErrorResponseSchema,
                 },
             },
         },
@@ -153,14 +166,16 @@ export async function propertyImageRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Property Images"],
                 summary: "Delete property image",
+                description:
+                    "Deletes a property image record and removes its uploaded file if it exists locally.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["propertyId", "imageId"],
-                    properties: {
-                        propertyId: { type: "string" },
-                        imageId: { type: "string" },
-                    },
+                params: deletePropertyImageParamsSchemaForSwagger,
+                response: {
+                    200: propertyImageDeleteResponseSchema,
+                    400: propertyImageErrorResponseSchema,
+                    401: propertyImageErrorResponseSchema,
+                    403: propertyImageErrorResponseSchema,
+                    404: propertyImageErrorResponseSchema,
                 },
             },
         },
