@@ -2,6 +2,13 @@ import { FastifyInstance } from "fastify";
 import { auditIdParamsSchema, auditListQuerySchema } from "./audit.schema.js";
 import { getAuditLogById, getAuditLogs } from "./audit.service.js";
 import { requirePermission } from "../permission/permission.middleware.js";
+import {
+    auditErrorResponseSchema,
+    auditListQuerySchemaForSwagger,
+    auditListResponseSchema,
+    auditParamsSchema,
+    auditSuccessResponseSchema,
+} from "./audit.swagger.js";
 
 export async function auditRoutes(app: FastifyInstance) {
     app.get(
@@ -11,31 +18,15 @@ export async function auditRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Audit Logs"],
                 summary: "List audit logs",
+                description:
+                    "Returns system audit logs. Admin access only.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        action: {
-                            type: "string",
-                            enum: [
-                                "CREATE",
-                                "UPDATE",
-                                "DELETE",
-                                "APPROVE",
-                                "REJECT",
-                                "LOGIN",
-                                "LOGOUT",
-                                "STATUS_CHANGE",
-                            ],
-                        },
-                        resourceType: { type: "string" },
-                        resourceId: { type: "string" },
-                        actorUserId: { type: "string" },
-                        dateFrom: { type: "string" },
-                        dateTo: { type: "string" },
-                        page: { type: "number" },
-                        limit: { type: "number" },
-                    },
+                querystring: auditListQuerySchemaForSwagger,
+                response: {
+                    200: auditListResponseSchema,
+                    400: auditErrorResponseSchema,
+                    401: auditErrorResponseSchema,
+                    403: auditErrorResponseSchema,
                 },
             },
         },
@@ -65,13 +56,16 @@ export async function auditRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Audit Logs"],
                 summary: "Get audit log by ID",
+                description:
+                    "Returns one audit log entry by ID. Admin access only.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: auditParamsSchema,
+                response: {
+                    200: auditSuccessResponseSchema,
+                    400: auditErrorResponseSchema,
+                    401: auditErrorResponseSchema,
+                    403: auditErrorResponseSchema,
+                    404: auditErrorResponseSchema,
                 },
             },
         },

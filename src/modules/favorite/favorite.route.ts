@@ -9,6 +9,15 @@ import {
     getUserFavorites,
     removePropertyFromFavorites,
 } from "./favorite.service.js";
+import {
+    favoriteDeleteResponseSchema,
+    favoriteErrorResponseSchema,
+    favoriteListQuerySchemaForSwagger,
+    favoriteListResponseSchema,
+    favoritePropertyParamsSchemaForSwagger,
+    favoriteStatusResponseSchema,
+    favoriteSuccessResponseSchema,
+} from "./favorite.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
 
@@ -20,16 +29,15 @@ export async function favoriteRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Favorites"],
                 summary: "Get current user's saved properties",
+                description:
+                    "Returns the authenticated user's saved published properties.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        search: { type: "string" },
-                        city: { type: "string" },
-                        province: { type: "string" },
-                        page: { type: "number" },
-                        limit: { type: "number" },
-                    },
+                querystring: favoriteListQuerySchemaForSwagger,
+                response: {
+                    200: favoriteListResponseSchema,
+                    400: favoriteErrorResponseSchema,
+                    401: favoriteErrorResponseSchema,
+                    403: favoriteErrorResponseSchema,
                 },
             },
         },
@@ -60,13 +68,16 @@ export async function favoriteRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Favorites"],
                 summary: "Save property to favorites",
+                description:
+                    "Saves a published property to the current user's favorite list.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["propertyId"],
-                    properties: {
-                        propertyId: { type: "string" },
-                    },
+                params: favoritePropertyParamsSchemaForSwagger,
+                response: {
+                    201: favoriteSuccessResponseSchema,
+                    400: favoriteErrorResponseSchema,
+                    401: favoriteErrorResponseSchema,
+                    403: favoriteErrorResponseSchema,
+                    404: favoriteErrorResponseSchema,
                 },
             },
         },
@@ -112,13 +123,16 @@ export async function favoriteRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Favorites"],
                 summary: "Remove property from favorites",
+                description:
+                    "Removes a property from the current user's saved properties.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["propertyId"],
-                    properties: {
-                        propertyId: { type: "string" },
-                    },
+                params: favoritePropertyParamsSchemaForSwagger,
+                response: {
+                    200: favoriteDeleteResponseSchema,
+                    400: favoriteErrorResponseSchema,
+                    401: favoriteErrorResponseSchema,
+                    403: favoriteErrorResponseSchema,
+                    404: favoriteErrorResponseSchema,
                 },
             },
         },
@@ -159,14 +173,16 @@ export async function favoriteRoutes(app: FastifyInstance) {
             preHandler: requirePermission("SAVE_PROPERTIES"),
             schema: {
                 tags: ["Favorites"],
-                summary: "Check if property is saved by current user",
+                summary: "Check favorite status",
+                description:
+                    "Checks whether the current authenticated user already saved the property.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["propertyId"],
-                    properties: {
-                        propertyId: { type: "string" },
-                    },
+                params: favoritePropertyParamsSchemaForSwagger,
+                response: {
+                    200: favoriteStatusResponseSchema,
+                    400: favoriteErrorResponseSchema,
+                    401: favoriteErrorResponseSchema,
+                    403: favoriteErrorResponseSchema,
                 },
             },
         },

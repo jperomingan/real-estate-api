@@ -14,6 +14,17 @@ import {
     rescheduleViewingAppointment,
     updateViewingStatus,
 } from "./viewing.service.js";
+import {
+    createViewingBodySchema,
+    rescheduleViewingBodySchema,
+    updateViewingStatusBodySchema,
+    viewingDeleteResponseSchema,
+    viewingErrorResponseSchema,
+    viewingListQuerySchemaForSwagger,
+    viewingListResponseSchema,
+    viewingParamsSchema,
+    viewingSuccessResponseSchema,
+} from "./viewing.swagger.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 
@@ -29,19 +40,13 @@ export async function viewingRoutes(app: FastifyInstance) {
             },
             schema: {
                 tags: ["Viewings"],
-                summary: "Request a property viewing appointment",
-                body: {
-                    type: "object",
-                    required: ["propertyId", "firstName", "phone", "preferredDate"],
-                    properties: {
-                        propertyId: { type: "string" },
-                        firstName: { type: "string" },
-                        lastName: { type: "string" },
-                        email: { type: "string" },
-                        phone: { type: "string" },
-                        message: { type: "string" },
-                        preferredDate: { type: "string" },
-                    },
+                summary: "Request property viewing",
+                description:
+                    "Creates a viewing appointment request for a published property.",
+                body: createViewingBodySchema,
+                response: {
+                    201: viewingSuccessResponseSchema,
+                    400: viewingErrorResponseSchema,
                 },
             },
         },
@@ -89,29 +94,15 @@ export async function viewingRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Viewings"],
                 summary: "List viewing appointments",
+                description:
+                    "Returns viewing appointments for admins or approved brokers. Brokers only see their own appointments.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        search: { type: "string" },
-                        status: {
-                            type: "string",
-                            enum: [
-                                "REQUESTED",
-                                "CONFIRMED",
-                                "RESCHEDULED",
-                                "COMPLETED",
-                                "CANCELLED",
-                                "DECLINED",
-                            ],
-                        },
-                        propertyId: { type: "string" },
-                        brokerId: { type: "string" },
-                        dateFrom: { type: "string" },
-                        dateTo: { type: "string" },
-                        page: { type: "number" },
-                        limit: { type: "number" },
-                    },
+                querystring: viewingListQuerySchemaForSwagger,
+                response: {
+                    200: viewingListResponseSchema,
+                    400: viewingErrorResponseSchema,
+                    401: viewingErrorResponseSchema,
+                    403: viewingErrorResponseSchema,
                 },
             },
         },
@@ -142,13 +133,16 @@ export async function viewingRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Viewings"],
                 summary: "Get viewing appointment by ID",
+                description:
+                    "Returns one viewing appointment. Brokers can only view their own appointments.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: viewingParamsSchema,
+                response: {
+                    200: viewingSuccessResponseSchema,
+                    400: viewingErrorResponseSchema,
+                    401: viewingErrorResponseSchema,
+                    403: viewingErrorResponseSchema,
+                    404: viewingErrorResponseSchema,
                 },
             },
         },
@@ -197,31 +191,17 @@ export async function viewingRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Viewings"],
                 summary: "Update viewing status",
+                description:
+                    "Updates viewing status to confirmed, completed, cancelled, declined, or other allowed statuses.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
-                },
-                body: {
-                    type: "object",
-                    required: ["status"],
-                    properties: {
-                        status: {
-                            type: "string",
-                            enum: [
-                                "REQUESTED",
-                                "CONFIRMED",
-                                "RESCHEDULED",
-                                "COMPLETED",
-                                "CANCELLED",
-                                "DECLINED",
-                            ],
-                        },
-                        notes: { type: "string" },
-                    },
+                params: viewingParamsSchema,
+                body: updateViewingStatusBodySchema,
+                response: {
+                    200: viewingSuccessResponseSchema,
+                    400: viewingErrorResponseSchema,
+                    401: viewingErrorResponseSchema,
+                    403: viewingErrorResponseSchema,
+                    404: viewingErrorResponseSchema,
                 },
             },
         },
@@ -273,21 +253,17 @@ export async function viewingRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Viewings"],
                 summary: "Reschedule viewing appointment",
+                description:
+                    "Sets a new confirmed viewing date and marks the appointment as RESCHEDULED.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
-                },
-                body: {
-                    type: "object",
-                    required: ["confirmedDate"],
-                    properties: {
-                        confirmedDate: { type: "string" },
-                        notes: { type: "string" },
-                    },
+                params: viewingParamsSchema,
+                body: rescheduleViewingBodySchema,
+                response: {
+                    200: viewingSuccessResponseSchema,
+                    400: viewingErrorResponseSchema,
+                    401: viewingErrorResponseSchema,
+                    403: viewingErrorResponseSchema,
+                    404: viewingErrorResponseSchema,
                 },
             },
         },
@@ -339,13 +315,16 @@ export async function viewingRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Viewings"],
                 summary: "Delete viewing appointment",
+                description:
+                    "Deletes a viewing appointment. Admins can delete any appointment. Brokers can delete only their own appointments.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: viewingParamsSchema,
+                response: {
+                    200: viewingDeleteResponseSchema,
+                    400: viewingErrorResponseSchema,
+                    401: viewingErrorResponseSchema,
+                    403: viewingErrorResponseSchema,
+                    404: viewingErrorResponseSchema,
                 },
             },
         },

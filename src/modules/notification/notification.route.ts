@@ -10,6 +10,15 @@ import {
     markAllNotificationsAsRead,
     markNotificationAsRead,
 } from "./notification.service.js";
+import {
+    notificationActionResponseSchema,
+    notificationErrorResponseSchema,
+    notificationListQuerySchemaForSwagger,
+    notificationListResponseSchema,
+    notificationParamsSchema,
+    notificationSuccessResponseSchema,
+    unreadCountResponseSchema,
+} from "./notification.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
 
@@ -21,27 +30,15 @@ export async function notificationRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Notifications"],
                 summary: "Get current user's notifications",
+                description:
+                    "Returns notifications belonging to the authenticated user.",
                 security: [{ bearerAuth: [] }],
-                querystring: {
-                    type: "object",
-                    properties: {
-                        isRead: { type: "boolean" },
-                        type: {
-                            type: "string",
-                            enum: [
-                                "LEAD_CREATED",
-                                "VIEWING_REQUESTED",
-                                "VIEWING_UPDATED",
-                                "REVENUE_CREATED",
-                                "PROPERTY_UPDATED",
-                                "ACCOUNT_APPROVED",
-                                "ACCOUNT_REJECTED",
-                                "GENERAL",
-                            ],
-                        },
-                        page: { type: "number" },
-                        limit: { type: "number" },
-                    },
+                querystring: notificationListQuerySchemaForSwagger,
+                response: {
+                    200: notificationListResponseSchema,
+                    400: notificationErrorResponseSchema,
+                    401: notificationErrorResponseSchema,
+                    403: notificationErrorResponseSchema,
                 },
             },
         },
@@ -72,7 +69,14 @@ export async function notificationRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Notifications"],
                 summary: "Get unread notification count",
+                description:
+                    "Returns the number of unread notifications for the authenticated user.",
                 security: [{ bearerAuth: [] }],
+                response: {
+                    200: unreadCountResponseSchema,
+                    401: notificationErrorResponseSchema,
+                    403: notificationErrorResponseSchema,
+                },
             },
         },
         async (request, reply) => {
@@ -93,7 +97,14 @@ export async function notificationRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Notifications"],
                 summary: "Mark all notifications as read",
+                description:
+                    "Marks all unread notifications of the authenticated user as read.",
                 security: [{ bearerAuth: [] }],
+                response: {
+                    200: notificationActionResponseSchema,
+                    401: notificationErrorResponseSchema,
+                    403: notificationErrorResponseSchema,
+                },
             },
         },
         async (request, reply) => {
@@ -114,13 +125,16 @@ export async function notificationRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Notifications"],
                 summary: "Mark notification as read",
+                description:
+                    "Marks a single notification as read.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: notificationParamsSchema,
+                response: {
+                    200: notificationSuccessResponseSchema,
+                    400: notificationErrorResponseSchema,
+                    401: notificationErrorResponseSchema,
+                    403: notificationErrorResponseSchema,
+                    404: notificationErrorResponseSchema,
                 },
             },
         },
@@ -163,13 +177,16 @@ export async function notificationRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Notifications"],
                 summary: "Delete notification",
+                description:
+                    "Deletes a notification belonging to the authenticated user.",
                 security: [{ bearerAuth: [] }],
-                params: {
-                    type: "object",
-                    required: ["id"],
-                    properties: {
-                        id: { type: "string" },
-                    },
+                params: notificationParamsSchema,
+                response: {
+                    200: notificationActionResponseSchema,
+                    400: notificationErrorResponseSchema,
+                    401: notificationErrorResponseSchema,
+                    403: notificationErrorResponseSchema,
+                    404: notificationErrorResponseSchema,
                 },
             },
         },
