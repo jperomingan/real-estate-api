@@ -13,7 +13,8 @@
     "prisma": "^6.19.3",
     "tsx": "latest",
     "typescript": "latest",
-    "typescript-eslint": "^8.59.2"
+    "typescript-eslint": "^8.59.2",
+    "vitest": "^4.1.8"
   },
   "scripts": {
     "lint": "eslint . --ext .ts",
@@ -23,7 +24,9 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
