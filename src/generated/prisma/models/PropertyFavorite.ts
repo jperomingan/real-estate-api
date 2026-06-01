@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums.js"
 import type * as Prisma from "../internal/prismaNamespace.js"
 
@@ -151,7 +151,7 @@ export type PropertyFavoriteGroupByOutputType = {
   _max: PropertyFavoriteMaxAggregateOutputType | null
 }
 
-export type GetPropertyFavoriteGroupByPayload<T extends PropertyFavoriteGroupByArgs> = Prisma.PrismaPromise<
+type GetPropertyFavoriteGroupByPayload<T extends PropertyFavoriteGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PropertyFavoriteGroupByOutputType, T['by']> &
       {
@@ -1207,11 +1207,6 @@ export type PropertyFavoriteFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` PropertyFavorites.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of PropertyFavorites.
-   */
   distinct?: Prisma.PropertyFavoriteScalarFieldEnum | Prisma.PropertyFavoriteScalarFieldEnum[]
 }
 

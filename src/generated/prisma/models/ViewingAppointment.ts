@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums.js"
 import type * as Prisma from "../internal/prismaNamespace.js"
 
@@ -228,7 +228,7 @@ export type ViewingAppointmentGroupByOutputType = {
   _max: ViewingAppointmentMaxAggregateOutputType | null
 }
 
-export type GetViewingAppointmentGroupByPayload<T extends ViewingAppointmentGroupByArgs> = Prisma.PrismaPromise<
+type GetViewingAppointmentGroupByPayload<T extends ViewingAppointmentGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ViewingAppointmentGroupByOutputType, T['by']> &
       {
@@ -1836,11 +1836,6 @@ export type ViewingAppointmentFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Skip the first `n` ViewingAppointments.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of ViewingAppointments.
-   */
   distinct?: Prisma.ViewingAppointmentScalarFieldEnum | Prisma.ViewingAppointmentScalarFieldEnum[]
 }
 

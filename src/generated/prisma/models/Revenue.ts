@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums.js"
 import type * as Prisma from "../internal/prismaNamespace.js"
 
@@ -267,7 +267,7 @@ export type RevenueGroupByOutputType = {
   _max: RevenueMaxAggregateOutputType | null
 }
 
-export type GetRevenueGroupByPayload<T extends RevenueGroupByArgs> = Prisma.PrismaPromise<
+type GetRevenueGroupByPayload<T extends RevenueGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RevenueGroupByOutputType, T['by']> &
       {
@@ -1808,11 +1808,6 @@ export type RevenueFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Skip the first `n` Revenues.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of Revenues.
-   */
   distinct?: Prisma.RevenueScalarFieldEnum | Prisma.RevenueScalarFieldEnum[]
 }
 

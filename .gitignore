@@ -6,3 +6,4 @@ dist/
 /generated/prisma
 uploads/*
 !uploads/.gitkeep
+.env.test
