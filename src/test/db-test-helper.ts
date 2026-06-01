@@ -112,3 +112,20 @@ export async function createTestProperty(brokerId: string) {
         },
     });
 }
+
+export async function createTestLead(brokerId: string, propertyId?: string) {
+    return prisma.lead.create({
+        data: {
+            firstName: "Maria",
+            lastName: "Santos",
+            email: "maria@test.com",
+            phone: "09123456789",
+            message: "I am interested in this property.",
+            source: "WEBSITE",
+            status: "NEW",
+            budget: 3500000,
+            brokerId,
+            propertyId,
+        },
+    });
+}
