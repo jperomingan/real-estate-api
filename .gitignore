@@ -5,4 +5,4 @@ dist/
 .DS_Store
 /generated/prisma
 uploads/*
-!uploads/.gitkeep
+!uploads/.gitkeep.env.test
