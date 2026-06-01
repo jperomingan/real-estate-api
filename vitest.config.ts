@@ -6,6 +6,7 @@ export default defineConfig({
         environment: "node",
         include: ["src/**/*.test.ts"],
         exclude: ["node_modules/**", "dist/**"],
+        fileParallelism: false,
         testTimeout: 30000,
         env: {
             NODE_ENV: "test",
