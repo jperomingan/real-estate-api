@@ -202,3 +202,23 @@ export async function createTestNotification(targetUserId: string) {
         },
     });
 }
+
+export async function createTestAuditLog(actorUserId?: string) {
+    return prisma.auditLog.create({
+        data: {
+            action: "CREATE",
+            resourceType: "Property",
+            resourceId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            description: "Test audit log entry.",
+            actorUserId,
+            newValues: {
+                title: "Test Property",
+            },
+            metadata: {
+                source: "test",
+            },
+            ipAddress: "127.0.0.1",
+            userAgent: "vitest",
+        },
+    });
+}

@@ -220,7 +220,7 @@ export async function buildApp() {
     });
 
     await app.register(auditRoutes, {
-        prefix: "/api/audit",
+        prefix: "/api/audit-logs",
     });
 
     await app.register(revenueRoutes, {
