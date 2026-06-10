@@ -145,3 +145,45 @@ export async function createTestViewing(propertyId: string, brokerId: string) {
         },
     });
 }
+
+export async function createClosedWonTestLead(
+    brokerId: string,
+    propertyId: string
+) {
+    return prisma.lead.create({
+        data: {
+            firstName: "Maria",
+            lastName: "Santos",
+            email: "maria@test.com",
+            phone: "09123456789",
+            message: "Closed won lead for revenue test.",
+            source: "WEBSITE",
+            status: "CLOSED_WON",
+            budget: 3500000,
+            brokerId,
+            propertyId,
+        },
+    });
+}
+
+export async function createTestRevenue(
+    propertyId: string,
+    brokerId: string,
+    leadId?: string
+) {
+    return prisma.revenue.create({
+        data: {
+            propertyId,
+            brokerId,
+            leadId,
+            grossSaleAmount: 3500000,
+            commissionRate: 5,
+            commissionAmount: 175000,
+            paymentReceived: 500000,
+            paymentStatus: "PARTIAL",
+            commissionStatus: "PENDING",
+            saleDate: new Date("2026-07-01T00:00:00.000Z"),
+            notes: "Test revenue record.",
+        },
+    });
+}
