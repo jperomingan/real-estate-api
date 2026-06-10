@@ -5,6 +5,7 @@
     "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
+    "@vitest/coverage-v8": "^4.1.8",
     "dotenv-cli": "^11.0.0",
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
@@ -29,7 +30,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:db:push": "dotenv -e .env.test -- prisma db push",
-    "test:db:reset": "dotenv -e .env.test -- prisma db push --force-reset"
+    "test:db:reset": "dotenv -e .env.test -- prisma db push --force-reset",
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:ui": "vitest --coverage"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
