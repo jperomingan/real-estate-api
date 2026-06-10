@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: real_estate_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: real_estate_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - real_estate_postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: postgresql://postgres:postgres@postgres:5432/real_estate_db?schema=public
+    container_name: real_estate_api
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/real_estate_db?schema=public
+      JWT_SECRET: replace_this_with_a_long_secure_secret_minimum_32_characters
+      PORT: 4000
+      APP_URL: http://localhost:4000
+      ALLOWED_ORIGINS: http://localhost:4000,http://localhost:3000,http://localhost:5173
+    ports:
+      - "4000:4000"
+
+volumes:
+  real_estate_postgres_data:
