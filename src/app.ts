@@ -35,31 +35,33 @@ export async function buildApp() {
     await app.register(requestLoggerPlugin);
     await app.register(securityHeadersPlugin);
 
-    await app.register(rateLimit, {
-        global: true,
-        max: 300,
-        timeWindow: "1 minute",
-        hook: "onRequest",
-        errorResponseBuilder: (
-            _request: unknown,
-            context: {
-                after: string;
-                max: number;
-                ttl: number;
-            }
-        ) => {
-            return {
-                success: false,
-                message: `Too many requests. Please try again in ${context.after}.`,
-                errors: {
-                    statusCode: 429,
-                    limit: context.max,
-                    remaining: 0,
-                    reset: context.ttl,
-                },
-            };
-        },
-    });
+    if (env.NODE_ENV !== "test") {
+        await app.register(rateLimit, {
+            global: true,
+            max: 300,
+            timeWindow: "1 minute",
+            hook: "onRequest",
+            errorResponseBuilder: (
+                _request: unknown,
+                context: {
+                    after: string;
+                    max: number;
+                    ttl: number;
+                }
+            ) => {
+                return {
+                    success: false,
+                    message: `Too many requests. Please try again in ${context.after}.`,
+                    errors: {
+                        statusCode: 429,
+                        limit: context.max,
+                        remaining: 0,
+                        reset: context.ttl,
+                    },
+                };
+            },
+        });
+    }
 
     await app.register(corsPlugin);
 
