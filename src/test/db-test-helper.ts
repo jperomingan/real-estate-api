@@ -187,3 +187,18 @@ export async function createTestRevenue(
         },
     });
 }
+
+export async function createTestNotification(targetUserId: string) {
+    return prisma.notification.create({
+        data: {
+            targetUserId,
+            type: "GENERAL",
+            title: "Test Notification",
+            message: "This is a test notification.",
+            isRead: false,
+            metadata: {
+                source: "test",
+            },
+        },
+    });
+}
