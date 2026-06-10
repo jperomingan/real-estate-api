@@ -222,3 +222,36 @@ export async function createTestAuditLog(actorUserId?: string) {
         },
     });
 }
+
+export async function createPendingTestBroker() {
+    return createTestUser({
+        firstName: "Pending",
+        lastName: "Broker",
+        email: "pending.broker@test.com",
+        password: "BrokerPassword123",
+        role: "BROKER",
+        status: "PENDING",
+    });
+}
+
+export async function createRejectedTestBroker() {
+    return createTestUser({
+        firstName: "Rejected",
+        lastName: "Broker",
+        email: "rejected.broker@test.com",
+        password: "BrokerPassword123",
+        role: "BROKER",
+        status: "REJECTED",
+    });
+}
+
+export async function createInactiveTestClient() {
+    return createTestUser({
+        firstName: "Inactive",
+        lastName: "Client",
+        email: "inactive.client@test.com",
+        password: "ClientPassword123",
+        role: "CLIENT",
+        status: "INACTIVE",
+    });
+}
