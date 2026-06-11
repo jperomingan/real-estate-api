@@ -10,10 +10,9 @@ async function startServer() {
             host: "0.0.0.0",
         });
 
-        console.log(`Backend API is running at http://localhost:${env.PORT}`);
+        app.log.info(`Server running on port ${env.PORT}`);
     } catch (error) {
         app.log.error(error);
-        console.error("Failed to start server:", error);
         process.exit(1);
     }
 }
