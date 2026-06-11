@@ -41,3 +41,23 @@ npm run docker:db:migrate
 
 For local Docker schema sync only
 npm run docker:db:push
+
+
+---
+
+## 3. Update `DEPLOYMENT.md`
+
+Add this section under **Database Migration Commands**:
+
+```md
+## Production Admin Seeding
+
+After production migrations are applied, seed the first admin user.
+
+Set these environment variables in the production platform:
+
+```env
+SEED_ADMIN_EMAIL=admin@yourdomain.com
+SEED_ADMIN_PASSWORD=replace_with_secure_admin_password
+SEED_ADMIN_FIRST_NAME=System
+SEED_ADMIN_LAST_NAME=Admin

@@ -385,3 +385,21 @@ npm run test
 
 If Docker is running
 npm run docker:db:push
+
+## Admin Seed User
+
+The project includes a safe seed script for creating or updating the default admin user.
+
+The seed script uses `upsert`, so running it multiple times will not create duplicate admin accounts.
+
+### Seed Environment Variables
+
+---
+
+## 4. Test commands
+
+```bash
+npm run db:generate
+npm run db:seed
+npm run build
+npm run test

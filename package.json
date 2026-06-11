@@ -44,7 +44,8 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:seed": "prisma db seed",
-    "docker:db:migrate": "docker compose exec api npx prisma migrate deploy"
+    "docker:db:migrate": "docker compose exec api npx prisma migrate deploy",
+    "docker:db:seed": "DATABASE_URL=\"postgresql://postgres:postgres@localhost:5433/real_estate_db?schema=public\" npm run db:seed"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
