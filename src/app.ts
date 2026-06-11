@@ -23,6 +23,7 @@ import { requestLoggerPlugin } from "./plugins/request-logger.js";
 import rateLimit from "@fastify/rate-limit";
 import { securityHeadersPlugin } from "./plugins/security-headers.js";
 import { corsPlugin } from "./plugins/cors.js";
+import { healthRoutes } from "./modules/health/health.route.js";
 
 export async function buildApp() {
     const app = Fastify({
@@ -145,47 +146,11 @@ export async function buildApp() {
         },
     });
 
+    await app.register(healthRoutes);
+
     await app.register(swaggerUi, {
         routePrefix: "/docs",
     });
-
-    app.get(
-        "/health",
-        {
-            schema: {
-                tags: ["Health"],
-                summary: "Check if backend server is running",
-                response: {
-                    200: {
-                        type: "object",
-                        properties: {
-                            success: { type: "boolean" },
-                            message: { type: "string" },
-                            data: {
-                                type: "object",
-                                properties: {
-                                    status: { type: "string" },
-                                    service: { type: "string" },
-                                    timestamp: { type: "string" },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        async () => {
-            return {
-                success: true,
-                message: "Backend API is running",
-                data: {
-                    status: "ok",
-                    service: "real-estate-api",
-                    timestamp: new Date().toISOString(),
-                },
-            };
-        }
-    );
 
     await app.register(authRoutes, {
         prefix: "/api/auth",

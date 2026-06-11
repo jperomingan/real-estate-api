@@ -39,7 +39,7 @@ USER node
 EXPOSE 4000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-  CMD wget -qO- http://localhost:4000/health || exit 1
+  CMD wget -qO- http://localhost:4000/ready || exit 1
 
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "dist/src/server.js"]
