@@ -343,3 +343,13 @@ Current tested modules include:
 * Dashboard
 * Favorites
 * Notifications
+
+## Environment Files
+
+Use the example files as templates:
+
+```txt
+.env.example
+.env.test.example
+.env.docker.example
+.env.production.example
