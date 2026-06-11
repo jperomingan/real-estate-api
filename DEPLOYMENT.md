@@ -23,3 +23,21 @@ JWT_SECRET=replace_with_a_secure_32_plus_character_secret
 PORT=4000
 APP_URL=https://your-backend-domain.com
 ALLOWED_ORIGINS=https://your-frontend-domain.com
+
+## Database Migration Commands
+
+For local development:
+
+```bash
+npm run db:migrate:dev
+
+For production or staging
+
+npm run db:migrate:deploy
+
+For Docker production-style migration
+
+npm run docker:db:migrate
+
+For local Docker schema sync only
+npm run docker:db:push

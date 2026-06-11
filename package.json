@@ -37,7 +37,14 @@
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f api",
-    "docker:db:push": "docker compose exec api npx prisma db push"
+    "docker:db:push": "docker compose exec api npx prisma db push",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed",
+    "docker:db:migrate": "docker compose exec api npx prisma migrate deploy"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",

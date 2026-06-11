@@ -353,3 +353,35 @@ Use the example files as templates:
 .env.test.example
 .env.docker.example
 .env.production.example
+
+
+---
+
+## 4. Update `README.md`
+
+Add this section near **Backend Commands**:
+
+```md
+## Database Commands
+
+```bash
+npm run db:generate
+npm run db:migrate:dev
+npm run db:migrate:deploy
+npm run db:push
+npm run db:studio
+
+
+---
+
+## 5. Test locally
+
+Run:
+
+```bash
+npm run db:generate
+npm run build
+npm run test
+
+If Docker is running
+npm run docker:db:push
