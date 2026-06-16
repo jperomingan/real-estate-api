@@ -1,10 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../../lib/prisma.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function healthRoutes(app: FastifyInstance) {
-    app.get("/health", async () => {
-        return {
-            success: true,
+    app.get("/health", async (_request, reply) => {
+        return sendSuccess({
+            reply,
             message: "Backend API is running",
             data: {
                 status: "ok",
@@ -12,15 +13,15 @@ export async function healthRoutes(app: FastifyInstance) {
                 uptime: process.uptime(),
                 timestamp: new Date().toISOString(),
             },
-        };
+        });
     });
 
-    app.get("/ready", async (_request, reply) => {
+    app.get("/ready", async (request, reply) => {
         try {
             await prisma.$queryRaw`SELECT 1`;
 
-            return {
-                success: true,
+            return sendSuccess({
+                reply,
                 message: "Backend API is ready",
                 data: {
                     status: "ready",
@@ -28,12 +29,15 @@ export async function healthRoutes(app: FastifyInstance) {
                     service: "real-estate-api",
                     timestamp: new Date().toISOString(),
                 },
-            };
-        } catch (error) {
-            return reply.status(503).send({
-                success: false,
+            });
+        } catch {
+            return sendError({
+                reply,
+                statusCode: 503,
                 message: "Backend API is not ready",
-                data: {
+                code: "SERVICE_UNAVAILABLE",
+                requestId: request.id,
+                details: {
                     status: "not_ready",
                     database: "disconnected",
                     service: "real-estate-api",
