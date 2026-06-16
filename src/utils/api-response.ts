@@ -1,41 +1,76 @@
-import { FastifyReply } from "fastify";
+import type { FastifyReply } from "fastify";
 
 type SuccessResponseInput<T> = {
     reply: FastifyReply;
+    statusCode?: number;
     message: string;
     data?: T;
-    statusCode?: number;
+    meta?: Record<string, unknown>;
 };
 
 type ErrorResponseInput = {
     reply: FastifyReply;
-    message: string;
-    errors?: unknown;
     statusCode?: number;
+    message: string;
+    code?: string;
+    details?: unknown;
+    requestId?: string;
 };
 
 export function sendSuccess<T>({
     reply,
+    statusCode = 200,
     message,
     data,
-    statusCode = 200,
+    meta,
 }: SuccessResponseInput<T>) {
     return reply.status(statusCode).send({
         success: true,
         message,
-        data,
+        data: data ?? null,
+        ...(meta ? { meta } : {}),
     });
 }
 
 export function sendError({
     reply,
+    statusCode = 500,
     message,
-    errors,
-    statusCode = 400,
+    code = "INTERNAL_SERVER_ERROR",
+    details,
+    requestId,
 }: ErrorResponseInput) {
     return reply.status(statusCode).send({
         success: false,
         message,
-        errors,
+        error: {
+            code,
+            statusCode,
+            ...(requestId ? { requestId } : {}),
+            ...(details ? { details } : {}),
+        },
     });
+}
+
+export function buildPaginationMeta({
+    page,
+    limit,
+    total,
+}: {
+    page: number;
+    limit: number;
+    total: number;
+}) {
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+        pagination: {
+            page,
+            limit,
+            total,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPreviousPage: page > 1,
+        },
+    };
 }
