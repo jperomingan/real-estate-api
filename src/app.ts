@@ -54,7 +54,7 @@ export async function buildApp() {
     });
 
     await requestIdPlugin(app);
-    await app.register(errorHandlerPlugin);
+    await errorHandlerPlugin(app);
     await app.register(requestLoggerPlugin);
     await app.register(securityHeadersPlugin);
 
