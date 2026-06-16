@@ -24,14 +24,36 @@ import rateLimit from "@fastify/rate-limit";
 import { securityHeadersPlugin } from "./plugins/security-headers.js";
 import { corsPlugin } from "./plugins/cors.js";
 import { healthRoutes } from "./modules/health/health.route.js";
+import crypto from "node:crypto";
+import { requestIdPlugin } from "./plugins/request-id.js";
 
 export async function buildApp() {
     const app = Fastify({
         logger: {
             level: env.NODE_ENV === "production" ? "info" : "debug",
+            transport:
+                env.NODE_ENV === "development"
+                    ? {
+                        target: "pino-pretty",
+                        options: {
+                            translateTime: "SYS:standard",
+                            ignore: "pid,hostname",
+                        },
+                    }
+                    : undefined,
+        },
+        genReqId: (request) => {
+            const existingRequestId = request.headers["x-request-id"];
+
+            if (typeof existingRequestId === "string") {
+                return existingRequestId;
+            }
+
+            return crypto.randomUUID();
         },
     });
 
+    await requestIdPlugin(app);
     await app.register(errorHandlerPlugin);
     await app.register(requestLoggerPlugin);
     await app.register(securityHeadersPlugin);
