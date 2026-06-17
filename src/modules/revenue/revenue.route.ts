@@ -29,6 +29,7 @@ import {
 } from "./revenue.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function revenueRoutes(app: FastifyInstance) {
     app.post(
@@ -54,9 +55,13 @@ export async function revenueRoutes(app: FastifyInstance) {
             const bodyResult = createRevenueSchema.safeParse(request.body);
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -64,16 +69,22 @@ export async function revenueRoutes(app: FastifyInstance) {
                 const user = request.user as JwtUser;
                 const revenue = await createRevenue(bodyResult.data, user);
 
-                return reply.status(201).send({
+                return sendSuccess({
+                    reply,
+                    statusCode: 201,
                     message: "Revenue record created successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to create revenue record",
+                    code: "REVENUE_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -100,7 +111,8 @@ export async function revenueRoutes(app: FastifyInstance) {
             const user = request.user as JwtUser;
             const data = await getRevenueSummary(user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Revenue summary fetched successfully",
                 data,
             });
@@ -130,16 +142,21 @@ export async function revenueRoutes(app: FastifyInstance) {
             const queryResult = revenueListQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getRevenues(queryResult.data, user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Revenue records fetched successfully",
                 data,
             });
@@ -170,9 +187,13 @@ export async function revenueRoutes(app: FastifyInstance) {
             const paramsResult = revenueIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -181,21 +202,30 @@ export async function revenueRoutes(app: FastifyInstance) {
                 const revenue = await getRevenueById(paramsResult.data.id, user);
 
                 if (!revenue) {
-                    return reply.status(404).send({
+                    return sendError({
+                        reply,
+                        statusCode: 404,
                         message: "Revenue record not found",
+                        code: "REVENUE_NOT_FOUND",
+                        requestId: request.id,
                     });
                 }
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Revenue record fetched successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return reply.status(403).send({
+                return sendError({
+                    reply,
+                    statusCode: 403,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to fetch revenue record",
+                    code: "REVENUE_ACCESS_DENIED",
+                    requestId: request.id,
                 });
             }
         }
@@ -227,16 +257,24 @@ export async function revenueRoutes(app: FastifyInstance) {
             const bodyResult = updatePaymentStatusSchema.safeParse(request.body);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -248,16 +286,21 @@ export async function revenueRoutes(app: FastifyInstance) {
                     user
                 );
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Revenue payment status updated successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to update payment status",
+                    code: "REVENUE_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -289,16 +332,24 @@ export async function revenueRoutes(app: FastifyInstance) {
             const bodyResult = updateCommissionStatusSchema.safeParse(request.body);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -310,16 +361,21 @@ export async function revenueRoutes(app: FastifyInstance) {
                     user
                 );
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Revenue commission status updated successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to update commission status",
+                    code: "REVENUE_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -349,9 +405,13 @@ export async function revenueRoutes(app: FastifyInstance) {
             const paramsResult = revenueIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -359,15 +419,20 @@ export async function revenueRoutes(app: FastifyInstance) {
                 const user = request.user as JwtUser;
                 await deleteRevenue(paramsResult.data.id, user);
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Revenue record deleted successfully",
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to delete revenue record",
+                    code: "REVENUE_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
