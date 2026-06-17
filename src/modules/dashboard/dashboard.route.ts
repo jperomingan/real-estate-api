@@ -18,6 +18,7 @@ import {
 } from "./dashboard.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function dashboardRoutes(app: FastifyInstance) {
     app.get(
@@ -43,16 +44,21 @@ export async function dashboardRoutes(app: FastifyInstance) {
             const queryResult = dashboardQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getDashboardSummary(queryResult.data, user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Dashboard summary fetched successfully",
                 data,
             });
@@ -82,16 +88,21 @@ export async function dashboardRoutes(app: FastifyInstance) {
             const queryResult = dashboardQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getMonthlyRevenue(queryResult.data, user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Monthly revenue fetched successfully",
                 data,
             });
@@ -121,16 +132,21 @@ export async function dashboardRoutes(app: FastifyInstance) {
             const queryResult = dashboardQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getLeadConversion(queryResult.data, user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Lead conversion statistics fetched successfully",
                 data,
             });
@@ -158,7 +174,8 @@ export async function dashboardRoutes(app: FastifyInstance) {
             const user = request.user as JwtUser;
             const data = await getPropertyStats(user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Property statistics fetched successfully",
                 data,
             });
@@ -188,16 +205,21 @@ export async function dashboardRoutes(app: FastifyInstance) {
             const queryResult = dashboardQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getBrokerPerformance(queryResult.data, user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Broker performance fetched successfully",
                 data,
             });
