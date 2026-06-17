@@ -72,27 +72,27 @@ export async function adminRoutes(app: FastifyInstance) {
                 ...(status ? { status } : {}),
                 ...(search
                     ? {
-                          OR: [
-                              {
-                                  firstName: {
-                                      contains: search,
-                                      mode: "insensitive" as const,
-                                  },
-                              },
-                              {
-                                  lastName: {
-                                      contains: search,
-                                      mode: "insensitive" as const,
-                                  },
-                              },
-                              {
-                                  email: {
-                                      contains: search,
-                                      mode: "insensitive" as const,
-                                  },
-                              },
-                          ],
-                      }
+                        OR: [
+                            {
+                                firstName: {
+                                    contains: search,
+                                    mode: "insensitive" as const,
+                                },
+                            },
+                            {
+                                lastName: {
+                                    contains: search,
+                                    mode: "insensitive" as const,
+                                },
+                            },
+                            {
+                                email: {
+                                    contains: search,
+                                    mode: "insensitive" as const,
+                                },
+                            },
+                        ],
+                    }
                     : {}),
             };
 
