@@ -20,6 +20,7 @@ import {
 } from "./favorite.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function favoriteRoutes(app: FastifyInstance) {
     app.get(
@@ -45,16 +46,21 @@ export async function favoriteRoutes(app: FastifyInstance) {
             const queryResult = favoriteListQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getUserFavorites(user.id, queryResult.data);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Saved properties fetched successfully",
                 data,
             });
@@ -87,9 +93,13 @@ export async function favoriteRoutes(app: FastifyInstance) {
             );
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -101,16 +111,22 @@ export async function favoriteRoutes(app: FastifyInstance) {
                     paramsResult.data.propertyId
                 );
 
-                return reply.status(201).send({
+                return sendSuccess({
+                    reply,
+                    statusCode: 201,
                     message: "Property saved successfully",
                     data: favorite,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to save property",
+                    code: "FAVORITE_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -142,26 +158,38 @@ export async function favoriteRoutes(app: FastifyInstance) {
             );
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             try {
                 const user = request.user as JwtUser;
 
-                await removePropertyFromFavorites(user.id, paramsResult.data.propertyId);
+                await removePropertyFromFavorites(
+                    user.id,
+                    paramsResult.data.propertyId
+                );
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Property removed from saved list successfully",
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to remove property",
+                    code: "FAVORITE_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -192,16 +220,24 @@ export async function favoriteRoutes(app: FastifyInstance) {
             );
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
-            const data = await getFavoriteStatus(user.id, paramsResult.data.propertyId);
+            const data = await getFavoriteStatus(
+                user.id,
+                paramsResult.data.propertyId
+            );
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Favorite status fetched successfully",
                 data,
             });
