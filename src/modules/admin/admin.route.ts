@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { prisma } from "../../lib/prisma.js";
 import {
     updateUserStatusSchema,
@@ -72,27 +72,27 @@ export async function adminRoutes(app: FastifyInstance) {
                 ...(status ? { status } : {}),
                 ...(search
                     ? {
-                        OR: [
-                            {
-                                firstName: {
-                                    contains: search,
-                                    mode: "insensitive" as const,
-                                },
-                            },
-                            {
-                                lastName: {
-                                    contains: search,
-                                    mode: "insensitive" as const,
-                                },
-                            },
-                            {
-                                email: {
-                                    contains: search,
-                                    mode: "insensitive" as const,
-                                },
-                            },
-                        ],
-                    }
+                          OR: [
+                              {
+                                  firstName: {
+                                      contains: search,
+                                      mode: "insensitive" as const,
+                                  },
+                              },
+                              {
+                                  lastName: {
+                                      contains: search,
+                                      mode: "insensitive" as const,
+                                  },
+                              },
+                              {
+                                  email: {
+                                      contains: search,
+                                      mode: "insensitive" as const,
+                                  },
+                              },
+                          ],
+                      }
                     : {}),
             };
 
@@ -125,7 +125,7 @@ export async function adminRoutes(app: FastifyInstance) {
                     }),
                 },
             });
-        }
+        },
     );
 
     app.get(
@@ -183,7 +183,7 @@ export async function adminRoutes(app: FastifyInstance) {
                 message: "User fetched successfully",
                 data: user,
             });
-        }
+        },
     );
 
     app.patch(
@@ -251,7 +251,7 @@ export async function adminRoutes(app: FastifyInstance) {
                 message: "User approved successfully",
                 data: updatedUser,
             });
-        }
+        },
     );
 
     app.patch(
@@ -319,7 +319,7 @@ export async function adminRoutes(app: FastifyInstance) {
                 message: "User rejected successfully",
                 data: updatedUser,
             });
-        }
+        },
     );
 
     app.patch(
@@ -400,7 +400,7 @@ export async function adminRoutes(app: FastifyInstance) {
                 message: "User status updated successfully",
                 data: updatedUser,
             });
-        }
+        },
     );
 
     app.delete(
@@ -478,6 +478,6 @@ export async function adminRoutes(app: FastifyInstance) {
                 reply,
                 message: "User deleted successfully",
             });
-        }
+        },
     );
 }
