@@ -18,6 +18,7 @@ import {
 } from "./property-image.swagger.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { requirePermission } from "../permission/permission.middleware.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 const UPLOAD_DIR = path.join(process.cwd(), "uploads", "properties");
 
@@ -66,9 +67,13 @@ export async function propertyImageRoutes(app: FastifyInstance) {
             const paramsResult = propertyImageParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -86,28 +91,44 @@ export async function propertyImageRoutes(app: FastifyInstance) {
             });
 
             if (!property) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "Property not found",
+                    code: "PROPERTY_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
             if (user.role === "BROKER" && property.brokerId !== user.id) {
-                return reply.status(403).send({
+                return sendError({
+                    reply,
+                    statusCode: 403,
                     message: "You can only upload images to your own properties.",
+                    code: "PROPERTY_IMAGE_ACCESS_DENIED",
+                    requestId: request.id,
                 });
             }
 
             const file = await request.file();
 
             if (!file) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Image file is required.",
+                    code: "IMAGE_FILE_REQUIRED",
+                    requestId: request.id,
                 });
             }
 
             if (!file.mimetype.startsWith("image/")) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Only image files are allowed.",
+                    code: "INVALID_IMAGE_FILE",
+                    requestId: request.id,
                 });
             }
 
@@ -118,7 +139,13 @@ export async function propertyImageRoutes(app: FastifyInstance) {
                 const storedFilename = `${randomUUID()}${extension}`;
                 const storedPath = path.join(UPLOAD_DIR, storedFilename);
 
-                await pipeline(file.file, await fs.open(storedPath, "w").then((handle) => handle.createWriteStream()));
+                const fileHandle = await fs.open(storedPath, "w");
+
+                try {
+                    await pipeline(file.file, fileHandle.createWriteStream());
+                } finally {
+                    await fileHandle.close();
+                }
 
                 const currentImageCount = await prisma.propertyImage.count({
                     where: {
@@ -146,14 +173,20 @@ export async function propertyImageRoutes(app: FastifyInstance) {
                     },
                 });
 
-                return reply.status(201).send({
+                return sendSuccess({
+                    reply,
+                    statusCode: 201,
                     message: "Property image uploaded successfully",
                     data: propertyImage,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error ? error.message : "Failed to upload image",
+                    code: "PROPERTY_IMAGE_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -185,9 +218,13 @@ export async function propertyImageRoutes(app: FastifyInstance) {
             );
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -205,14 +242,22 @@ export async function propertyImageRoutes(app: FastifyInstance) {
             });
 
             if (!property) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "Property not found",
+                    code: "PROPERTY_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
             if (user.role === "BROKER" && property.brokerId !== user.id) {
-                return reply.status(403).send({
+                return sendError({
+                    reply,
+                    statusCode: 403,
                     message: "You can only delete images from your own properties.",
+                    code: "PROPERTY_IMAGE_ACCESS_DENIED",
+                    requestId: request.id,
                 });
             }
 
@@ -223,8 +268,12 @@ export async function propertyImageRoutes(app: FastifyInstance) {
             });
 
             if (!image || image.propertyId !== propertyId) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "Property image not found",
+                    code: "PROPERTY_IMAGE_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
@@ -243,7 +292,8 @@ export async function propertyImageRoutes(app: FastifyInstance) {
                 // Ignore missing local file because database record is already deleted.
             }
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Property image deleted successfully",
             });
         }
