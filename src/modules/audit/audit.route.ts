@@ -9,6 +9,7 @@ import {
     auditParamsSchema,
     auditSuccessResponseSchema,
 } from "./audit.swagger.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function auditRoutes(app: FastifyInstance) {
     app.get(
@@ -18,8 +19,7 @@ export async function auditRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Audit Logs"],
                 summary: "List audit logs",
-                description:
-                    "Returns system audit logs. Admin access only.",
+                description: "Returns system audit logs. Admin access only.",
                 security: [{ bearerAuth: [] }],
                 querystring: auditListQuerySchemaForSwagger,
                 response: {
@@ -34,15 +34,20 @@ export async function auditRoutes(app: FastifyInstance) {
             const queryResult = auditListQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const data = await getAuditLogs(queryResult.data);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Audit logs fetched successfully",
                 data,
             });
@@ -56,8 +61,7 @@ export async function auditRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Audit Logs"],
                 summary: "Get audit log by ID",
-                description:
-                    "Returns one audit log entry by ID. Admin access only.",
+                description: "Returns one audit log entry by ID. Admin access only.",
                 security: [{ bearerAuth: [] }],
                 params: auditParamsSchema,
                 response: {
@@ -73,21 +77,30 @@ export async function auditRoutes(app: FastifyInstance) {
             const paramsResult = auditIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             const auditLog = await getAuditLogById(paramsResult.data.id);
 
             if (!auditLog) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "Audit log not found",
+                    code: "AUDIT_LOG_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Audit log fetched successfully",
                 data: auditLog,
             });
