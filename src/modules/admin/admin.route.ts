@@ -16,6 +16,7 @@ import {
 } from "./admin.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 const userSelect = {
     id: true,
@@ -54,9 +55,13 @@ export async function adminRoutes(app: FastifyInstance) {
             const queryResult = userListQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -108,7 +113,8 @@ export async function adminRoutes(app: FastifyInstance) {
                 }),
             ]);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Users fetched successfully",
                 data: {
                     items: users,
@@ -145,9 +151,13 @@ export async function adminRoutes(app: FastifyInstance) {
             const paramsResult = userIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -159,12 +169,17 @@ export async function adminRoutes(app: FastifyInstance) {
             });
 
             if (!user) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "User not found",
+                    code: "USER_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "User fetched successfully",
                 data: user,
             });
@@ -195,9 +210,13 @@ export async function adminRoutes(app: FastifyInstance) {
             const paramsResult = userIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -208,8 +227,12 @@ export async function adminRoutes(app: FastifyInstance) {
             });
 
             if (!existingUser) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "User not found",
+                    code: "USER_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
@@ -223,7 +246,8 @@ export async function adminRoutes(app: FastifyInstance) {
                 select: userSelect,
             });
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "User approved successfully",
                 data: updatedUser,
             });
@@ -254,9 +278,13 @@ export async function adminRoutes(app: FastifyInstance) {
             const paramsResult = userIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -267,8 +295,12 @@ export async function adminRoutes(app: FastifyInstance) {
             });
 
             if (!existingUser) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "User not found",
+                    code: "USER_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
@@ -282,7 +314,8 @@ export async function adminRoutes(app: FastifyInstance) {
                 select: userSelect,
             });
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "User rejected successfully",
                 data: updatedUser,
             });
@@ -315,16 +348,24 @@ export async function adminRoutes(app: FastifyInstance) {
             const bodyResult = updateUserStatusSchema.safeParse(request.body);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -335,8 +376,12 @@ export async function adminRoutes(app: FastifyInstance) {
             });
 
             if (!existingUser) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "User not found",
+                    code: "USER_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
@@ -350,7 +395,8 @@ export async function adminRoutes(app: FastifyInstance) {
                 select: userSelect,
             });
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "User status updated successfully",
                 data: updatedUser,
             });
@@ -381,9 +427,13 @@ export async function adminRoutes(app: FastifyInstance) {
             const paramsResult = userIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -393,8 +443,12 @@ export async function adminRoutes(app: FastifyInstance) {
             };
 
             if (paramsResult.data.id === jwtUser.id) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "You cannot delete your own account.",
+                    code: "CANNOT_DELETE_OWN_ACCOUNT",
+                    requestId: request.id,
                 });
             }
 
@@ -405,8 +459,12 @@ export async function adminRoutes(app: FastifyInstance) {
             });
 
             if (!existingUser) {
-                return reply.status(404).send({
+                return sendError({
+                    reply,
+                    statusCode: 404,
                     message: "User not found",
+                    code: "USER_NOT_FOUND",
+                    requestId: request.id,
                 });
             }
 
@@ -416,7 +474,8 @@ export async function adminRoutes(app: FastifyInstance) {
                 },
             });
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "User deleted successfully",
             });
         }
