@@ -27,6 +27,7 @@ import {
 } from "./viewing.swagger.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { requirePermission } from "../permission/permission.middleware.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function viewingRoutes(app: FastifyInstance) {
     app.post(
@@ -54,9 +55,13 @@ export async function viewingRoutes(app: FastifyInstance) {
             const bodyResult = createViewingSchema.safeParse(request.body);
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -72,16 +77,22 @@ export async function viewingRoutes(app: FastifyInstance) {
 
                 const viewing = await createViewingAppointment(bodyResult.data, user);
 
-                return reply.status(201).send({
-                    message: "Viewing appointment requested successfully",
+                return sendSuccess({
+                    reply,
+                    statusCode: 201,
+                    message: "Viewing request created successfully",
                     data: viewing,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to request viewing appointment",
+                    code: "VIEWING_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -110,17 +121,22 @@ export async function viewingRoutes(app: FastifyInstance) {
             const queryResult = viewingListQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getViewingAppointments(queryResult.data, user);
 
-            return reply.send({
-                message: "Viewing appointments fetched successfully",
+            return sendSuccess({
+                reply,
+                message: "Viewings fetched successfully",
                 data,
             });
         }
@@ -150,9 +166,13 @@ export async function viewingRoutes(app: FastifyInstance) {
             const paramsResult = viewingIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -164,21 +184,30 @@ export async function viewingRoutes(app: FastifyInstance) {
                 );
 
                 if (!viewing) {
-                    return reply.status(404).send({
+                    return sendError({
+                        reply,
+                        statusCode: 404,
                         message: "Viewing appointment not found",
+                        code: "VIEWING_NOT_FOUND",
+                        requestId: request.id,
                     });
                 }
 
-                return reply.send({
-                    message: "Viewing appointment fetched successfully",
+                return sendSuccess({
+                    reply,
+                    message: "Viewing fetched successfully",
                     data: viewing,
                 });
             } catch (error) {
-                return reply.status(403).send({
+                return sendError({
+                    reply,
+                    statusCode: 403,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to fetch viewing appointment",
+                    code: "VIEWING_ACCESS_DENIED",
+                    requestId: request.id,
                 });
             }
         }
@@ -210,16 +239,24 @@ export async function viewingRoutes(app: FastifyInstance) {
             const bodyResult = updateViewingStatusSchema.safeParse(request.body);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -231,16 +268,21 @@ export async function viewingRoutes(app: FastifyInstance) {
                     user
                 );
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Viewing status updated successfully",
                     data: viewing,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to update viewing status",
+                    code: "VIEWING_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -272,16 +314,24 @@ export async function viewingRoutes(app: FastifyInstance) {
             const bodyResult = rescheduleViewingSchema.safeParse(request.body);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -293,16 +343,21 @@ export async function viewingRoutes(app: FastifyInstance) {
                     user
                 );
 
-                return reply.send({
-                    message: "Viewing appointment rescheduled successfully",
+                return sendSuccess({
+                    reply,
+                    message: "Viewing rescheduled successfully",
                     data: viewing,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to reschedule viewing appointment",
+                    code: "VIEWING_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -332,9 +387,13 @@ export async function viewingRoutes(app: FastifyInstance) {
             const paramsResult = viewingIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -342,15 +401,20 @@ export async function viewingRoutes(app: FastifyInstance) {
                 const user = request.user as JwtUser;
                 await deleteViewingAppointment(paramsResult.data.id, user);
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Viewing appointment deleted successfully",
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to delete viewing appointment",
+                    code: "VIEWING_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
