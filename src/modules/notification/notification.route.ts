@@ -21,6 +21,7 @@ import {
 } from "./notification.swagger.js";
 import { requirePermission } from "../permission/permission.middleware.js";
 import { JwtUser } from "../permission/permission.types.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function notificationRoutes(app: FastifyInstance) {
     app.get(
@@ -46,16 +47,21 @@ export async function notificationRoutes(app: FastifyInstance) {
             const queryResult = notificationListQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getNotifications(user.id, queryResult.data);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Notifications fetched successfully",
                 data,
             });
@@ -83,7 +89,8 @@ export async function notificationRoutes(app: FastifyInstance) {
             const user = request.user as JwtUser;
             const data = await getUnreadNotificationCount(user.id);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Unread notification count fetched successfully",
                 data,
             });
@@ -112,7 +119,8 @@ export async function notificationRoutes(app: FastifyInstance) {
 
             await markAllNotificationsAsRead(user.id);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "All notifications marked as read successfully",
             });
         }
@@ -125,8 +133,7 @@ export async function notificationRoutes(app: FastifyInstance) {
             schema: {
                 tags: ["Notifications"],
                 summary: "Mark notification as read",
-                description:
-                    "Marks a single notification as read.",
+                description: "Marks a single notification as read.",
                 security: [{ bearerAuth: [] }],
                 params: notificationParamsSchema,
                 response: {
@@ -142,9 +149,13 @@ export async function notificationRoutes(app: FastifyInstance) {
             const paramsResult = notificationIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -155,16 +166,21 @@ export async function notificationRoutes(app: FastifyInstance) {
                     paramsResult.data.id
                 );
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Notification marked as read successfully",
                     data: notification,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to update notification",
+                    code: "NOTIFICATION_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -194,9 +210,13 @@ export async function notificationRoutes(app: FastifyInstance) {
             const paramsResult = notificationIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -205,15 +225,20 @@ export async function notificationRoutes(app: FastifyInstance) {
 
                 await deleteNotification(user.id, paramsResult.data.id);
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Notification deleted successfully",
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message:
                         error instanceof Error
                             ? error.message
                             : "Failed to delete notification",
+                    code: "NOTIFICATION_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
