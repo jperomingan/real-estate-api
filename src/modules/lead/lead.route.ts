@@ -24,6 +24,7 @@ import {
 } from "./lead.swagger.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { requirePermission } from "../permission/permission.middleware.js";
+import { sendSuccess, sendError } from "../../utils/api-response.js";
 
 export async function leadRoutes(app: FastifyInstance) {
     app.post(
@@ -51,9 +52,13 @@ export async function leadRoutes(app: FastifyInstance) {
             const bodyResult = createLeadSchema.safeParse(request.body);
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -69,13 +74,19 @@ export async function leadRoutes(app: FastifyInstance) {
 
                 const lead = await createLead(bodyResult.data, user);
 
-                return reply.status(201).send({
+                return sendSuccess({
+                    reply,
+                    statusCode: 201,
                     message: "Lead created successfully",
                     data: lead,
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: error instanceof Error ? error.message : "Failed to create lead",
+                    code: "LEAD_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -104,16 +115,21 @@ export async function leadRoutes(app: FastifyInstance) {
             const queryResult = leadListQuerySchema.safeParse(request.query);
 
             if (!queryResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: queryResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: queryResult.error.flatten().fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
             const data = await getLeads(queryResult.data, user);
 
-            return reply.send({
+            return sendSuccess({
+                reply,
                 message: "Leads fetched successfully",
                 data,
             });
@@ -144,9 +160,13 @@ export async function leadRoutes(app: FastifyInstance) {
             const paramsResult = leadIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -155,12 +175,17 @@ export async function leadRoutes(app: FastifyInstance) {
                 const lead = await getLeadById(paramsResult.data.id, user);
 
                 if (!lead) {
-                    return reply.status(404).send({
+                    return sendError({
+                        reply,
+                        statusCode: 404,
                         message: "Lead not found",
+                        code: "LEAD_NOT_FOUND",
+                        requestId: request.id,
                     });
                 }
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Lead fetched successfully",
                     data: lead,
                 });
@@ -198,16 +223,24 @@ export async function leadRoutes(app: FastifyInstance) {
             const bodyResult = updateLeadStatusSchema.safeParse(request.body);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
             if (!bodyResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: bodyResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: bodyResult.error.flatten().fieldErrors,
                 });
             }
 
@@ -219,14 +252,18 @@ export async function leadRoutes(app: FastifyInstance) {
                     user
                 );
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Lead status updated successfully",
                     data: lead,
                 });
             } catch (error) {
-                return reply.status(400).send({
-                    message:
-                        error instanceof Error ? error.message : "Failed to update lead status",
+                return sendError({
+                    reply,
+                    statusCode: 400,
+                    message: error instanceof Error ? error.message : "Failed to update lead status",
+                    code: "LEAD_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }
@@ -256,9 +293,13 @@ export async function leadRoutes(app: FastifyInstance) {
             const paramsResult = leadIdParamsSchema.safeParse(request.params);
 
             if (!paramsResult.success) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: "Validation error",
-                    errors: paramsResult.error.flatten().fieldErrors,
+                    code: "VALIDATION_ERROR",
+                    requestId: request.id,
+                    details: paramsResult.error.flatten().fieldErrors,
                 });
             }
 
