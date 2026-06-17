@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { sendError } from "../../utils/api-response.js";
 import { hasPermission } from "./permission.service.js";
 import { JwtUser, Permission } from "./permission.types.js";
 
@@ -13,13 +14,22 @@ export function requirePermission(permission: Permission) {
             const user = request.user as JwtUser;
 
             if (!hasPermission(user, permission)) {
-                return reply.status(403).send({
-                    message: "Forbidden. You do not have permission to access this resource.",
+                return sendError({
+                    reply,
+                    statusCode: 403,
+                    message:
+                        "Forbidden. You do not have permission to access this resource.",
+                    code: "FORBIDDEN",
+                    requestId: request.id,
                 });
             }
         } catch {
-            return reply.status(401).send({
+            return sendError({
+                reply,
+                statusCode: 401,
                 message: "Unauthorized",
+                code: "UNAUTHORIZED",
+                requestId: request.id,
             });
         }
     };

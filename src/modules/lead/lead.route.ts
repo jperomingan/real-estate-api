@@ -190,8 +190,12 @@ export async function leadRoutes(app: FastifyInstance) {
                     data: lead,
                 });
             } catch (error) {
-                return reply.status(403).send({
+                return sendError({
+                    reply,
+                    statusCode: 403,
                     message: error instanceof Error ? error.message : "Failed to fetch lead",
+                    code: "LEAD_ACCESS_DENIED",
+                    requestId: request.id,
                 });
             }
         }
@@ -307,12 +311,17 @@ export async function leadRoutes(app: FastifyInstance) {
                 const user = request.user as JwtUser;
                 await deleteLead(paramsResult.data.id, user);
 
-                return reply.send({
+                return sendSuccess({
+                    reply,
                     message: "Lead deleted successfully",
                 });
             } catch (error) {
-                return reply.status(400).send({
+                return sendError({
+                    reply,
+                    statusCode: 400,
                     message: error instanceof Error ? error.message : "Failed to delete lead",
+                    code: "LEAD_OPERATION_FAILED",
+                    requestId: request.id,
                 });
             }
         }

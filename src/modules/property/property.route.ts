@@ -300,7 +300,8 @@ export async function propertyRoutes(app: FastifyInstance) {
         const user = request.user as JwtUser;
         await deleteProperty(paramsResult.data.id, user);
 
-        return reply.send({
+        return sendSuccess({
+          reply,
           message: "Property deleted successfully",
         });
       } catch (error) {
