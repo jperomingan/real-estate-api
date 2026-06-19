@@ -75,7 +75,8 @@ export async function buildApp() {
                 return {
                     success: false,
                     message: `Too many requests. Please try again in ${context.after}.`,
-                    errors: {
+                    error: {
+                        code: "RATE_LIMIT_EXCEEDED",
                         statusCode: 429,
                         limit: context.max,
                         remaining: 0,
