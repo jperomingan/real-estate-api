@@ -4,15 +4,15 @@ services:
     container_name: real_estate_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: real_estate_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-real_estate_db}
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PORT:-5433}:5432"
     volumes:
       - real_estate_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d real_estate_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-real_estate_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,21 +22,23 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        DATABASE_URL: postgresql://postgres:postgres@postgres:5432/real_estate_db?schema=public
+        DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/real_estate_db?schema=public}
     container_name: real_estate_api
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/real_estate_db?schema=public
-      JWT_SECRET: replace_this_with_a_long_secure_secret_minimum_32_characters
-      PORT: 4000
-      APP_URL: http://localhost:4000
-      ALLOWED_ORIGINS: http://localhost:4000,http://localhost:3000,http://localhost:5173
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/real_estate_db?schema=public}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: ${PORT:-4000}
+      APP_URL: ${APP_URL:-http://localhost:4000}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:4000,http://localhost:3000,http://localhost:5173}
     ports:
-      - "4000:4000"
+      - "${PORT:-4000}:4000"
+    volumes:
+      - ./uploads:/app/uploads
 
 volumes:
   real_estate_postgres_data:
