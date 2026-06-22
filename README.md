@@ -2,137 +2,218 @@
 
 ![Backend CI](https://github.com/jperomingan/real-estate-api/actions/workflows/backend-ci.yml/badge.svg)
 
-Backend API for the Real Estate Management System with property management, lead tracking, viewing appointments, revenue tracking, favorites, notifications, audit logs, dashboard analytics, authentication, role-based access control, Swagger API documentation, and automated tests.
+Production-ready backend API for a Real Estate Management System with property management, lead tracking, viewing appointments, revenue tracking, favorites, notifications, audit logs, dashboard analytics, authentication, and role-based access control.
 
 ## Features
 
-* User authentication with JWT
-* Admin, broker, and client roles
-* Role-based permission middleware
-* Property listing and management
-* Property image upload and delete support
-* Lead and inquiry tracking
-* Viewing appointment management
-* Revenue, payment, and commission tracking
-* Favorite properties
-* User notifications
-* Audit logs
-* Dashboard analytics
-* Swagger API documentation
-* Vitest automated testing
-* Test database support
-* Coverage reporting
-* GitHub Actions CI
+- JWT authentication
+- Admin, broker, and client roles
+- Permission-based authorization
+- User approval and account management
+- Property listing and management
+- Property image upload and deletion
+- Lead and inquiry tracking
+- Viewing appointment management
+- Revenue, payment, and commission tracking
+- Favorite properties
+- User notifications
+- Audit logs
+- Dashboard analytics
+- Standard API success and error responses
+- Request ID tracking
+- Structured request logging
+- CORS protection
+- Helmet security headers
+- Global rate limiting
+- Swagger/OpenAPI documentation
+- Prisma migrations and database seeding
+- Vitest automated tests and coverage
+- Docker and Docker Compose support
+- GitHub Actions CI
 
-## Tech Stack
+## Technology Stack
 
-* Node.js
-* TypeScript
-* Fastify
-* Prisma ORM
-* PostgreSQL
-* Zod
-* JWT
-* Vitest
-* Swagger / OpenAPI
-* GitHub Actions
+- Node.js 22
+- TypeScript
+- Fastify
+- Prisma ORM
+- PostgreSQL
+- Zod
+- JWT
+- Vitest
+- Swagger/OpenAPI
+- Docker
+- GitHub Actions
 
-## Backend Commands
+## Requirements
+
+For local development:
+
+- Node.js 22 or later
+- npm
+- PostgreSQL
+- Git
+
+For Docker development:
+
+- Docker Desktop
+- Docker Compose
+
+## Project Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/jperomingan/real-estate-api.git
+cd real-estate-api
+```
+
+### 2. Install dependencies
 
 ```bash
 npm install
-npx prisma generate
-npm run build
-npm run test
-npm run test:coverage
 ```
 
-## Development Setup
-
-### 1. Install dependencies
+### 3. Create the local environment file
 
 ```bash
-npm install
+cp .env.example .env
 ```
 
-### 2. Create environment file
+Generate a secure JWT secret:
 
-Create a `.env` file in the project root.
+```bash
+openssl rand -base64 48
+```
+
+Paste the generated value into `.env`.
+
+Example:
 
 ```env
-DATABASE_URL="postgresql://jenn@localhost:5432/real_estate_db?schema=public"
-JWT_SECRET="replace_this_with_a_long_secure_secret_minimum_32_characters"
+NODE_ENV=development
 PORT=4000
-NODE_ENV="development"
-APP_URL="http://localhost:4000"
-ALLOWED_ORIGINS="http://localhost:3000,http://localhost:5173,http://localhost:4000"
+APP_URL=http://localhost:4000
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost:4000
+
+DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/real_estate_db?schema=public
+
+JWT_SECRET=replace_with_a_random_secret_at_least_32_characters
+
+SEED_ADMIN_EMAIL=admin@example.com
+SEED_ADMIN_PASSWORD=replace_with_a_secure_admin_password
+SEED_ADMIN_FIRST_NAME=System
+SEED_ADMIN_LAST_NAME=Admin
 ```
 
-### 3. Generate Prisma client
+Never commit `.env` or real credentials.
+
+## Database Setup
+
+### Generate the Prisma client
 
 ```bash
-npx prisma generate
+npm run prisma:generate
 ```
 
-### 4. Run Prisma migration or database push
-
-For development migration:
+### Create a development migration
 
 ```bash
-npx prisma migrate dev
+npm run db:migrate:dev
 ```
 
-For pushing schema without migration:
+### Apply existing migrations
 
 ```bash
-npx prisma db push
+npm run db:migrate:deploy
 ```
 
-### 5. Start development server
+### Push the schema without creating a migration
+
+Use this only for temporary development databases:
+
+```bash
+npm run db:push
+```
+
+### Seed the database
+
+```bash
+npm run db:seed
+```
+
+The seed command uses these environment variables:
+
+```env
+SEED_ADMIN_EMAIL
+SEED_ADMIN_PASSWORD
+SEED_ADMIN_FIRST_NAME
+SEED_ADMIN_LAST_NAME
+```
+
+## Development Server
+
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-The API will run at:
+API URL:
 
-```txt
+```text
 http://localhost:4000
 ```
 
 Swagger documentation:
 
-```txt
+```text
 http://localhost:4000/docs
 ```
 
-## Test Database Setup
+Health endpoint:
 
-Create a `.env.test` file in the project root.
-
-```env
-DATABASE_URL="postgresql://jenn@localhost:5432/real_estate_test_db?schema=public"
-JWT_SECRET="test_secret_must_be_at_least_32_characters_long"
-PORT=4001
-NODE_ENV="test"
-APP_URL="http://localhost:4001"
-ALLOWED_ORIGINS="http://localhost:4001"
+```text
+http://localhost:4000/health
 ```
 
-Create the test database:
+Readiness endpoint:
+
+```text
+http://localhost:4000/ready
+```
+
+## Build and Production Start
+
+Build the TypeScript project:
 
 ```bash
-psql -d postgres
+npm run build
 ```
 
-Inside `psql`:
+Start the compiled application:
 
-```sql
-CREATE DATABASE real_estate_test_db;
-\q
+```bash
+npm run start
 ```
 
-Push Prisma schema to the test database:
+## Testing
+
+### Prepare the test database
+
+Create `.env.test` with a separate PostgreSQL database:
+
+```env
+NODE_ENV=test
+PORT=4001
+APP_URL=http://localhost:4001
+ALLOWED_ORIGINS=http://localhost:4001
+
+DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/real_estate_test_db?schema=public
+JWT_SECRET=test_secret_that_is_at_least_32_characters_long
+```
+
+Push the schema:
 
 ```bash
 npm run test:db:push
@@ -144,262 +225,265 @@ Reset the test database:
 npm run test:db:reset
 ```
 
-## Testing
-
-Run all tests:
+### Run tests
 
 ```bash
 npm run test
 ```
 
-Run tests in watch mode:
+Watch mode:
 
 ```bash
 npm run test:watch
 ```
 
-Run test coverage:
+Coverage:
 
 ```bash
 npm run test:coverage
 ```
 
-Open coverage report:
+Open the local coverage report on macOS:
 
 ```bash
 open coverage/index.html
 ```
 
-## API Documentation
+## Docker Setup
 
-Swagger documentation is available at:
+### 1. Create Docker environment file
 
-```txt
-http://localhost:4000/docs
+```bash
+cp .env.docker.example .env.docker
 ```
 
-Main API groups:
+Generate a unique JWT secret and update `.env.docker`:
 
-* Health
-* Auth
-* Admin
-* Properties
-* Property Images
-* Leads
-* Viewings
-* Revenue
-* Dashboard
-* Favorites
-* Notifications
-* Audit Logs
+```bash
+openssl rand -base64 48
+```
 
-## Main API Modules
+### 2. Build and start containers
 
-### Auth
+```bash
+docker compose --env-file .env.docker up --build -d
+```
 
-* Register user
-* Login user
-* Get current user
+### 3. Check container status
 
-### Admin
+```bash
+docker compose --env-file .env.docker ps -a
+```
 
-* List users
-* Get user by ID
-* Approve broker account
-* Reject broker account
-* Update user status
-* Delete user
+### 4. Apply Prisma migrations
+
+```bash
+docker compose --env-file .env.docker exec api npx prisma migrate deploy
+```
+
+### 5. Seed the Docker database
+
+```bash
+docker compose --env-file .env.docker exec api npm run db:seed
+```
+
+### 6. Test the Docker API
+
+```bash
+curl -i http://localhost:4000/health
+curl -i http://localhost:4000/ready
+curl -I http://localhost:4000/docs
+```
+
+### 7. View logs
+
+```bash
+docker compose --env-file .env.docker logs -f api
+```
+
+### 8. Stop containers
+
+```bash
+docker compose --env-file .env.docker down
+```
+
+To remove the local Docker database volume:
+
+```bash
+docker compose --env-file .env.docker down -v
+```
+
+Warning: `-v` permanently deletes the Docker database volume.
+
+## API Modules
+
+### Authentication
+
+- Register user
+- Login
+- Get current authenticated user
+
+### Administration
+
+- List users
+- Get user by ID
+- Approve broker
+- Reject broker
+- Update account status
+- Delete user
 
 ### Properties
 
-* Create property
-* List properties
-* Get property by ID
-* Update property
-* Delete property
-* Upload property image
-* Delete property image
+- Create property
+- List and filter properties
+- Get property by ID
+- Update property
+- Delete property
+- Upload property image
+- Delete property image
 
 ### Leads
 
-* Create lead or inquiry
-* List leads
-* Get lead by ID
-* Update lead status
-* Delete lead
+- Create lead
+- List leads
+- Get lead by ID
+- Update lead status
+- Delete lead
 
 ### Viewings
 
-* Request property viewing
-* List viewing appointments
-* Get viewing appointment by ID
-* Update viewing status
-* Reschedule viewing
-* Delete viewing appointment
+- Request viewing appointment
+- List viewings
+- Get viewing by ID
+- Update viewing status
+- Reschedule viewing
+- Delete viewing
 
 ### Revenue
 
-* Create revenue record
-* List revenue records
-* Get revenue by ID
-* Get revenue summary
-* Update payment status
-* Update commission status
-* Delete revenue record
+- Create revenue record
+- List revenue records
+- Get revenue by ID
+- Get revenue summary
+- Update payment status
+- Update commission status
+- Delete revenue record
 
 ### Dashboard
 
-* Dashboard summary
-* Monthly revenue
-* Lead conversion statistics
-* Property statistics
-* Broker performance
+- Dashboard summary
+- Monthly revenue
+- Lead conversion
+- Property statistics
+- Broker performance
 
 ### Favorites
 
-* Save property to favorites
-* List current user's favorites
-* Check favorite status
-* Remove property from favorites
+- Save property
+- List saved properties
+- Check favorite status
+- Remove saved property
 
 ### Notifications
 
-* List notifications
-* Get unread count
-* Mark notification as read
-* Mark all notifications as read
-* Delete notification
+- List notifications
+- Get unread count
+- Mark one notification as read
+- Mark all notifications as read
+- Delete notification
 
 ### Audit Logs
 
-* List audit logs
-* Get audit log by ID
+- List audit logs
+- Get audit log by ID
 
-## Build
+## Standard API Responses
+
+Successful response:
+
+```json
+{
+  "success": true,
+  "message": "Operation completed successfully",
+  "data": {}
+}
+```
+
+Error response:
+
+```json
+{
+  "success": false,
+  "message": "Validation error",
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "statusCode": 400,
+    "requestId": "request-id"
+  }
+}
+```
+
+## Security
+
+The API includes:
+
+- JWT authentication
+- Role and permission checks
+- CORS origin allowlist
+- Helmet security headers
+- Content Security Policy in production
+- Global request rate limiting
+- Production-safe server errors
+- Request IDs
+- Structured logging
+- Environment variable validation
+
+Never commit:
+
+- `.env`
+- `.env.docker`
+- `.env.production`
+- `.env.test`
+- database credentials
+- JWT secrets
+- admin passwords
+- API keys
+- private keys
+
+## Uploaded Files
+
+Property images are stored under:
+
+```text
+uploads/properties
+```
+
+Docker Compose mounts the local `uploads` directory into the API container:
+
+```text
+./uploads:/app/uploads
+```
+
+Production deployments must use persistent storage or an object-storage provider. Container-only storage is not permanent.
+
+## Useful Commands
 
 ```bash
+npm run dev
 npm run build
-```
-
-## Production Start
-
-```bash
 npm run start
-```
-
-## GitHub Actions CI
-
-This project uses GitHub Actions to automatically run:
-
-* dependency installation
-* Prisma client generation
-* database schema push
-* TypeScript build
-* automated tests
-* coverage report
-
-Workflow file:
-
-```txt
-.github/workflows/backend-ci.yml
-```
-
-Coverage report artifact is uploaded after CI runs.
-
-## Important Security Notes
-
-Do not commit the following files or values:
-
-* `.env`
-* `.env.test`
-* database URLs
-* JWT secrets
-* email passwords
-* payment keys
-* admin passwords
-* private server keys
-
-Use `.env.example` for safe sample environment variables only.
-
-## Project Status
-
-Current backend test coverage:
-
-```txt
-70 tests passing
-Overall line coverage: 70%+
-```
-
-Current tested modules include:
-
-* Health
-* Auth
-* Admin
-* Audit Logs
-* Properties
-* Leads
-* Viewings
-* Revenue
-* Dashboard
-* Favorites
-* Notifications
-
-## Environment Files
-
-Use the example files as templates:
-
-```txt
-.env.example
-.env.test.example
-.env.docker.example
-.env.production.example
-
-
----
-
-## 4. Update `README.md`
-
-Add this section near **Backend Commands**:
-
-```md
-## Database Commands
-
-```bash
-npm run db:generate
+npm run lint
+npm run test
+npm run test:coverage
+npm run prisma:generate
 npm run db:migrate:dev
 npm run db:migrate:deploy
 npm run db:push
-npm run db:studio
-
-
----
-
-## 5. Test locally
-
-Run:
-
-```bash
-npm run db:generate
-npm run build
-npm run test
-
-If Docker is running
-npm run docker:db:push
-
-## Admin Seed User
-
-The project includes a safe seed script for creating or updating the default admin user.
-
-The seed script uses `upsert`, so running it multiple times will not create duplicate admin accounts.
-
-### Seed Environment Variables
-
----
-
-## 4. Test commands
-
-```bash
-npm run db:generate
 npm run db:seed
-npm run build
-npm run test
+npm run docker:up
+npm run docker:down
+```
+
+## Deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the production deployment guide.
