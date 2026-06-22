@@ -16,12 +16,12 @@ import { fileURLToPath } from 'node:url'
 globalThis['__dirname'] = path.dirname(fileURLToPath(import.meta.url))
 
 import * as runtime from "@prisma/client/runtime/client"
-import * as $Enums from "./enums.ts"
-import * as $Class from "./internal/class.ts"
-import * as Prisma from "./internal/prismaNamespace.ts"
+import * as $Enums from "./enums.js"
+import * as $Class from "./internal/class.js"
+import * as Prisma from "./internal/prismaNamespace.js"
 
-export * as $Enums from './enums.ts'
-export * from "./enums.ts"
+export * as $Enums from './enums.js'
+export * from "./enums.js"
 /**
  * ## Prisma Client
  * 
@@ -46,3 +46,43 @@ export { Prisma }
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Property
+ * 
+ */
+export type Property = Prisma.PropertyModel
+/**
+ * Model Lead
+ * 
+ */
+export type Lead = Prisma.LeadModel
+/**
+ * Model Revenue
+ * 
+ */
+export type Revenue = Prisma.RevenueModel
+/**
+ * Model PropertyImage
+ * 
+ */
+export type PropertyImage = Prisma.PropertyImageModel
+/**
+ * Model PropertyFavorite
+ * 
+ */
+export type PropertyFavorite = Prisma.PropertyFavoriteModel
+/**
+ * Model ViewingAppointment
+ * 
+ */
+export type ViewingAppointment = Prisma.ViewingAppointmentModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel

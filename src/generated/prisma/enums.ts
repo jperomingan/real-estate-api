@@ -27,3 +27,116 @@ export const UserStatus = {
 } as const
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const PropertyType = {
+  HOUSE_AND_LOT: 'HOUSE_AND_LOT',
+  CONDOMINIUM: 'CONDOMINIUM',
+  LOT_ONLY: 'LOT_ONLY',
+  APARTMENT: 'APARTMENT',
+  TOWNHOUSE: 'TOWNHOUSE',
+  COMMERCIAL: 'COMMERCIAL',
+  AGRICULTURAL: 'AGRICULTURAL',
+  INDUSTRIAL: 'INDUSTRIAL'
+} as const
+
+export type PropertyType = (typeof PropertyType)[keyof typeof PropertyType]
+
+
+export const PropertyStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  RESERVED: 'RESERVED',
+  SOLD: 'SOLD',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type PropertyStatus = (typeof PropertyStatus)[keyof typeof PropertyStatus]
+
+
+export const LeadStatus = {
+  NEW: 'NEW',
+  CONTACTED: 'CONTACTED',
+  QUALIFIED: 'QUALIFIED',
+  VIEWING_SCHEDULED: 'VIEWING_SCHEDULED',
+  NEGOTIATION: 'NEGOTIATION',
+  CLOSED_WON: 'CLOSED_WON',
+  CLOSED_LOST: 'CLOSED_LOST',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
+
+
+export const LeadSource = {
+  WEBSITE: 'WEBSITE',
+  FACEBOOK: 'FACEBOOK',
+  REFERRAL: 'REFERRAL',
+  WALK_IN: 'WALK_IN',
+  PHONE_CALL: 'PHONE_CALL',
+  EMAIL: 'EMAIL',
+  OTHER: 'OTHER'
+} as const
+
+export type LeadSource = (typeof LeadSource)[keyof typeof LeadSource]
+
+
+export const PaymentStatus = {
+  UNPAID: 'UNPAID',
+  PARTIAL: 'PARTIAL',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const CommissionStatus = {
+  PENDING: 'PENDING',
+  PARTIAL: 'PARTIAL',
+  RELEASED: 'RELEASED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type CommissionStatus = (typeof CommissionStatus)[keyof typeof CommissionStatus]
+
+
+export const ViewingStatus = {
+  REQUESTED: 'REQUESTED',
+  CONFIRMED: 'CONFIRMED',
+  RESCHEDULED: 'RESCHEDULED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  DECLINED: 'DECLINED'
+} as const
+
+export type ViewingStatus = (typeof ViewingStatus)[keyof typeof ViewingStatus]
+
+
+export const NotificationType = {
+  LEAD_CREATED: 'LEAD_CREATED',
+  VIEWING_REQUESTED: 'VIEWING_REQUESTED',
+  VIEWING_UPDATED: 'VIEWING_UPDATED',
+  REVENUE_CREATED: 'REVENUE_CREATED',
+  PROPERTY_UPDATED: 'PROPERTY_UPDATED',
+  ACCOUNT_APPROVED: 'ACCOUNT_APPROVED',
+  ACCOUNT_REJECTED: 'ACCOUNT_REJECTED',
+  GENERAL: 'GENERAL'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const AuditAction = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT',
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
+  STATUS_CHANGE: 'STATUS_CHANGE'
+} as const
+
+export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]

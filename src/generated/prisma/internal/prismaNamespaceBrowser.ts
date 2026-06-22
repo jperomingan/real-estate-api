@@ -17,8 +17,8 @@
 
 import * as runtime from "@prisma/client/runtime/index-browser"
 
-export type * from '../models.ts'
-export type * from './prismaNamespace.ts'
+export type * from '../models.js'
+export type * from './prismaNamespace.js'
 
 export const Decimal = runtime.Decimal
 
@@ -51,7 +51,15 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  Property: 'Property',
+  Lead: 'Lead',
+  Revenue: 'Revenue',
+  PropertyImage: 'PropertyImage',
+  PropertyFavorite: 'PropertyFavorite',
+  ViewingAppointment: 'ViewingAppointment',
+  Notification: 'Notification',
+  AuditLog: 'AuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,12 +95,164 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const PropertyScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  status: 'status',
+  price: 'price',
+  lotAreaSqm: 'lotAreaSqm',
+  floorAreaSqm: 'floorAreaSqm',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  address: 'address',
+  barangay: 'barangay',
+  city: 'city',
+  province: 'province',
+  zipCode: 'zipCode',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  brokerId: 'brokerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
+
+
+export const LeadScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  message: 'message',
+  source: 'source',
+  status: 'status',
+  budget: 'budget',
+  preferredDate: 'preferredDate',
+  propertyId: 'propertyId',
+  brokerId: 'brokerId',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+export const RevenueScalarFieldEnum = {
+  id: 'id',
+  grossSaleAmount: 'grossSaleAmount',
+  commissionRate: 'commissionRate',
+  commissionAmount: 'commissionAmount',
+  paymentReceived: 'paymentReceived',
+  paymentStatus: 'paymentStatus',
+  commissionStatus: 'commissionStatus',
+  saleDate: 'saleDate',
+  notes: 'notes',
+  propertyId: 'propertyId',
+  leadId: 'leadId',
+  brokerId: 'brokerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RevenueScalarFieldEnum = (typeof RevenueScalarFieldEnum)[keyof typeof RevenueScalarFieldEnum]
+
+
+export const PropertyImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  altText: 'altText',
+  sortOrder: 'sortOrder',
+  propertyId: 'propertyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropertyImageScalarFieldEnum = (typeof PropertyImageScalarFieldEnum)[keyof typeof PropertyImageScalarFieldEnum]
+
+
+export const PropertyFavoriteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  propertyId: 'propertyId',
+  createdAt: 'createdAt'
+} as const
+
+export type PropertyFavoriteScalarFieldEnum = (typeof PropertyFavoriteScalarFieldEnum)[keyof typeof PropertyFavoriteScalarFieldEnum]
+
+
+export const ViewingAppointmentScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  message: 'message',
+  preferredDate: 'preferredDate',
+  confirmedDate: 'confirmedDate',
+  status: 'status',
+  notes: 'notes',
+  propertyId: 'propertyId',
+  brokerId: 'brokerId',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ViewingAppointmentScalarFieldEnum = (typeof ViewingAppointmentScalarFieldEnum)[keyof typeof ViewingAppointmentScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  targetUserId: 'targetUserId',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  description: 'description',
+  oldValues: 'oldValues',
+  newValues: 'newValues',
+  metadata: 'metadata',
+  actorUserId: 'actorUserId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -109,4 +269,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

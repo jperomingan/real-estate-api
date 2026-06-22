@@ -26,6 +26,92 @@ enum UserStatus {
   INACTIVE
 }
 
+enum PropertyType {
+  HOUSE_AND_LOT
+  CONDOMINIUM
+  LOT_ONLY
+  APARTMENT
+  TOWNHOUSE
+  COMMERCIAL
+  AGRICULTURAL
+  INDUSTRIAL
+}
+
+enum PropertyStatus {
+  DRAFT
+  PUBLISHED
+  RESERVED
+  SOLD
+  ARCHIVED
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  VIEWING_SCHEDULED
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+  ARCHIVED
+}
+
+enum LeadSource {
+  WEBSITE
+  FACEBOOK
+  REFERRAL
+  WALK_IN
+  PHONE_CALL
+  EMAIL
+  OTHER
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+enum CommissionStatus {
+  PENDING
+  PARTIAL
+  RELEASED
+  CANCELLED
+}
+
+enum ViewingStatus {
+  REQUESTED
+  CONFIRMED
+  RESCHEDULED
+  COMPLETED
+  CANCELLED
+  DECLINED
+}
+
+enum NotificationType {
+  LEAD_CREATED
+  VIEWING_REQUESTED
+  VIEWING_UPDATED
+  REVENUE_CREATED
+  PROPERTY_UPDATED
+  ACCOUNT_APPROVED
+  ACCOUNT_REJECTED
+  GENERAL
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  APPROVE
+  REJECT
+  LOGIN
+  LOGOUT
+  STATUS_CHANGE
+}
+
 model User {
   id           String     @id @default(uuid())
   firstName    String
@@ -36,9 +122,244 @@ model User {
   status       UserStatus @default(PENDING)
   phone        String?
   avatarUrl    String?
-
+  properties   Property[] @relation("BrokerProperties")
+  brokerLeads  Lead[] @relation("BrokerLeads")
+  clientLeads  Lead[] @relation("ClientLeads")
+  brokerRevenues Revenue[] @relation("BrokerRevenues")
+  favoriteProperties PropertyFavorite[] @relation("UserPropertyFavorites")
+  brokerViewings ViewingAppointment[] @relation("BrokerViewings")
+  clientViewings ViewingAppointment[] @relation("ClientViewings")
+  notifications Notification[] @relation("UserNotifications")
+  auditLogs    AuditLog[] @relation("UserAuditLogs")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
   @@map("users")
+}
+
+model Property {
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  type         PropertyType
+  status       PropertyStatus @default(DRAFT)
+
+  price        Decimal        @db.Decimal(15, 2)
+  lotAreaSqm   Decimal?       @db.Decimal(10, 2)
+  floorAreaSqm Decimal?       @db.Decimal(10, 2)
+
+  bedrooms     Int?
+  bathrooms    Int?
+
+  address      String
+  barangay     String?
+  city         String
+  province     String
+  zipCode      String?
+
+  latitude     Decimal?       @db.Decimal(10, 7)
+  longitude    Decimal?       @db.Decimal(10, 7)
+
+  brokerId     String
+  broker       User           @relation("BrokerProperties", fields: [brokerId], references: [id], onDelete: Restrict)
+  favoritedBy PropertyFavorite[] @relation("PropertyFavorites")
+  images       PropertyImage[]
+  leads        Lead[]
+  revenues     Revenue[]
+  viewings     ViewingAppointment[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([brokerId])
+  @@index([status])
+  @@index([type])
+  @@index([city])
+  @@map("properties")
+}
+
+model Lead {
+  id          String     @id @default(uuid())
+
+  firstName   String
+  lastName    String?
+  email       String?
+  phone       String
+  message     String?
+
+  source      LeadSource @default(WEBSITE)
+  status      LeadStatus @default(NEW)
+
+  budget      Decimal?   @db.Decimal(15, 2)
+  preferredDate DateTime?
+
+  propertyId  String?
+  property    Property?  @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+
+  brokerId    String
+  broker      User       @relation("BrokerLeads", fields: [brokerId], references: [id], onDelete: Restrict)
+
+  clientId    String?
+  client      User?      @relation("ClientLeads", fields: [clientId], references: [id], onDelete: SetNull)
+  revenue     Revenue?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([propertyId])
+  @@index([brokerId])
+  @@index([clientId])
+  @@index([status])
+  @@map("leads")
+}
+
+model Revenue {
+  id               String           @id @default(uuid())
+
+  grossSaleAmount  Decimal          @db.Decimal(15, 2)
+  commissionRate   Decimal          @db.Decimal(5, 2)
+  commissionAmount Decimal          @db.Decimal(15, 2)
+  paymentReceived  Decimal          @default(0) @db.Decimal(15, 2)
+
+  paymentStatus    PaymentStatus    @default(UNPAID)
+  commissionStatus CommissionStatus @default(PENDING)
+
+  saleDate         DateTime         @default(now())
+  notes            String?
+
+  propertyId       String
+  property         Property         @relation(fields: [propertyId], references: [id], onDelete: Restrict)
+
+  leadId           String?          @unique
+  lead             Lead?            @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  brokerId         String
+  broker           User             @relation("BrokerRevenues", fields: [brokerId], references: [id], onDelete: Restrict)
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([propertyId])
+  @@index([brokerId])
+  @@index([paymentStatus])
+  @@index([commissionStatus])
+  @@index([saleDate])
+  @@map("revenues")
+}
+
+model PropertyImage {
+  id         String   @id @default(uuid())
+  url        String
+  altText    String?
+  sortOrder  Int      @default(0)
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([propertyId])
+  @@map("property_images")
+}
+
+model PropertyFavorite {
+  id         String   @id @default(uuid())
+
+  userId     String
+  user       User     @relation("UserPropertyFavorites", fields: [userId], references: [id], onDelete: Cascade)
+
+  propertyId String
+  property   Property @relation("PropertyFavorites", fields: [propertyId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, propertyId])
+  @@index([userId])
+  @@index([propertyId])
+  @@map("property_favorites")
+}
+
+model ViewingAppointment {
+  id              String        @id @default(uuid())
+
+  firstName       String
+  lastName        String?
+  email           String?
+  phone           String
+  message         String?
+
+  preferredDate   DateTime
+  confirmedDate   DateTime?
+
+  status          ViewingStatus @default(REQUESTED)
+  notes           String?
+
+  propertyId      String
+  property        Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  brokerId        String
+  broker          User          @relation("BrokerViewings", fields: [brokerId], references: [id], onDelete: Restrict)
+
+  clientId        String?
+  client          User?         @relation("ClientViewings", fields: [clientId], references: [id], onDelete: SetNull)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([propertyId])
+  @@index([brokerId])
+  @@index([clientId])
+  @@index([status])
+  @@index([preferredDate])
+  @@map("viewing_appointments")
+}
+
+model Notification {
+  id           String           @id @default(uuid())
+
+  type         NotificationType @default(GENERAL)
+  title        String
+  message      String
+  isRead       Boolean          @default(false)
+
+  targetUserId String
+  targetUser   User             @relation("UserNotifications", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  metadata     Json?
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([targetUserId])
+  @@index([isRead])
+  @@index([type])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id           String      @id @default(uuid())
+
+  action       AuditAction
+  resourceType String
+  resourceId   String?
+
+  description  String?
+
+  oldValues    Json?
+  newValues    Json?
+  metadata     Json?
+
+  actorUserId  String?
+  actorUser    User?       @relation("UserAuditLogs", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  ipAddress    String?
+  userAgent    String?
+
+  createdAt    DateTime    @default(now())
+
+  @@index([actorUserId])
+  @@index([action])
+  @@index([resourceType])
+  @@index([resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
 }
