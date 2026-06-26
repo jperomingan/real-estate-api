@@ -15,3 +15,10 @@ coverage
 !.env.test.example
 !.env.docker.example
 !.env.production.example
+# Local source backups
+backups/
+
+# Environment files
+.env
+# Local backups
+*.backup

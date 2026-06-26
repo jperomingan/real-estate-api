@@ -84,35 +84,95 @@ export const propertyIdParamsSchema = z.object({
 });
 
 export const propertyListQuerySchema = z.object({
-    search: z.string().optional(),
+    search: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional(),
+    ),
 
-    type: propertyTypeSchema.optional(),
-    status: propertyStatusSchema.optional(),
+    type: z.preprocess(
+        emptyStringToUndefined,
+        propertyTypeSchema.optional(),
+    ),
 
-    city: z.string().optional(),
-    province: z.string().optional(),
-    barangay: z.string().optional(),
+    status: z.preprocess(
+        emptyStringToUndefined,
+        propertyStatusSchema.optional(),
+    ),
 
-    minPrice: z.coerce.number().optional(),
-    maxPrice: z.coerce.number().optional(),
+    city: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional(),
+    ),
 
-    minLotAreaSqm: z.coerce.number().optional(),
-    maxLotAreaSqm: z.coerce.number().optional(),
+    province: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional(),
+    ),
 
-    minFloorAreaSqm: z.coerce.number().optional(),
-    maxFloorAreaSqm: z.coerce.number().optional(),
+    barangay: z.preprocess(
+        emptyStringToUndefined,
+        z.string().optional(),
+    ),
 
-    bedrooms: z.coerce.number().int().min(0).optional(),
-    bathrooms: z.coerce.number().int().min(0).optional(),
+    minPrice: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().optional(),
+    ),
 
-    sortBy: z
-        .enum(["createdAt", "price", "title", "city"])
-        .default("createdAt"),
+    maxPrice: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().optional(),
+    ),
 
-    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    minLotAreaSqm: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().optional(),
+    ),
 
-    page: z.coerce.number().int().min(1).default(1),
-    limit: z.coerce.number().int().min(1).max(100).default(20),
+    maxLotAreaSqm: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().optional(),
+    ),
+
+    minFloorAreaSqm: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().optional(),
+    ),
+
+    maxFloorAreaSqm: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().optional(),
+    ),
+
+    bedrooms: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().int().min(0).optional(),
+    ),
+
+    bathrooms: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().int().min(0).optional(),
+    ),
+
+    sortBy: z.preprocess(
+        emptyStringToUndefined,
+        z.enum(["createdAt", "price", "title", "city"]).default("createdAt"),
+    ),
+
+    sortOrder: z.preprocess(
+        emptyStringToUndefined,
+        z.enum(["asc", "desc"]).default("desc"),
+    ),
+
+    page: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().int().min(1).default(1),
+    ),
+
+    limit: z.preprocess(
+        emptyStringToUndefined,
+        z.coerce.number().int().min(1).max(100).default(20),
+    ),
 });
 
 export type CreatePropertyInput = z.infer<typeof createPropertySchema>;

@@ -97,11 +97,11 @@ export async function createProperty(
       brokerId,
       images: input.imageUrls
         ? {
-            create: input.imageUrls.map((url, index) => ({
-              url,
-              sortOrder: index,
-            })),
-          }
+          create: input.imageUrls.map((url, index) => ({
+            url,
+            sortOrder: index,
+          })),
+        }
         : undefined,
     },
     select: propertySelect,
@@ -134,88 +134,88 @@ export async function getProperties(query: {
 
     ...(query.city
       ? {
-          city: {
-            contains: query.city,
-            mode: "insensitive",
-          },
-        }
+        city: {
+          contains: query.city,
+          mode: "insensitive",
+        },
+      }
       : {}),
 
     ...(query.province
       ? {
-          province: {
-            contains: query.province,
-            mode: "insensitive",
-          },
-        }
+        province: {
+          contains: query.province,
+          mode: "insensitive",
+        },
+      }
       : {}),
 
     ...(query.barangay
       ? {
-          barangay: {
-            contains: query.barangay,
-            mode: "insensitive",
-          },
-        }
+        barangay: {
+          contains: query.barangay,
+          mode: "insensitive",
+        },
+      }
       : {}),
 
     ...(query.bedrooms !== undefined
       ? {
-          bedrooms: {
-            gte: query.bedrooms,
-          },
-        }
+        bedrooms: {
+          gte: query.bedrooms,
+        },
+      }
       : {}),
 
     ...(query.bathrooms !== undefined
       ? {
-          bathrooms: {
-            gte: query.bathrooms,
-          },
-        }
+        bathrooms: {
+          gte: query.bathrooms,
+        },
+      }
       : {}),
 
     ...(query.search
       ? {
-          OR: [
-            {
-              title: {
-                contains: query.search,
-                mode: "insensitive",
-              },
+        OR: [
+          {
+            title: {
+              contains: query.search,
+              mode: "insensitive",
             },
-            {
-              description: {
-                contains: query.search,
-                mode: "insensitive",
-              },
+          },
+          {
+            description: {
+              contains: query.search,
+              mode: "insensitive",
             },
-            {
-              address: {
-                contains: query.search,
-                mode: "insensitive",
-              },
+          },
+          {
+            address: {
+              contains: query.search,
+              mode: "insensitive",
             },
-            {
-              barangay: {
-                contains: query.search,
-                mode: "insensitive",
-              },
+          },
+          {
+            barangay: {
+              contains: query.search,
+              mode: "insensitive",
             },
-            {
-              city: {
-                contains: query.search,
-                mode: "insensitive",
-              },
+          },
+          {
+            city: {
+              contains: query.search,
+              mode: "insensitive",
             },
-            {
-              province: {
-                contains: query.search,
-                mode: "insensitive",
-              },
+          },
+          {
+            province: {
+              contains: query.search,
+              mode: "insensitive",
             },
-          ],
-        }
+          },
+        ],
+      }
       : {}),
   } as Prisma.PropertyWhereInput;
 
@@ -253,20 +253,19 @@ export async function getProperties(query: {
 
   const skip = getPaginationOffset(query.page, query.limit);
 
-  const [properties, total] = await prisma.$transaction([
-    prisma.property.findMany({
-      where,
-      select: propertySelect,
-      orderBy: {
-        [query.sortBy]: query.sortOrder,
-      },
-      skip,
-      take: query.limit,
-    }),
-    prisma.property.count({
-      where,
-    }),
-  ]);
+  const properties = await prisma.property.findMany({
+    where,
+    select: propertySelect,
+    orderBy: {
+      [query.sortBy]: query.sortOrder,
+    },
+    skip,
+    take: query.limit,
+  });
+
+  const total = await prisma.property.count({
+    where,
+  });
 
   return {
     items: properties,
@@ -356,11 +355,11 @@ export async function updateProperty(
         longitude: input.longitude,
         images: input.imageUrls
           ? {
-              create: input.imageUrls.map((url, index) => ({
-                url,
-                sortOrder: index,
-              })),
-            }
+            create: input.imageUrls.map((url, index) => ({
+              url,
+              sortOrder: index,
+            })),
+          }
           : undefined,
       },
       select: propertySelect,

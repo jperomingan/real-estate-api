@@ -5,6 +5,7 @@ import {
     meController,
     registerController,
 } from "./auth.controller.js";
+import { sendError } from "../../utils/api-response.js";
 
 const userResponseSchema = {
     type: "object",
@@ -127,6 +128,22 @@ export async function authRoutes(app: FastifyInstance) {
     app.get(
         "/me",
         {
+            preHandler: async (
+                request,
+                reply,
+            ) => {
+                try {
+                    await request.jwtVerify();
+                } catch {
+                    return sendError({
+                        reply,
+                        statusCode: 401,
+                        message: "Unauthorized",
+                        code: "UNAUTHORIZED",
+                        requestId: request.id,
+                    });
+                }
+            },
             schema: {
                 tags: ["Auth"],
                 summary: "Get current logged-in user",
@@ -144,6 +161,6 @@ export async function authRoutes(app: FastifyInstance) {
                 },
             },
         },
-        meController
+        meController,
     );
 }
