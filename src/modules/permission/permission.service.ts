@@ -1,12 +1,20 @@
-import { JwtUser, Permission } from "./permission.types.js";
+import type {
+    JwtUser,
+    Permission,
+    UserRole,
+} from "./permission.types.js";
 
-const rolePermissions: Record<string, Permission[]> = {
+const rolePermissions: Record<
+    UserRole,
+    readonly Permission[]
+> = {
     ADMIN: [
         "MANAGE_USERS",
         "MANAGE_PROPERTIES",
         "MANAGE_LEADS",
         "MANAGE_REVENUES",
         "MANAGE_VIEWINGS",
+        "VIEW_OWN_VIEWINGS",
         "VIEW_DASHBOARD",
         "VIEW_AUDIT_LOGS",
         "MANAGE_NOTIFICATIONS",
@@ -20,25 +28,30 @@ const rolePermissions: Record<string, Permission[]> = {
         "MANAGE_VIEWINGS",
         "VIEW_DASHBOARD",
         "MANAGE_NOTIFICATIONS",
-        "SAVE_PROPERTIES",
     ],
 
     CLIENT: [
-        "SAVE_PROPERTIES",
+        "VIEW_OWN_VIEWINGS",
         "MANAGE_NOTIFICATIONS",
+        "SAVE_PROPERTIES",
     ],
 };
 
-export function hasPermission(user: JwtUser, permission: Permission) {
-    if (user.status === "REJECTED" || user.status === "INACTIVE") {
+export function getPermissionsForRole(
+    role: UserRole,
+): readonly Permission[] {
+    return rolePermissions[role];
+}
+
+export function hasPermission(
+    user: JwtUser,
+    permission: Permission,
+): boolean {
+    if (user.status !== "ACTIVE") {
         return false;
     }
 
-    if (user.role === "BROKER" && user.status !== "APPROVED") {
-        return false;
-    }
-
-    const permissions = rolePermissions[user.role] ?? [];
-
-    return permissions.includes(permission);
+    return rolePermissions[user.role].includes(
+        permission,
+    );
 }

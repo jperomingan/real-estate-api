@@ -1,4 +1,7 @@
-export type UserRole = "ADMIN" | "BROKER" | "CLIENT";
+export type UserRole =
+    | "ADMIN"
+    | "BROKER"
+    | "CLIENT";
 
 export type UserStatus =
     | "PENDING"
@@ -20,6 +23,7 @@ export type Permission =
     | "MANAGE_LEADS"
     | "MANAGE_REVENUES"
     | "MANAGE_VIEWINGS"
+    | "VIEW_OWN_VIEWINGS"
     | "VIEW_DASHBOARD"
     | "VIEW_AUDIT_LOGS"
     | "MANAGE_NOTIFICATIONS"
