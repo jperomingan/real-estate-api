@@ -9,12 +9,10 @@ async function startServer() {
             port: env.PORT,
             host: "0.0.0.0",
         });
-
-        app.log.info(`Server running on port ${env.PORT}`);
     } catch (error) {
         app.log.error(error);
         process.exit(1);
     }
 }
 
-startServer();
+void startServer();

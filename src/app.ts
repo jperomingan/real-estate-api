@@ -23,6 +23,8 @@ import rateLimit from "@fastify/rate-limit";
 import { securityHeadersPlugin } from "./plugins/security-headers.js";
 import { corsPlugin } from "./plugins/cors.js";
 import { healthRoutes } from "./modules/health/health.route.js";
+import { systemRoutes } from "./modules/system/system.route.js";
+import { apiMetadata } from "./config/api-metadata.js";
 import crypto from "node:crypto";
 import { requestIdPlugin } from "./plugins/request-id.js";
 
@@ -33,12 +35,12 @@ export async function buildApp() {
       transport:
         env.NODE_ENV === "development"
           ? {
-            target: "pino-pretty",
-            options: {
-              translateTime: "SYS:standard",
-              ignore: "pid,hostname",
-            },
-          }
+              target: "pino-pretty",
+              options: {
+                translateTime: "SYS:standard",
+                ignore: "pid,hostname",
+              },
+            }
           : undefined,
     },
     genReqId: (request) => {
@@ -95,11 +97,12 @@ export async function buildApp() {
   await app.register(swagger, {
     openapi: {
       info: {
-        title: "Real Estate Management System API",
-        description:
-          "Backend API for real estate property management, lead tracking, viewing appointments, revenue tracking, notifications, audit logs, and dashboard analytics.",
-        version: "1.0.0",
+        title: apiMetadata.title,
+        version: apiMetadata.version,
+        description: apiMetadata.swaggerDescription,
+        contact: apiMetadata.contact,
       },
+      externalDocs: apiMetadata.externalDocs,
       servers: [
         {
           url: env.APP_URL,
@@ -107,6 +110,11 @@ export async function buildApp() {
         },
       ],
       tags: [
+        {
+          name: "System",
+          description:
+            "API ownership, authorship, developer, and system information",
+        },
         {
           name: "Health",
           description: "Server health check endpoints",
@@ -170,9 +178,7 @@ export async function buildApp() {
 
   await app.register(healthRoutes);
 
-  await app.register(swaggerUi, {
-    routePrefix: "/docs",
-  });
+  await app.register(systemRoutes);
 
   await app.register(authRoutes, {
     prefix: "/api/auth",
@@ -227,6 +233,56 @@ export async function buildApp() {
   await app.register(fastifyStatic, {
     root: path.join(process.cwd(), "uploads"),
     prefix: "/uploads/",
+  });
+
+  await app.register(swaggerUi, {
+    routePrefix: "/docs",
+
+    uiConfig: {
+      docExpansion: "none",
+      deepLinking: false,
+      filter: true,
+      defaultModelsExpandDepth: -1,
+      defaultModelExpandDepth: 0,
+      displayRequestDuration: false,
+      syntaxHighlight: false,
+      tryItOutEnabled: false,
+    },
+
+    staticCSP: true,
+    transformStaticCSP: (header) => header,
+
+    theme: {
+      css: [
+        {
+          filename: "swagger-mobile.css",
+          content: `
+            @media (max-width: 768px) {
+              .swagger-ui .wrapper {
+                padding: 0 12px;
+              }
+  
+              .swagger-ui .info {
+                margin: 20px 0;
+              }
+  
+              .swagger-ui .info .title {
+                font-size: 26px;
+                line-height: 1.25;
+              }
+  
+              .swagger-ui .scheme-container {
+                padding: 15px 0;
+              }
+  
+              .swagger-ui .opblock .opblock-summary {
+                padding: 8px;
+              }
+            }
+          `,
+        },
+      ],
+    },
   });
 
   return app;

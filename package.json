@@ -69,5 +69,21 @@
     "tsx": "^4.22.4",
     "zod": "^4.4.3"
   },
-  "type": "module"
+  "type": "module",
+  "author": {
+    "name": "Jennelyn Urot Peromingan",
+    "email": "perominganj@gmail.com",
+    "url": "https://github.com/jperomingan"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jperomingan/real-estate-api.git"
+  },
+  "homepage": "https://github.com/jperomingan/real-estate-api#readme",
+  "name": "real-estate-api",
+  "version": "1.0.0",
+  "description": "A secure and production-ready backend API for managing modern real estate business operations.",
+  "bugs": {
+    "url": "https://github.com/jperomingan/real-estate-api/issues"
+  }
 }
