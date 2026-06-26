@@ -1,128 +1,232 @@
-import {
-    errorResponseSchema,
-    paginatedResponseSchema,
-    successResponseSchema,
-} from "../../utils/swagger-schemas.js";
-
-export const paymentStatusValues = [
-    "UNPAID",
-    "PARTIAL",
-    "PAID",
-    "CANCELLED",
-    "REFUNDED",
-];
-
-export const commissionStatusValues = [
-    "PENDING",
-    "PARTIAL",
-    "RELEASED",
-    "CANCELLED",
-];
-
-export const revenuePropertyResponseSchema = {
-    type: "object",
-    properties: {
-        id: { type: "string" },
-        title: { type: "string" },
-        price: { type: "string" },
-        city: { type: "string" },
-        province: { type: "string" },
-        status: { type: "string" },
-    },
+const decimalSchema = {
+    anyOf: [
+        { type: "number" },
+        { type: "string" },
+    ],
 };
 
-export const revenueLeadResponseSchema = {
-    type: "object",
-    nullable: true,
-    properties: {
-        id: { type: "string" },
-        firstName: { type: "string" },
-        lastName: { type: "string", nullable: true },
-        phone: { type: "string" },
-        email: { type: "string", nullable: true },
-        status: { type: "string" },
-    },
+const nullableStringSchema = {
+    anyOf: [
+        { type: "string" },
+        { type: "null" },
+    ],
 };
 
-export const revenueBrokerResponseSchema = {
+const brokerSummarySchema = {
     type: "object",
     properties: {
         id: { type: "string" },
         firstName: { type: "string" },
         lastName: { type: "string" },
         email: { type: "string" },
-        phone: { type: "string", nullable: true },
+        phone: nullableStringSchema,
     },
+    required: [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+    ],
 };
 
-export const revenueResponseSchema = {
+const revenueItemSchema = {
     type: "object",
     properties: {
         id: { type: "string" },
-        grossSaleAmount: { type: "string" },
-        commissionRate: { type: "string" },
-        commissionAmount: { type: "string" },
-        paymentReceived: { type: "string" },
-        paymentStatus: { type: "string", enum: paymentStatusValues },
-        commissionStatus: { type: "string", enum: commissionStatusValues },
-        saleDate: { type: "string" },
-        notes: { type: "string", nullable: true },
         propertyId: { type: "string" },
-        property: revenuePropertyResponseSchema,
-        leadId: { type: "string", nullable: true },
-        lead: revenueLeadResponseSchema,
+        property: {
+            type: "object",
+            properties: {
+                id: { type: "string" },
+                title: { type: "string" },
+                status: { type: "string" },
+                price: decimalSchema,
+                address: { type: "string" },
+                city: { type: "string" },
+                province: { type: "string" },
+            },
+            required: [
+                "id",
+                "title",
+                "status",
+                "price",
+                "address",
+                "city",
+                "province",
+            ],
+        },
+        leadId: nullableStringSchema,
+        lead: {
+            anyOf: [
+                {
+                    type: "object",
+                    properties: {
+                        id: { type: "string" },
+                        firstName: { type: "string" },
+                        lastName: { type: "string" },
+                        email: nullableStringSchema,
+                        phone: { type: "string" },
+                        status: { type: "string" },
+                    },
+                    required: [
+                        "id",
+                        "firstName",
+                        "lastName",
+                        "phone",
+                        "status",
+                    ],
+                },
+                { type: "null" },
+            ],
+        },
         brokerId: { type: "string" },
-        broker: revenueBrokerResponseSchema,
-        createdAt: { type: "string" },
-        updatedAt: { type: "string" },
+        broker: brokerSummarySchema,
+        grossSaleAmount: decimalSchema,
+        commissionRate: decimalSchema,
+        commissionAmount: decimalSchema,
+        paymentReceived: decimalSchema,
+        paymentStatus: {
+            type: "string",
+            enum: [
+                "UNPAID",
+                "PARTIAL",
+                "PAID",
+            ],
+        },
+        commissionStatus: {
+            type: "string",
+            enum: [
+                "PENDING",
+                "RELEASED",
+            ],
+        },
+        saleDate: {
+            type: "string",
+            format: "date-time",
+        },
+        notes: nullableStringSchema,
+        createdAt: {
+            type: "string",
+            format: "date-time",
+        },
+        updatedAt: {
+            type: "string",
+            format: "date-time",
+        },
     },
+    required: [
+        "id",
+        "propertyId",
+        "property",
+        "brokerId",
+        "broker",
+        "grossSaleAmount",
+        "commissionRate",
+        "commissionAmount",
+        "paymentReceived",
+        "paymentStatus",
+        "commissionStatus",
+        "saleDate",
+        "createdAt",
+        "updatedAt",
+    ],
 };
 
 export const createRevenueBodySchema = {
     type: "object",
-    required: ["propertyId", "grossSaleAmount", "commissionRate"],
+    required: [
+        "propertyId",
+        "grossSaleAmount",
+        "commissionRate",
+        "saleDate",
+    ],
     properties: {
         propertyId: {
             type: "string",
-            description: "Required property ID",
+            format: "uuid",
         },
         leadId: {
             type: "string",
-            description:
-                "Optional. If provided, the lead must exist and must be CLOSED_WON.",
-        },
-        brokerId: {
-            type: "string",
-            description:
-                "Optional for admin use. If not provided, broker is taken from the property.",
+            format: "uuid",
         },
         grossSaleAmount: {
             type: "number",
-            description: "Total sale amount. Example: 3500000",
+            exclusiveMinimum: 0,
         },
         commissionRate: {
             type: "number",
-            description: "Commission rate percentage. Example: 5",
+            minimum: 0,
+            maximum: 100,
         },
         paymentReceived: {
             type: "number",
-            description: "Amount already received. Example: 500000",
-        },
-        paymentStatus: {
-            type: "string",
-            enum: paymentStatusValues,
+            minimum: 0,
+            default: 0,
         },
         commissionStatus: {
             type: "string",
-            enum: commissionStatusValues,
+            enum: [
+                "PENDING",
+                "RELEASED",
+            ],
+            default: "PENDING",
         },
         saleDate: {
             type: "string",
-            description: "Optional sale date in ISO format",
+            format: "date-time",
         },
         notes: {
             type: "string",
-            description: "Optional notes",
+            maxLength: 2000,
+        },
+    },
+};
+
+export const revenueListQuerySchemaForSwagger = {
+    type: "object",
+    properties: {
+        search: { type: "string" },
+        propertyId: {
+            type: "string",
+            format: "uuid",
+        },
+        brokerId: {
+            type: "string",
+            format: "uuid",
+        },
+        paymentStatus: {
+            type: "string",
+            enum: [
+                "UNPAID",
+                "PARTIAL",
+                "PAID",
+            ],
+        },
+        commissionStatus: {
+            type: "string",
+            enum: [
+                "PENDING",
+                "RELEASED",
+            ],
+        },
+        dateFrom: {
+            type: "string",
+            format: "date-time",
+        },
+        dateTo: {
+            type: "string",
+            format: "date-time",
+        },
+        page: {
+            type: "integer",
+            minimum: 1,
+            default: 1,
+        },
+        limit: {
+            type: "integer",
+            minimum: 1,
+            maximum: 100,
+            default: 20,
         },
     },
 };
@@ -133,60 +237,26 @@ export const revenueParamsSchema = {
     properties: {
         id: {
             type: "string",
-            description: "Revenue record ID",
-        },
-    },
-};
-
-export const revenueListQuerySchemaForSwagger = {
-    type: "object",
-    properties: {
-        search: {
-            type: "string",
-            description: "Search by property title or broker email",
-        },
-        propertyId: {
-            type: "string",
-        },
-        brokerId: {
-            type: "string",
-        },
-        paymentStatus: {
-            type: "string",
-            enum: paymentStatusValues,
-        },
-        commissionStatus: {
-            type: "string",
-            enum: commissionStatusValues,
-        },
-        dateFrom: {
-            type: "string",
-            description: "Start sale date filter. Example: 2026-01-01",
-        },
-        dateTo: {
-            type: "string",
-            description: "End sale date filter. Example: 2026-12-31",
-        },
-        page: {
-            type: "number",
-        },
-        limit: {
-            type: "number",
+            format: "uuid",
         },
     },
 };
 
 export const updatePaymentStatusBodySchema = {
     type: "object",
-    required: ["paymentStatus"],
+    required: ["paymentReceived"],
     properties: {
-        paymentStatus: {
-            type: "string",
-            enum: paymentStatusValues,
-        },
         paymentReceived: {
             type: "number",
-            description: "Optional updated payment received amount",
+            minimum: 0,
+        },
+        paymentStatus: {
+            type: "string",
+            enum: [
+                "UNPAID",
+                "PARTIAL",
+                "PAID",
+            ],
         },
     },
 };
@@ -197,36 +267,127 @@ export const updateCommissionStatusBodySchema = {
     properties: {
         commissionStatus: {
             type: "string",
-            enum: commissionStatusValues,
+            enum: [
+                "PENDING",
+                "RELEASED",
+            ],
         },
     },
 };
 
-export const revenueSummaryResponseSchema = successResponseSchema({
+export const revenueSuccessResponseSchema = {
     type: "object",
     properties: {
-        totalRecords: { type: "number" },
-        totalGrossSales: { type: "number" },
-        totalCommission: { type: "number" },
-        totalPaymentReceived: { type: "number" },
-        totalReceivable: { type: "number" },
-        unpaidCount: { type: "number" },
-        partiallyPaidCount: { type: "number" },
-        paidCount: { type: "number" },
-        pendingCommissionCount: { type: "number" },
-        releasedCommissionCount: { type: "number" },
+        success: { type: "boolean" },
+        message: { type: "string" },
+        data: revenueItemSchema,
     },
-});
+    required: ["message", "data"],
+};
 
-export const revenueSuccessResponseSchema =
-    successResponseSchema(revenueResponseSchema);
-
-export const revenueListResponseSchema =
-    paginatedResponseSchema(revenueResponseSchema);
-
-export const revenueDeleteResponseSchema = successResponseSchema({
+export const revenueListResponseSchema = {
     type: "object",
-    properties: {},
-});
+    properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        data: {
+            type: "object",
+            properties: {
+                items: {
+                    type: "array",
+                    items: revenueItemSchema,
+                },
+                pagination: {
+                    type: "object",
+                    properties: {
+                        page: { type: "integer" },
+                        limit: { type: "integer" },
+                        total: { type: "integer" },
+                        totalPages: { type: "integer" },
+                    },
+                    required: [
+                        "page",
+                        "limit",
+                        "total",
+                        "totalPages",
+                    ],
+                },
+            },
+            required: ["items", "pagination"],
+        },
+    },
+    required: ["message", "data"],
+};
 
-export const revenueErrorResponseSchema = errorResponseSchema;
+export const revenueSummaryResponseSchema = {
+    type: "object",
+    properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        data: {
+            type: "object",
+            properties: {
+                totalRecords: { type: "integer" },
+                totalGrossSales: { type: "number" },
+                totalCommission: { type: "number" },
+                totalPaymentReceived: { type: "number" },
+                totalReceivable: { type: "number" },
+                unpaidCount: { type: "integer" },
+                partiallyPaidCount: { type: "integer" },
+                paidCount: { type: "integer" },
+                pendingCommissionCount: {
+                    type: "integer",
+                },
+                releasedCommissionCount: {
+                    type: "integer",
+                },
+            },
+            required: [
+                "totalRecords",
+                "totalGrossSales",
+                "totalCommission",
+                "totalPaymentReceived",
+                "totalReceivable",
+                "unpaidCount",
+                "partiallyPaidCount",
+                "paidCount",
+                "pendingCommissionCount",
+                "releasedCommissionCount",
+            ],
+        },
+    },
+    required: ["message", "data"],
+};
+
+export const revenueDeleteResponseSchema = {
+    type: "object",
+    properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        data: {
+            type: "object",
+            properties: {
+                id: { type: "string" },
+            },
+            required: ["id"],
+        },
+    },
+    required: ["message", "data"],
+};
+
+export const revenueErrorResponseSchema = {
+    type: "object",
+    properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        errors: {
+            type: "object",
+            additionalProperties: true,
+        },
+        error: {
+            type: "object",
+            additionalProperties: true,
+        },
+    },
+    required: ["message"],
+};

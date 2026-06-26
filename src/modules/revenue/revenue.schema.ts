@@ -1,63 +1,235 @@
 import { z } from "zod";
-import { emptyStringToUndefined } from "../../utils/sanitize.js";
 
-export const paymentStatusSchema = z.enum([
+export const revenuePaymentStatusSchema = z.enum([
     "UNPAID",
     "PARTIAL",
     "PAID",
-    "CANCELLED",
-    "REFUNDED",
 ]);
 
-export const commissionStatusSchema = z.enum([
+export const revenueCommissionStatusSchema = z.enum([
     "PENDING",
-    "PARTIAL",
     "RELEASED",
-    "CANCELLED",
 ]);
 
-export const createRevenueSchema = z.object({
-    propertyId: z.string().uuid("Invalid property ID"),
-    leadId: z.string().uuid("Invalid lead ID").optional(),
-    brokerId: z.string().uuid("Invalid broker ID").optional(),
+const moneySchema = z.coerce
+    .number()
+    .finite("Amount must be a valid number.");
 
-    grossSaleAmount: z.coerce.number().positive("Gross sale amount is required"),
-    commissionRate: z.coerce.number().min(0).max(100),
-    paymentReceived: z.coerce.number().min(0).default(0),
+const optionalNotesSchema = z
+    .string()
+    .trim()
+    .max(
+        2000,
+        "Notes must not exceed 2000 characters.",
+    )
+    .optional();
 
-    paymentStatus: paymentStatusSchema.default("UNPAID"),
-    commissionStatus: commissionStatusSchema.default("PENDING"),
+export const createRevenueSchema = z
+    .object({
+        propertyId: z
+            .string()
+            .trim()
+            .uuid(
+                "Property ID must be a valid UUID.",
+            ),
 
-    saleDate: z.coerce.date().optional(),
-    notes: z.preprocess(
-        emptyStringToUndefined,
-        z.string().optional()
-    ),
-});
+        leadId: z
+            .string()
+            .trim()
+            .uuid(
+                "Lead ID must be a valid UUID.",
+            )
+            .optional(),
 
-export const revenueIdParamsSchema = z.object({
-    id: z.string().uuid("Invalid revenue ID"),
-});
+        grossSaleAmount: moneySchema.positive(
+            "Gross sale amount must be greater than zero.",
+        ),
+
+        commissionRate: moneySchema
+            .min(
+                0,
+                "Commission rate must not be negative.",
+            )
+            .max(
+                100,
+                "Commission rate must not exceed 100.",
+            ),
+
+        paymentReceived: moneySchema
+            .min(
+                0,
+                "Payment received must not be negative.",
+            )
+            .default(0),
+
+        commissionStatus:
+            revenueCommissionStatusSchema.default(
+                "PENDING",
+            ),
+
+        saleDate: z.coerce.date(),
+
+        notes: optionalNotesSchema,
+    })
+    .superRefine(
+        (data, context) => {
+            if (
+                data.paymentReceived >
+                data.grossSaleAmount
+            ) {
+                context.addIssue({
+                    code: "custom",
+                    path: ["paymentReceived"],
+                    message:
+                        "Payment received must not exceed the gross sale amount.",
+                });
+            }
+
+            if (
+                data.saleDate.getTime() >
+                Date.now()
+            ) {
+                context.addIssue({
+                    code: "custom",
+                    path: ["saleDate"],
+                    message:
+                        "Sale date must not be in the future.",
+                });
+            }
+        },
+    );
+
+export const revenueListQuerySchema = z
+    .object({
+        search: z
+            .string()
+            .trim()
+            .min(
+                1,
+                "Search must not be empty.",
+            )
+            .optional(),
+
+        propertyId: z
+            .string()
+            .trim()
+            .uuid(
+                "Property ID must be a valid UUID.",
+            )
+            .optional(),
+
+        brokerId: z
+            .string()
+            .trim()
+            .uuid(
+                "Broker ID must be a valid UUID.",
+            )
+            .optional(),
+
+        paymentStatus:
+            revenuePaymentStatusSchema.optional(),
+
+        commissionStatus:
+            revenueCommissionStatusSchema.optional(),
+
+        dateFrom:
+            z.coerce.date().optional(),
+
+        dateTo:
+            z.coerce.date().optional(),
+
+        page: z.coerce
+            .number()
+            .int(
+                "Page must be an integer.",
+            )
+            .positive(
+                "Page must be greater than zero.",
+            )
+            .default(1),
+
+        limit: z.coerce
+            .number()
+            .int(
+                "Limit must be an integer.",
+            )
+            .positive(
+                "Limit must be greater than zero.",
+            )
+            .max(
+                100,
+                "Limit must not exceed 100.",
+            )
+            .default(20),
+    })
+    .refine(
+        (data) =>
+            !data.dateFrom ||
+            !data.dateTo ||
+            data.dateFrom <= data.dateTo,
+        {
+            path: ["dateTo"],
+            message:
+                "dateFrom must be earlier than or equal to dateTo.",
+        },
+    );
 
 export const updatePaymentStatusSchema = z.object({
-    paymentStatus: paymentStatusSchema,
-    paymentReceived: z.coerce.number().min(0).optional(),
+    paymentReceived: moneySchema.min(
+        0,
+        "Payment received must not be negative.",
+    ),
+
+    paymentStatus:
+        revenuePaymentStatusSchema.optional(),
 });
 
-export const updateCommissionStatusSchema = z.object({
-    commissionStatus: commissionStatusSchema,
+export const updateCommissionStatusSchema =
+    z.object({
+        commissionStatus:
+            revenueCommissionStatusSchema,
+    });
+
+export const revenueIdParamsSchema = z.object({
+    id: z
+        .string()
+        .trim()
+        .uuid(
+            "Revenue ID must be a valid UUID.",
+        ),
 });
 
-export const revenueListQuerySchema = z.object({
-    search: z.string().optional(),
-    propertyId: z.string().uuid().optional(),
-    brokerId: z.string().uuid().optional(),
-    paymentStatus: paymentStatusSchema.optional(),
-    commissionStatus: commissionStatusSchema.optional(),
-    dateFrom: z.coerce.date().optional(),
-    dateTo: z.coerce.date().optional(),
-    page: z.coerce.number().int().min(1).default(1),
-    limit: z.coerce.number().int().min(1).max(100).default(20),
-});
+export type RevenuePaymentStatus =
+    z.infer<
+        typeof revenuePaymentStatusSchema
+    >;
 
-export type CreateRevenueInput = z.infer<typeof createRevenueSchema>;
+export type RevenueCommissionStatus =
+    z.infer<
+        typeof revenueCommissionStatusSchema
+    >;
+
+export type CreateRevenueInput =
+    z.infer<
+        typeof createRevenueSchema
+    >;
+
+export type RevenueListQuery =
+    z.infer<
+        typeof revenueListQuerySchema
+    >;
+
+export type UpdatePaymentStatusInput =
+    z.infer<
+        typeof updatePaymentStatusSchema
+    >;
+
+export type UpdateCommissionStatusInput =
+    z.infer<
+        typeof updateCommissionStatusSchema
+    >;
+
+export type RevenueIdParams =
+    z.infer<
+        typeof revenueIdParamsSchema
+    >;

@@ -1,4 +1,18 @@
-import { FastifyInstance } from "fastify";
+import type {
+    FastifyInstance,
+    FastifyReply,
+} from "fastify";
+
+import {
+    sendError,
+    sendSuccess,
+} from "../../utils/api-response.js";
+import {
+    requirePermission,
+} from "../permission/permission.middleware.js";
+import type {
+    JwtUser,
+} from "../permission/permission.types.js";
 import {
     createRevenueSchema,
     revenueIdParamsSchema,
@@ -27,20 +41,87 @@ import {
     updateCommissionStatusBodySchema,
     updatePaymentStatusBodySchema,
 } from "./revenue.swagger.js";
-import { requirePermission } from "../permission/permission.middleware.js";
-import { JwtUser } from "../permission/permission.types.js";
-import { sendSuccess, sendError } from "../../utils/api-response.js";
 
-export async function revenueRoutes(app: FastifyInstance) {
+const forbiddenRevenueMessages = new Set([
+    "Brokers can only create revenue records for their own properties.",
+    "You can only view your own revenue records.",
+    "You can only update your own revenue records.",
+    "You can only delete your own revenue records.",
+]);
+
+const revenueNotFoundMessages = new Set([
+    "Revenue record not found.",
+    "Revenue record not found",
+]);
+
+function getErrorMessage(
+    error: unknown,
+    fallback: string,
+): string {
+    return error instanceof Error
+        ? error.message
+        : fallback;
+}
+
+function sendRevenueOperationError({
+    reply,
+    requestId,
+    error,
+    fallback,
+}: {
+    reply: FastifyReply;
+    requestId: string;
+    error: unknown;
+    fallback: string;
+}) {
+    const message = getErrorMessage(
+        error,
+        fallback,
+    );
+
+    if (forbiddenRevenueMessages.has(message)) {
+        return sendError({
+            reply,
+            statusCode: 403,
+            message,
+            code: "FORBIDDEN",
+            requestId,
+        });
+    }
+
+    if (revenueNotFoundMessages.has(message)) {
+        return sendError({
+            reply,
+            statusCode: 404,
+            message,
+            code: "REVENUE_NOT_FOUND",
+            requestId,
+        });
+    }
+
+    return sendError({
+        reply,
+        statusCode: 400,
+        message,
+        code: "REVENUE_OPERATION_FAILED",
+        requestId,
+    });
+}
+
+export async function revenueRoutes(
+    app: FastifyInstance,
+) {
     app.post(
         "/",
         {
-            preHandler: requirePermission("MANAGE_REVENUES"),
+            preHandler: requirePermission(
+                "MANAGE_REVENUES",
+            ),
             schema: {
                 tags: ["Revenue"],
                 summary: "Create revenue record",
                 description:
-                    "Creates a revenue record from a closed sale. If leadId is provided, the lead must be CLOSED_WON.",
+                    "Creates a revenue record and automatically calculates commission amount and payment status.",
                 security: [{ bearerAuth: [] }],
                 body: createRevenueBodySchema,
                 response: {
@@ -52,7 +133,10 @@ export async function revenueRoutes(app: FastifyInstance) {
             },
         },
         async (request, reply) => {
-            const bodyResult = createRevenueSchema.safeParse(request.body);
+            const bodyResult =
+                createRevenueSchema.safeParse(
+                    request.body,
+                );
 
             if (!bodyResult.success) {
                 return sendError({
@@ -61,44 +145,49 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: bodyResult.error.flatten().fieldErrors,
+                    details:
+                        bodyResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
             try {
                 const user = request.user as JwtUser;
-                const revenue = await createRevenue(bodyResult.data, user);
+                const revenue = await createRevenue(
+                    bodyResult.data,
+                    user,
+                );
 
                 return sendSuccess({
                     reply,
                     statusCode: 201,
-                    message: "Revenue record created successfully",
+                    message:
+                        "Revenue record created successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return sendError({
+                return sendRevenueOperationError({
                     reply,
-                    statusCode: 400,
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : "Failed to create revenue record",
-                    code: "REVENUE_OPERATION_FAILED",
                     requestId: request.id,
+                    error,
+                    fallback:
+                        "Failed to create revenue record",
                 });
             }
-        }
+        },
     );
 
     app.get(
         "/summary",
         {
-            preHandler: requirePermission("MANAGE_REVENUES"),
+            preHandler: requirePermission(
+                "MANAGE_REVENUES",
+            ),
             schema: {
                 tags: ["Revenue"],
                 summary: "Get revenue summary",
                 description:
-                    "Returns summarized gross sales, commission, payment received, receivables, and status counts.",
+                    "Returns sales, commission, collection, receivable, payment-status, and commission-status totals.",
                 security: [{ bearerAuth: [] }],
                 response: {
                     200: revenueSummaryResponseSchema,
@@ -113,23 +202,27 @@ export async function revenueRoutes(app: FastifyInstance) {
 
             return sendSuccess({
                 reply,
-                message: "Revenue summary fetched successfully",
+                message:
+                    "Revenue summary fetched successfully",
                 data,
             });
-        }
+        },
     );
 
     app.get(
         "/",
         {
-            preHandler: requirePermission("MANAGE_REVENUES"),
+            preHandler: requirePermission(
+                "MANAGE_REVENUES",
+            ),
             schema: {
                 tags: ["Revenue"],
                 summary: "List revenue records",
                 description:
-                    "Returns revenue records with filters by property, broker, payment status, commission status, and sale date.",
+                    "Admins see all records. Brokers see only records assigned to them.",
                 security: [{ bearerAuth: [] }],
-                querystring: revenueListQuerySchemaForSwagger,
+                querystring:
+                    revenueListQuerySchemaForSwagger,
                 response: {
                     200: revenueListResponseSchema,
                     400: revenueErrorResponseSchema,
@@ -139,7 +232,10 @@ export async function revenueRoutes(app: FastifyInstance) {
             },
         },
         async (request, reply) => {
-            const queryResult = revenueListQuerySchema.safeParse(request.query);
+            const queryResult =
+                revenueListQuerySchema.safeParse(
+                    request.query,
+                );
 
             if (!queryResult.success) {
                 return sendError({
@@ -148,30 +244,38 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: queryResult.error.flatten().fieldErrors,
+                    details:
+                        queryResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
             const user = request.user as JwtUser;
-            const data = await getRevenues(queryResult.data, user);
+            const data = await getRevenues(
+                queryResult.data,
+                user,
+            );
 
             return sendSuccess({
                 reply,
-                message: "Revenue records fetched successfully",
+                message:
+                    "Revenue records fetched successfully",
                 data,
             });
-        }
+        },
     );
 
     app.get(
         "/:id",
         {
-            preHandler: requirePermission("MANAGE_REVENUES"),
+            preHandler: requirePermission(
+                "MANAGE_REVENUES",
+            ),
             schema: {
                 tags: ["Revenue"],
                 summary: "Get revenue record by ID",
                 description:
-                    "Returns a single revenue record. Brokers can only view their own revenue records.",
+                    "Returns one revenue record. Brokers may open only their own records.",
                 security: [{ bearerAuth: [] }],
                 params: revenueParamsSchema,
                 response: {
@@ -184,7 +288,10 @@ export async function revenueRoutes(app: FastifyInstance) {
             },
         },
         async (request, reply) => {
-            const paramsResult = revenueIdParamsSchema.safeParse(request.params);
+            const paramsResult =
+                revenueIdParamsSchema.safeParse(
+                    request.params,
+                );
 
             if (!paramsResult.success) {
                 return sendError({
@@ -193,19 +300,25 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: paramsResult.error.flatten().fieldErrors,
+                    details:
+                        paramsResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
             try {
                 const user = request.user as JwtUser;
-                const revenue = await getRevenueById(paramsResult.data.id, user);
+                const revenue = await getRevenueById(
+                    paramsResult.data.id,
+                    user,
+                );
 
                 if (!revenue) {
                     return sendError({
                         reply,
                         statusCode: 404,
-                        message: "Revenue record not found",
+                        message:
+                            "Revenue record not found",
                         code: "REVENUE_NOT_FOUND",
                         requestId: request.id,
                     });
@@ -213,33 +326,33 @@ export async function revenueRoutes(app: FastifyInstance) {
 
                 return sendSuccess({
                     reply,
-                    message: "Revenue record fetched successfully",
+                    message:
+                        "Revenue record fetched successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return sendError({
+                return sendRevenueOperationError({
                     reply,
-                    statusCode: 403,
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : "Failed to fetch revenue record",
-                    code: "REVENUE_ACCESS_DENIED",
                     requestId: request.id,
+                    error,
+                    fallback:
+                        "Failed to fetch revenue record",
                 });
             }
-        }
+        },
     );
 
     app.patch(
         "/:id/payment-status",
         {
-            preHandler: requirePermission("MANAGE_REVENUES"),
+            preHandler: requirePermission(
+                "MANAGE_REVENUES",
+            ),
             schema: {
                 tags: ["Revenue"],
-                summary: "Update payment status",
+                summary: "Update revenue payment",
                 description:
-                    "Updates payment status and optionally updates the payment received amount.",
+                    "Updates payment received and automatically derives UNPAID, PARTIAL, or PAID.",
                 security: [{ bearerAuth: [] }],
                 params: revenueParamsSchema,
                 body: updatePaymentStatusBodySchema,
@@ -253,8 +366,14 @@ export async function revenueRoutes(app: FastifyInstance) {
             },
         },
         async (request, reply) => {
-            const paramsResult = revenueIdParamsSchema.safeParse(request.params);
-            const bodyResult = updatePaymentStatusSchema.safeParse(request.body);
+            const paramsResult =
+                revenueIdParamsSchema.safeParse(
+                    request.params,
+                );
+            const bodyResult =
+                updatePaymentStatusSchema.safeParse(
+                    request.body,
+                );
 
             if (!paramsResult.success) {
                 return sendError({
@@ -263,7 +382,9 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: paramsResult.error.flatten().fieldErrors,
+                    details:
+                        paramsResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
@@ -274,47 +395,50 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: bodyResult.error.flatten().fieldErrors,
+                    details:
+                        bodyResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
             try {
                 const user = request.user as JwtUser;
-                const revenue = await updateRevenuePaymentStatus(
-                    paramsResult.data.id,
-                    bodyResult.data,
-                    user
-                );
+                const revenue =
+                    await updateRevenuePaymentStatus(
+                        paramsResult.data.id,
+                        bodyResult.data,
+                        user,
+                    );
 
                 return sendSuccess({
                     reply,
-                    message: "Revenue payment status updated successfully",
+                    message:
+                        "Revenue payment updated successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return sendError({
+                return sendRevenueOperationError({
                     reply,
-                    statusCode: 400,
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : "Failed to update payment status",
-                    code: "REVENUE_OPERATION_FAILED",
                     requestId: request.id,
+                    error,
+                    fallback:
+                        "Failed to update revenue payment",
                 });
             }
-        }
+        },
     );
 
     app.patch(
         "/:id/commission-status",
         {
-            preHandler: requirePermission("MANAGE_REVENUES"),
+            preHandler: requirePermission(
+                "MANAGE_REVENUES",
+            ),
             schema: {
                 tags: ["Revenue"],
                 summary: "Update commission status",
                 description:
-                    "Updates the commission release status for a revenue record.",
+                    "Updates commission release status.",
                 security: [{ bearerAuth: [] }],
                 params: revenueParamsSchema,
                 body: updateCommissionStatusBodySchema,
@@ -328,8 +452,14 @@ export async function revenueRoutes(app: FastifyInstance) {
             },
         },
         async (request, reply) => {
-            const paramsResult = revenueIdParamsSchema.safeParse(request.params);
-            const bodyResult = updateCommissionStatusSchema.safeParse(request.body);
+            const paramsResult =
+                revenueIdParamsSchema.safeParse(
+                    request.params,
+                );
+            const bodyResult =
+                updateCommissionStatusSchema.safeParse(
+                    request.body,
+                );
 
             if (!paramsResult.success) {
                 return sendError({
@@ -338,7 +468,9 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: paramsResult.error.flatten().fieldErrors,
+                    details:
+                        paramsResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
@@ -349,47 +481,50 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: bodyResult.error.flatten().fieldErrors,
+                    details:
+                        bodyResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
             try {
                 const user = request.user as JwtUser;
-                const revenue = await updateRevenueCommissionStatus(
-                    paramsResult.data.id,
-                    bodyResult.data.commissionStatus,
-                    user
-                );
+                const revenue =
+                    await updateRevenueCommissionStatus(
+                        paramsResult.data.id,
+                        bodyResult.data.commissionStatus,
+                        user,
+                    );
 
                 return sendSuccess({
                     reply,
-                    message: "Revenue commission status updated successfully",
+                    message:
+                        "Revenue commission status updated successfully",
                     data: revenue,
                 });
             } catch (error) {
-                return sendError({
+                return sendRevenueOperationError({
                     reply,
-                    statusCode: 400,
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : "Failed to update commission status",
-                    code: "REVENUE_OPERATION_FAILED",
                     requestId: request.id,
+                    error,
+                    fallback:
+                        "Failed to update commission status",
                 });
             }
-        }
+        },
     );
 
     app.delete(
         "/:id",
         {
-            preHandler: requirePermission("MANAGE_REVENUES"),
+            preHandler: requirePermission(
+                "MANAGE_REVENUES",
+            ),
             schema: {
                 tags: ["Revenue"],
                 summary: "Delete revenue record",
                 description:
-                    "Deletes a revenue record. Admins can delete any record. Brokers can delete only their own records.",
+                    "Admins may delete any record. Brokers may delete only their own.",
                 security: [{ bearerAuth: [] }],
                 params: revenueParamsSchema,
                 response: {
@@ -402,7 +537,10 @@ export async function revenueRoutes(app: FastifyInstance) {
             },
         },
         async (request, reply) => {
-            const paramsResult = revenueIdParamsSchema.safeParse(request.params);
+            const paramsResult =
+                revenueIdParamsSchema.safeParse(
+                    request.params,
+                );
 
             if (!paramsResult.success) {
                 return sendError({
@@ -411,30 +549,37 @@ export async function revenueRoutes(app: FastifyInstance) {
                     message: "Validation error",
                     code: "VALIDATION_ERROR",
                     requestId: request.id,
-                    details: paramsResult.error.flatten().fieldErrors,
+                    details:
+                        paramsResult.error.flatten()
+                            .fieldErrors,
                 });
             }
 
             try {
                 const user = request.user as JwtUser;
-                await deleteRevenue(paramsResult.data.id, user);
+
+                await deleteRevenue(
+                    paramsResult.data.id,
+                    user,
+                );
 
                 return sendSuccess({
                     reply,
-                    message: "Revenue record deleted successfully",
+                    message:
+                        "Revenue record deleted successfully",
+                    data: {
+                        id: paramsResult.data.id,
+                    },
                 });
             } catch (error) {
-                return sendError({
+                return sendRevenueOperationError({
                     reply,
-                    statusCode: 400,
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : "Failed to delete revenue record",
-                    code: "REVENUE_OPERATION_FAILED",
                     requestId: request.id,
+                    error,
+                    fallback:
+                        "Failed to delete revenue record",
                 });
             }
-        }
+        },
     );
 }
