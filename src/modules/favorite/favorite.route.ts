@@ -1,246 +1,378 @@
-import { FastifyInstance } from "fastify";
-import {
-    favoriteListQuerySchema,
-    favoritePropertyParamsSchema,
-} from "./favorite.schema.js";
-import {
-    addPropertyToFavorites,
-    getFavoriteStatus,
-    getUserFavorites,
-    removePropertyFromFavorites,
-} from "./favorite.service.js";
-import {
-    favoriteDeleteResponseSchema,
-    favoriteErrorResponseSchema,
-    favoriteListQuerySchemaForSwagger,
-    favoriteListResponseSchema,
-    favoritePropertyParamsSchemaForSwagger,
-    favoriteStatusResponseSchema,
-    favoriteSuccessResponseSchema,
-} from "./favorite.swagger.js";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+
+import { sendError, sendSuccess } from "../../utils/api-response.js";
+
 import { requirePermission } from "../permission/permission.middleware.js";
-import { JwtUser } from "../permission/permission.types.js";
-import { sendSuccess, sendError } from "../../utils/api-response.js";
+
+import type { JwtUser } from "../permission/permission.types.js";
+
+import {
+  favoriteListQuerySchema,
+  favoritePropertyParamsSchema,
+} from "./favorite.schema.js";
+
+import {
+  addPropertyToFavorites,
+  getFavoriteStatus,
+  getUserFavorites,
+  removePropertyFromFavorites,
+} from "./favorite.service.js";
+
+import {
+  favoriteDeleteResponseSchema,
+  favoriteErrorResponseSchema,
+  favoriteListQuerySwaggerSchema,
+  favoriteListResponseSchema,
+  favoritePropertyParamsSwaggerSchema,
+  favoriteStatusResponseSchema,
+  favoriteSuccessResponseSchema,
+} from "./favorite.swagger.js";
+
+const favoriteNotFoundMessages = new Set([
+  "Property not found.",
+  "Property is not in your saved list.",
+]);
+
+function getErrorMessage(error: unknown, fallback: string): string {
+  return error instanceof Error ? error.message : fallback;
+}
+
+async function requireClientRole(request: FastifyRequest, reply: FastifyReply) {
+  const user = request.user as JwtUser;
+
+  if (user.role !== "CLIENT") {
+    return sendError({
+      reply,
+      statusCode: 403,
+      message: "Only clients can manage saved properties.",
+      code: "CLIENT_ROLE_REQUIRED",
+      requestId: request.id,
+    });
+  }
+}
+
+function sendFavoriteOperationError({
+  reply,
+  requestId,
+  error,
+  fallback,
+}: {
+  reply: FastifyReply;
+  requestId: string;
+  error: unknown;
+  fallback: string;
+}) {
+  const message = getErrorMessage(error, fallback);
+
+  if (favoriteNotFoundMessages.has(message)) {
+    return sendError({
+      reply,
+      statusCode: 404,
+      message,
+      code: "FAVORITE_NOT_FOUND",
+      requestId,
+    });
+  }
+
+  return sendError({
+    reply,
+    statusCode: 400,
+    message,
+    code: "FAVORITE_OPERATION_FAILED",
+    requestId,
+  });
+}
+
+const favoritePreHandlers = [
+  requirePermission("SAVE_PROPERTIES"),
+  requireClientRole,
+];
 
 export async function favoriteRoutes(app: FastifyInstance) {
-    app.get(
-        "/",
-        {
-            preHandler: requirePermission("SAVE_PROPERTIES"),
-            schema: {
-                tags: ["Favorites"],
-                summary: "Get current user's saved properties",
-                description:
-                    "Returns the authenticated user's saved published properties.",
-                security: [{ bearerAuth: [] }],
-                querystring: favoriteListQuerySchemaForSwagger,
-                response: {
-                    200: favoriteListResponseSchema,
-                    400: favoriteErrorResponseSchema,
-                    401: favoriteErrorResponseSchema,
-                    403: favoriteErrorResponseSchema,
-                },
-            },
+  app.post(
+    "/:propertyId",
+    {
+      preHandler: favoritePreHandlers,
+
+      schema: {
+        tags: ["Favorites"],
+
+        summary: "Save property",
+
+        description:
+          "Saves a published property to the authenticated client's favorites.",
+
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+
+        params: favoritePropertyParamsSwaggerSchema,
+
+        response: {
+          201: favoriteSuccessResponseSchema,
+
+          400: favoriteErrorResponseSchema,
+
+          401: favoriteErrorResponseSchema,
+
+          403: favoriteErrorResponseSchema,
+
+          404: favoriteErrorResponseSchema,
         },
-        async (request, reply) => {
-            const queryResult = favoriteListQuerySchema.safeParse(request.query);
+      },
+    },
 
-            if (!queryResult.success) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message: "Validation error",
-                    code: "VALIDATION_ERROR",
-                    requestId: request.id,
-                    details: queryResult.error.flatten().fieldErrors,
-                });
-            }
+    async (request, reply) => {
+      const paramsResult = favoritePropertyParamsSchema.safeParse(
+        request.params,
+      );
 
-            const user = request.user as JwtUser;
-            const data = await getUserFavorites(user.id, queryResult.data);
+      if (!paramsResult.success) {
+        return sendError({
+          reply,
+          statusCode: 400,
+          message: "Validation error",
+          code: "VALIDATION_ERROR",
+          requestId: request.id,
+          details: paramsResult.error.flatten().fieldErrors,
+        });
+      }
 
-            return sendSuccess({
-                reply,
-                message: "Saved properties fetched successfully",
-                data,
-            });
-        }
-    );
+      try {
+        const user = request.user as JwtUser;
 
-    app.post(
-        "/:propertyId",
-        {
-            preHandler: requirePermission("SAVE_PROPERTIES"),
-            schema: {
-                tags: ["Favorites"],
-                summary: "Save property to favorites",
-                description:
-                    "Saves a published property to the current user's favorite list.",
-                security: [{ bearerAuth: [] }],
-                params: favoritePropertyParamsSchemaForSwagger,
-                response: {
-                    201: favoriteSuccessResponseSchema,
-                    400: favoriteErrorResponseSchema,
-                    401: favoriteErrorResponseSchema,
-                    403: favoriteErrorResponseSchema,
-                    404: favoriteErrorResponseSchema,
-                },
-            },
+        const favorite = await addPropertyToFavorites(
+          user.id,
+          paramsResult.data.propertyId,
+        );
+
+        return sendSuccess({
+          reply,
+          statusCode: 201,
+          message: "Property saved successfully",
+          data: favorite,
+        });
+      } catch (error) {
+        return sendFavoriteOperationError({
+          reply,
+          requestId: request.id,
+          error,
+          fallback: "Failed to save property",
+        });
+      }
+    },
+  );
+
+  app.get(
+    "/",
+    {
+      preHandler: favoritePreHandlers,
+
+      schema: {
+        tags: ["Favorites"],
+
+        summary: "List saved properties",
+
+        description:
+          "Lists only the authenticated client's published saved properties.",
+
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+
+        querystring: favoriteListQuerySwaggerSchema,
+
+        response: {
+          200: favoriteListResponseSchema,
+
+          400: favoriteErrorResponseSchema,
+
+          401: favoriteErrorResponseSchema,
+
+          403: favoriteErrorResponseSchema,
         },
-        async (request, reply) => {
-            const paramsResult = favoritePropertyParamsSchema.safeParse(
-                request.params
-            );
+      },
+    },
 
-            if (!paramsResult.success) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message: "Validation error",
-                    code: "VALIDATION_ERROR",
-                    requestId: request.id,
-                    details: paramsResult.error.flatten().fieldErrors,
-                });
-            }
+    async (request, reply) => {
+      const queryResult = favoriteListQuerySchema.safeParse(request.query);
 
-            try {
-                const user = request.user as JwtUser;
+      if (!queryResult.success) {
+        return sendError({
+          reply,
+          statusCode: 400,
+          message: "Validation error",
+          code: "VALIDATION_ERROR",
+          requestId: request.id,
+          details: queryResult.error.flatten().fieldErrors,
+        });
+      }
 
-                const favorite = await addPropertyToFavorites(
-                    user.id,
-                    paramsResult.data.propertyId
-                );
+      const user = request.user as JwtUser;
 
-                return sendSuccess({
-                    reply,
-                    statusCode: 201,
-                    message: "Property saved successfully",
-                    data: favorite,
-                });
-            } catch (error) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : "Failed to save property",
-                    code: "FAVORITE_OPERATION_FAILED",
-                    requestId: request.id,
-                });
-            }
-        }
-    );
+      const data = await getUserFavorites(user.id, queryResult.data);
 
-    app.delete(
-        "/:propertyId",
-        {
-            preHandler: requirePermission("SAVE_PROPERTIES"),
-            schema: {
-                tags: ["Favorites"],
-                summary: "Remove property from favorites",
-                description:
-                    "Removes a property from the current user's saved properties.",
-                security: [{ bearerAuth: [] }],
-                params: favoritePropertyParamsSchemaForSwagger,
-                response: {
-                    200: favoriteDeleteResponseSchema,
-                    400: favoriteErrorResponseSchema,
-                    401: favoriteErrorResponseSchema,
-                    403: favoriteErrorResponseSchema,
-                    404: favoriteErrorResponseSchema,
-                },
-            },
+      return sendSuccess({
+        reply,
+        message: "Saved properties fetched successfully",
+        data,
+      });
+    },
+  );
+
+  app.get(
+    "/:propertyId/status",
+    {
+      preHandler: favoritePreHandlers,
+
+      schema: {
+        tags: ["Favorites"],
+
+        summary: "Check saved-property status",
+
+        description:
+          "Checks whether the authenticated client has saved the property.",
+
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+
+        params: favoritePropertyParamsSwaggerSchema,
+
+        response: {
+          200: favoriteStatusResponseSchema,
+
+          400: favoriteErrorResponseSchema,
+
+          401: favoriteErrorResponseSchema,
+
+          403: favoriteErrorResponseSchema,
+
+          404: favoriteErrorResponseSchema,
         },
-        async (request, reply) => {
-            const paramsResult = favoritePropertyParamsSchema.safeParse(
-                request.params
-            );
+      },
+    },
 
-            if (!paramsResult.success) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message: "Validation error",
-                    code: "VALIDATION_ERROR",
-                    requestId: request.id,
-                    details: paramsResult.error.flatten().fieldErrors,
-                });
-            }
+    async (request, reply) => {
+      const paramsResult = favoritePropertyParamsSchema.safeParse(
+        request.params,
+      );
 
-            try {
-                const user = request.user as JwtUser;
+      if (!paramsResult.success) {
+        return sendError({
+          reply,
+          statusCode: 400,
+          message: "Validation error",
+          code: "VALIDATION_ERROR",
+          requestId: request.id,
+          details: paramsResult.error.flatten().fieldErrors,
+        });
+      }
 
-                await removePropertyFromFavorites(
-                    user.id,
-                    paramsResult.data.propertyId
-                );
+      try {
+        const user = request.user as JwtUser;
 
-                return sendSuccess({
-                    reply,
-                    message: "Property removed from saved list successfully",
-                });
-            } catch (error) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message:
-                        error instanceof Error
-                            ? error.message
-                            : "Failed to remove property",
-                    code: "FAVORITE_OPERATION_FAILED",
-                    requestId: request.id,
-                });
-            }
-        }
-    );
+        const data = await getFavoriteStatus(
+          user.id,
+          paramsResult.data.propertyId,
+        );
 
-    app.get(
-        "/:propertyId/status",
-        {
-            preHandler: requirePermission("SAVE_PROPERTIES"),
-            schema: {
-                tags: ["Favorites"],
-                summary: "Check favorite status",
-                description:
-                    "Checks whether the current authenticated user already saved the property.",
-                security: [{ bearerAuth: [] }],
-                params: favoritePropertyParamsSchemaForSwagger,
-                response: {
-                    200: favoriteStatusResponseSchema,
-                    400: favoriteErrorResponseSchema,
-                    401: favoriteErrorResponseSchema,
-                    403: favoriteErrorResponseSchema,
-                },
-            },
+        return sendSuccess({
+          reply,
+          message: "Favorite status fetched successfully",
+          data,
+        });
+      } catch (error) {
+        return sendFavoriteOperationError({
+          reply,
+          requestId: request.id,
+          error,
+          fallback: "Failed to check favorite status",
+        });
+      }
+    },
+  );
+
+  app.delete(
+    "/:propertyId",
+    {
+      preHandler: favoritePreHandlers,
+
+      schema: {
+        tags: ["Favorites"],
+
+        summary: "Remove saved property",
+
+        description:
+          "Removes a property from the authenticated client's favorites.",
+
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+
+        params: favoritePropertyParamsSwaggerSchema,
+
+        response: {
+          200: favoriteDeleteResponseSchema,
+
+          400: favoriteErrorResponseSchema,
+
+          401: favoriteErrorResponseSchema,
+
+          403: favoriteErrorResponseSchema,
+
+          404: favoriteErrorResponseSchema,
         },
-        async (request, reply) => {
-            const paramsResult = favoritePropertyParamsSchema.safeParse(
-                request.params
-            );
+      },
+    },
 
-            if (!paramsResult.success) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message: "Validation error",
-                    code: "VALIDATION_ERROR",
-                    requestId: request.id,
-                    details: paramsResult.error.flatten().fieldErrors,
-                });
-            }
+    async (request, reply) => {
+      const paramsResult = favoritePropertyParamsSchema.safeParse(
+        request.params,
+      );
 
-            const user = request.user as JwtUser;
-            const data = await getFavoriteStatus(
-                user.id,
-                paramsResult.data.propertyId
-            );
+      if (!paramsResult.success) {
+        return sendError({
+          reply,
+          statusCode: 400,
+          message: "Validation error",
+          code: "VALIDATION_ERROR",
+          requestId: request.id,
+          details: paramsResult.error.flatten().fieldErrors,
+        });
+      }
 
-            return sendSuccess({
-                reply,
-                message: "Favorite status fetched successfully",
-                data,
-            });
-        }
-    );
+      try {
+        const user = request.user as JwtUser;
+
+        await removePropertyFromFavorites(
+          user.id,
+          paramsResult.data.propertyId,
+        );
+
+        return sendSuccess({
+          reply,
+          message: "Property removed from saved properties",
+          data: {
+            propertyId: paramsResult.data.propertyId,
+          },
+        });
+      } catch (error) {
+        return sendFavoriteOperationError({
+          reply,
+          requestId: request.id,
+          error,
+          fallback: "Failed to remove saved property",
+        });
+      }
+    },
+  );
 }

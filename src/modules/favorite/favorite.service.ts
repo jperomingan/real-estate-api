@@ -7,6 +7,8 @@ import {
   getPaginationOffset,
 } from "../../utils/pagination.js";
 
+import type { FavoriteListQuery } from "./favorite.schema.js";
+
 type PropertyFavoriteFindManyArgs = Prisma.Args<
   typeof prisma.propertyFavorite,
   "findMany"
@@ -19,14 +21,6 @@ type PropertyFavoriteWhereInput = NonNullable<
 type PropertyFavoriteSelect = NonNullable<
   PropertyFavoriteFindManyArgs["select"]
 >;
-
-type FavoriteListQuery = {
-  search?: string;
-  city?: string;
-  province?: string;
-  page: number;
-  limit: number;
-};
 
 const favoriteSelect = {
   id: true,
@@ -86,14 +80,8 @@ const favoriteSelect = {
   createdAt: true,
 } satisfies PropertyFavoriteSelect;
 
-/**
- * Saves a published property to a user's favorites.
- */
-export async function addPropertyToFavorites(
-  userId: string,
-  propertyId: string,
-) {
-  const property = await prisma.property.findUnique({
+async function getPropertyForFavorite(propertyId: string) {
+  return prisma.property.findUnique({
     where: {
       id: propertyId,
     },
@@ -103,6 +91,13 @@ export async function addPropertyToFavorites(
       status: true,
     },
   });
+}
+
+export async function addPropertyToFavorites(
+  userId: string,
+  propertyId: string,
+) {
+  const property = await getPropertyForFavorite(propertyId);
 
   if (!property) {
     throw new Error("Property not found.");
@@ -139,13 +134,16 @@ export async function addPropertyToFavorites(
   });
 }
 
-/**
- * Removes a property from a user's favorites.
- */
 export async function removePropertyFromFavorites(
   userId: string,
   propertyId: string,
 ) {
+  const property = await getPropertyForFavorite(propertyId);
+
+  if (!property) {
+    throw new Error("Property not found.");
+  }
+
   const existingFavorite = await prisma.propertyFavorite.findUnique({
     where: {
       userId_propertyId: {
@@ -173,10 +171,13 @@ export async function removePropertyFromFavorites(
   });
 }
 
-/**
- * Checks whether the user has saved the property.
- */
 export async function getFavoriteStatus(userId: string, propertyId: string) {
+  const property = await getPropertyForFavorite(propertyId);
+
+  if (!property) {
+    throw new Error("Property not found.");
+  }
+
   const favorite = await prisma.propertyFavorite.findUnique({
     where: {
       userId_propertyId: {
@@ -191,13 +192,12 @@ export async function getFavoriteStatus(userId: string, propertyId: string) {
   });
 
   return {
+    propertyId,
+
     isFavorited: Boolean(favorite),
   };
 }
 
-/**
- * Returns the authenticated user's published favorite properties.
- */
 export async function getUserFavorites(
   userId: string,
   query: FavoriteListQuery,
@@ -319,12 +319,6 @@ export async function getUserFavorites(
   };
 }
 
-/*
- * Compatibility aliases.
- *
- * These aliases prevent route import errors if an older route version
- * uses savePropertyToFavorites() or removeFavorite().
- */
 export const savePropertyToFavorites = addPropertyToFavorites;
 
 export const addFavorite = addPropertyToFavorites;
