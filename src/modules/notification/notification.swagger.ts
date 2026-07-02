@@ -1,69 +1,308 @@
-import {
-    errorResponseSchema,
-    paginatedResponseSchema,
-    successResponseSchema,
-} from "../../utils/swagger-schemas.js";
-
-export const notificationTypeValues = [
-    "LEAD_CREATED",
-    "VIEWING_REQUESTED",
-    "VIEWING_UPDATED",
-    "REVENUE_CREATED",
-    "PROPERTY_UPDATED",
-    "ACCOUNT_APPROVED",
-    "ACCOUNT_REJECTED",
-    "GENERAL",
-];
-
-export const notificationResponseSchema = {
-    type: "object",
-    properties: {
-        id: { type: "string" },
-        type: { type: "string", enum: notificationTypeValues },
-        title: { type: "string" },
-        message: { type: "string" },
-        isRead: { type: "boolean" },
-        metadata: {},
-        targetUserId: { type: "string" },
-        createdAt: { type: "string" },
-        updatedAt: { type: "string" },
+const notificationMetadataSchema = {
+  anyOf: [
+    {
+      type: "object",
+      additionalProperties: true,
     },
+    {
+      type: "array",
+      items: {},
+    },
+    {
+      type: "string",
+    },
+    {
+      type: "number",
+    },
+    {
+      type: "boolean",
+    },
+    {
+      type: "null",
+    },
+  ],
 };
 
-export const notificationParamsSchema = {
-    type: "object",
-    required: ["id"],
-    properties: {
-        id: { type: "string", description: "Notification ID" },
+const notificationItemSchema = {
+  type: "object",
+
+  properties: {
+    id: {
+      type: "string",
     },
+
+    targetUserId: {
+      type: "string",
+    },
+
+    type: {
+      type: "string",
+      examples: [
+        "VIEWING_REQUESTED",
+        "VIEWING_UPDATED",
+        "LEAD_CREATED",
+        "REVENUE_UPDATED",
+      ],
+    },
+
+    title: {
+      type: "string",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    metadata: notificationMetadataSchema,
+
+    isRead: {
+      type: "boolean",
+    },
+
+    createdAt: {
+      type: "string",
+      format: "date-time",
+    },
+
+    updatedAt: {
+      type: "string",
+      format: "date-time",
+    },
+  },
+
+  required: [
+    "id",
+    "targetUserId",
+    "type",
+    "title",
+    "message",
+    "isRead",
+    "createdAt",
+    "updatedAt",
+  ],
 };
 
 export const notificationListQuerySchemaForSwagger = {
-    type: "object",
-    properties: {
-        isRead: { type: "boolean" },
-        type: { type: "string", enum: notificationTypeValues },
-        page: { type: "number" },
-        limit: { type: "number" },
+  type: "object",
+
+  properties: {
+    search: {
+      type: "string",
     },
+
+    type: {
+      type: "string",
+    },
+
+    isRead: {
+      type: "boolean",
+    },
+
+    page: {
+      type: "integer",
+      minimum: 1,
+      default: 1,
+    },
+
+    limit: {
+      type: "integer",
+      minimum: 1,
+      maximum: 100,
+      default: 20,
+    },
+  },
 };
 
-export const unreadCountResponseSchema = successResponseSchema({
-    type: "object",
-    properties: {
-        unreadCount: { type: "number" },
+export const notificationParamsSchema = {
+  type: "object",
+
+  required: ["id"],
+
+  properties: {
+    id: {
+      type: "string",
+      format: "uuid",
     },
-});
+  },
+};
 
-export const notificationSuccessResponseSchema =
-    successResponseSchema(notificationResponseSchema);
+export const notificationSuccessResponseSchema = {
+  type: "object",
 
-export const notificationListResponseSchema =
-    paginatedResponseSchema(notificationResponseSchema);
+  properties: {
+    success: {
+      type: "boolean",
+    },
 
-export const notificationActionResponseSchema = successResponseSchema({
-    type: "object",
-    properties: {},
-});
+    message: {
+      type: "string",
+    },
 
-export const notificationErrorResponseSchema = errorResponseSchema;
+    data: notificationItemSchema,
+  },
+
+  required: ["message", "data"],
+};
+
+export const notificationListResponseSchema = {
+  type: "object",
+
+  properties: {
+    success: {
+      type: "boolean",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    data: {
+      type: "object",
+
+      properties: {
+        items: {
+          type: "array",
+          items: notificationItemSchema,
+        },
+
+        pagination: {
+          type: "object",
+
+          properties: {
+            page: {
+              type: "integer",
+            },
+
+            limit: {
+              type: "integer",
+            },
+
+            total: {
+              type: "integer",
+            },
+
+            totalPages: {
+              type: "integer",
+            },
+          },
+
+          required: ["page", "limit", "total", "totalPages"],
+        },
+      },
+
+      required: ["items", "pagination"],
+    },
+  },
+
+  required: ["message", "data"],
+};
+
+export const unreadNotificationCountResponseSchema = {
+  type: "object",
+
+  properties: {
+    success: {
+      type: "boolean",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    data: {
+      type: "object",
+
+      properties: {
+        count: {
+          type: "integer",
+        },
+      },
+
+      required: ["count"],
+    },
+  },
+
+  required: ["message", "data"],
+};
+
+export const notificationReadAllResponseSchema = {
+  type: "object",
+
+  properties: {
+    success: {
+      type: "boolean",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    data: {
+      type: "object",
+
+      properties: {
+        updatedCount: {
+          type: "integer",
+        },
+      },
+
+      required: ["updatedCount"],
+    },
+  },
+
+  required: ["message", "data"],
+};
+
+export const notificationDeleteResponseSchema = {
+  type: "object",
+
+  properties: {
+    success: {
+      type: "boolean",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    data: {
+      type: "object",
+
+      properties: {
+        id: {
+          type: "string",
+        },
+      },
+
+      required: ["id"],
+    },
+  },
+
+  required: ["message", "data"],
+};
+
+export const notificationErrorResponseSchema = {
+  type: "object",
+
+  properties: {
+    success: {
+      type: "boolean",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    errors: {
+      type: "object",
+      additionalProperties: true,
+    },
+
+    error: {
+      type: "object",
+      additionalProperties: true,
+    },
+  },
+
+  required: ["message"],
+};
