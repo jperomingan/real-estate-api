@@ -1,116 +1,270 @@
-import { errorResponseSchema, successResponseSchema } from "../../utils/swagger-schemas.js";
-
-export const dashboardQuerySchemaForSwagger = {
-    type: "object",
-    properties: {
-        dateFrom: {
-            type: "string",
-            description: "Start date filter. Example: 2026-01-01",
-        },
-        dateTo: {
-            type: "string",
-            description: "End date filter. Example: 2026-12-31",
-        },
+const nullableStringSchema = {
+  anyOf: [
+    {
+      type: "string",
     },
+    {
+      type: "null",
+    },
+  ],
 };
 
-export const dashboardSummaryResponseSchema = successResponseSchema({
-    type: "object",
-    properties: {
-        totalProperties: { type: "number" },
-        publishedProperties: { type: "number" },
-        totalLeads: { type: "number" },
-        newLeads: { type: "number" },
-        closedWonLeads: { type: "number" },
-        leadConversionRate: { type: "number" },
-        totalRevenueRecords: { type: "number" },
-        totalGrossSales: { type: "number" },
-        totalCommission: { type: "number" },
-        totalPaymentReceived: { type: "number" },
-        totalReceivable: { type: "number" },
-        paidRevenueCount: { type: "number" },
-        unpaidRevenueCount: { type: "number" },
-        releasedCommissionCount: { type: "number" },
-        pendingCommissionCount: { type: "number" },
-    },
-});
+const statusCountSchema = {
+  type: "object",
 
-export const monthlyRevenueResponseSchema = successResponseSchema({
-    type: "array",
-    items: {
-        type: "object",
-        properties: {
-            month: { type: "string", description: "Month in YYYY-MM format" },
-            totalGrossSales: { type: "number" },
-            totalCommission: { type: "number" },
-            totalPaymentReceived: { type: "number" },
-            count: { type: "number" },
+  properties: {
+    status: {
+      type: "string",
+    },
+
+    count: {
+      type: "integer",
+    },
+  },
+
+  required: ["status", "count"],
+};
+
+export const dashboardSummaryQuerySchemaForSwagger = {
+  type: "object",
+
+  properties: {
+    dateFrom: {
+      type: "string",
+      format: "date-time",
+    },
+
+    dateTo: {
+      type: "string",
+      format: "date-time",
+    },
+
+    recentLimit: {
+      type: "integer",
+      minimum: 1,
+      maximum: 20,
+      default: 5,
+    },
+  },
+};
+
+export const dashboardSummaryResponseSchema = {
+  type: "object",
+
+  properties: {
+    success: {
+      type: "boolean",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    data: {
+      type: "object",
+
+      properties: {
+        role: {
+          type: "string",
         },
-    },
-});
 
-export const leadConversionResponseSchema = successResponseSchema({
-    type: "array",
-    items: {
-        type: "object",
-        properties: {
-            status: { type: "string" },
-            count: { type: "number" },
-            percentage: { type: "number" },
+        scope: {
+          type: "string",
+          enum: ["GLOBAL", "BROKER"],
         },
-    },
-});
 
-export const propertyStatsResponseSchema = successResponseSchema({
-    type: "object",
-    properties: {
-        total: { type: "number" },
-        byStatus: {
-            type: "array",
-            items: {
-                type: "object",
-                properties: {
-                    status: { type: "string" },
-                    count: { type: "number" },
-                },
+        filters: {
+          type: "object",
+
+          properties: {
+            dateFrom: nullableStringSchema,
+
+            dateTo: nullableStringSchema,
+
+            recentLimit: {
+              type: "integer",
             },
-        },
-        byType: {
-            type: "array",
-            items: {
-                type: "object",
-                properties: {
-                    type: { type: "string" },
-                    count: { type: "number" },
-                },
-            },
-        },
-        byLocation: {
-            type: "array",
-            items: {
-                type: "object",
-                properties: {
-                    location: { type: "string" },
-                    count: { type: "number" },
-                },
-            },
-        },
-    },
-});
+          },
 
-export const brokerPerformanceResponseSchema = successResponseSchema({
-    type: "array",
-    items: {
-        type: "object",
+          required: ["dateFrom", "dateTo", "recentLimit"],
+        },
+
         properties: {
-            brokerId: { type: "string" },
-            brokerName: { type: "string" },
-            brokerEmail: { type: "string" },
-            totalGrossSales: { type: "number" },
-            totalCommission: { type: "number" },
-            closedSalesCount: { type: "number" },
-        },
-    },
-});
+          type: "object",
 
-export const dashboardErrorResponseSchema = errorResponseSchema;
+          properties: {
+            total: {
+              type: "integer",
+            },
+
+            byStatus: {
+              type: "array",
+              items: statusCountSchema,
+            },
+          },
+
+          required: ["total", "byStatus"],
+        },
+
+        leads: {
+          type: "object",
+
+          properties: {
+            total: {
+              type: "integer",
+            },
+
+            byStatus: {
+              type: "array",
+              items: statusCountSchema,
+            },
+          },
+
+          required: ["total", "byStatus"],
+        },
+
+        viewings: {
+          type: "object",
+
+          properties: {
+            total: {
+              type: "integer",
+            },
+
+            byStatus: {
+              type: "array",
+              items: statusCountSchema,
+            },
+          },
+
+          required: ["total", "byStatus"],
+        },
+
+        revenue: {
+          type: "object",
+
+          properties: {
+            totalRecords: {
+              type: "integer",
+            },
+
+            totalGrossSales: {
+              type: "number",
+            },
+
+            totalCommission: {
+              type: "number",
+            },
+
+            totalPaymentReceived: {
+              type: "number",
+            },
+
+            totalReceivable: {
+              type: "number",
+            },
+
+            byPaymentStatus: {
+              type: "array",
+              items: statusCountSchema,
+            },
+
+            byCommissionStatus: {
+              type: "array",
+              items: statusCountSchema,
+            },
+          },
+
+          required: [
+            "totalRecords",
+            "totalGrossSales",
+            "totalCommission",
+            "totalPaymentReceived",
+            "totalReceivable",
+            "byPaymentStatus",
+            "byCommissionStatus",
+          ],
+        },
+
+        recent: {
+          type: "object",
+
+          properties: {
+            properties: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: true,
+              },
+            },
+
+            leads: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: true,
+              },
+            },
+
+            viewings: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: true,
+              },
+            },
+
+            revenues: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: true,
+              },
+            },
+          },
+
+          required: ["properties", "leads", "viewings", "revenues"],
+        },
+      },
+
+      required: [
+        "role",
+        "scope",
+        "filters",
+        "properties",
+        "leads",
+        "viewings",
+        "revenue",
+        "recent",
+      ],
+    },
+  },
+
+  required: ["message", "data"],
+};
+
+export const dashboardErrorResponseSchema = {
+  type: "object",
+
+  properties: {
+    success: {
+      type: "boolean",
+    },
+
+    message: {
+      type: "string",
+    },
+
+    errors: {
+      type: "object",
+      additionalProperties: true,
+    },
+
+    error: {
+      type: "object",
+      additionalProperties: true,
+    },
+  },
+
+  required: ["message"],
+};

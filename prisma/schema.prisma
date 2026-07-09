@@ -64,6 +64,7 @@ enum LeadSource {
   PHONE_CALL
   EMAIL
   OTHER
+  SOCIAL_MEDIA
 }
 
 enum PaymentStatus {
