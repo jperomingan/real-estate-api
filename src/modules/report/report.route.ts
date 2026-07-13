@@ -1,4 +1,4 @@
-import type { FastifyPluginAsync } from "fastify";
+import type { FastifyPluginAsync, FastifyReply } from "fastify";
 import { requirePermission } from "../permission/permission.middleware.js";
 import {
   getLeadSourceReport,
@@ -8,7 +8,22 @@ import {
   getRevenueStatusReport,
   getViewingStatusReport,
 } from "./report.service.js";
+import {
+  exportLeadSourcesCsv,
+  exportLeadStatusesCsv,
+  exportPropertyStatusesCsv,
+  exportReportsSummaryCsv,
+  exportRevenueStatusesCsv,
+  exportViewingStatusesCsv,
+} from "./report-export.service.js";
 import { reportQuerySchema } from "./report.schema.js";
+
+function sendCsv(reply: FastifyReply, filename: string, csv: string) {
+  return reply
+    .header("Content-Type", "text/csv; charset=utf-8")
+    .header("Content-Disposition", `attachment; filename="${filename}"`)
+    .send(csv);
+}
 
 export const reportRoutes: FastifyPluginAsync = async (app) => {
   app.get(
@@ -80,6 +95,84 @@ export const reportRoutes: FastifyPluginAsync = async (app) => {
       const query = reportQuerySchema.parse(request.query);
 
       return getRevenueStatusReport(query);
+    },
+  );
+
+  app.get(
+    "/export/summary.csv",
+    {
+      preHandler: [requirePermission("VIEW_DASHBOARD")],
+    },
+    async (request, reply) => {
+      const query = reportQuerySchema.parse(request.query);
+      const csv = await exportReportsSummaryCsv(query);
+
+      return sendCsv(reply, "reports-summary.csv", csv);
+    },
+  );
+
+  app.get(
+    "/export/leads-sources.csv",
+    {
+      preHandler: [requirePermission("VIEW_DASHBOARD")],
+    },
+    async (request, reply) => {
+      const query = reportQuerySchema.parse(request.query);
+      const csv = await exportLeadSourcesCsv(query);
+
+      return sendCsv(reply, "reports-leads-sources.csv", csv);
+    },
+  );
+
+  app.get(
+    "/export/leads-statuses.csv",
+    {
+      preHandler: [requirePermission("VIEW_DASHBOARD")],
+    },
+    async (request, reply) => {
+      const query = reportQuerySchema.parse(request.query);
+      const csv = await exportLeadStatusesCsv(query);
+
+      return sendCsv(reply, "reports-leads-statuses.csv", csv);
+    },
+  );
+
+  app.get(
+    "/export/properties-statuses.csv",
+    {
+      preHandler: [requirePermission("VIEW_DASHBOARD")],
+    },
+    async (request, reply) => {
+      const query = reportQuerySchema.parse(request.query);
+      const csv = await exportPropertyStatusesCsv(query);
+
+      return sendCsv(reply, "reports-properties-statuses.csv", csv);
+    },
+  );
+
+  app.get(
+    "/export/viewings-statuses.csv",
+    {
+      preHandler: [requirePermission("VIEW_DASHBOARD")],
+    },
+    async (request, reply) => {
+      const query = reportQuerySchema.parse(request.query);
+      const csv = await exportViewingStatusesCsv(query);
+
+      return sendCsv(reply, "reports-viewings-statuses.csv", csv);
+    },
+  );
+
+  app.get(
+    "/export/revenues-statuses.csv",
+    {
+      preHandler: [requirePermission("VIEW_DASHBOARD")],
+    },
+    async (request, reply) => {
+      const query = reportQuerySchema.parse(request.query);
+      const csv = await exportRevenueStatusesCsv(query);
+
+      return sendCsv(reply, "reports-revenues-statuses.csv", csv);
     },
   );
 };
