@@ -28,6 +28,7 @@ import { systemRoutes } from "./modules/system/system.route.js";
 import { apiMetadata } from "./config/api-metadata.js";
 import crypto from "node:crypto";
 import { requestIdPlugin } from "./plugins/request-id.js";
+import { leadFollowUpRoutes } from "./modules/lead-follow-up/lead-follow-up.route.js";
 
 export async function buildApp() {
   const app = Fastify({
@@ -36,12 +37,12 @@ export async function buildApp() {
       transport:
         env.NODE_ENV === "development"
           ? {
-              target: "pino-pretty",
-              options: {
-                translateTime: "SYS:standard",
-                ignore: "pid,hostname",
-              },
-            }
+            target: "pino-pretty",
+            options: {
+              translateTime: "SYS:standard",
+              ignore: "pid,hostname",
+            },
+          }
           : undefined,
     },
     genReqId: (request) => {
@@ -208,6 +209,10 @@ export async function buildApp() {
 
   await app.register(leadRoutes, {
     prefix: "/api/leads",
+  });
+
+  await app.register(leadFollowUpRoutes, {
+    prefix: "/api",
   });
 
   await app.register(viewingRoutes, {

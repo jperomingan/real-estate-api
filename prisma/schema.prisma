@@ -113,27 +113,41 @@ enum AuditAction {
   STATUS_CHANGE
 }
 
+enum LeadFollowUpStatus {
+  PENDING
+  DONE
+  CANCELLED
+}
+
+enum LeadFollowUpPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model User {
-  id                 String               @id @default(uuid())
-  firstName          String
-  lastName           String
-  email              String               @unique
-  passwordHash       String
-  role               UserRole             @default(BROKER)
-  status             UserStatus           @default(PENDING)
-  phone              String?
-  avatarUrl          String?
-  properties         Property[]           @relation("BrokerProperties")
-  brokerLeads        Lead[]               @relation("BrokerLeads")
-  clientLeads        Lead[]               @relation("ClientLeads")
-  brokerRevenues     Revenue[]            @relation("BrokerRevenues")
-  favoriteProperties PropertyFavorite[]   @relation("UserPropertyFavorites")
-  brokerViewings     ViewingAppointment[] @relation("BrokerViewings")
-  clientViewings     ViewingAppointment[] @relation("ClientViewings")
-  notifications      Notification[]       @relation("UserNotifications")
-  auditLogs          AuditLog[]           @relation("UserAuditLogs")
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
+  id                    String               @id @default(uuid())
+  firstName             String
+  lastName              String
+  email                 String               @unique
+  passwordHash          String
+  role                  UserRole             @default(BROKER)
+  status                UserStatus           @default(PENDING)
+  phone                 String?
+  avatarUrl             String?
+  properties            Property[]           @relation("BrokerProperties")
+  brokerLeads           Lead[]               @relation("BrokerLeads")
+  clientLeads           Lead[]               @relation("ClientLeads")
+  brokerRevenues        Revenue[]            @relation("BrokerRevenues")
+  favoriteProperties    PropertyFavorite[]   @relation("UserPropertyFavorites")
+  brokerViewings        ViewingAppointment[] @relation("BrokerViewings")
+  clientViewings        ViewingAppointment[] @relation("ClientViewings")
+  notifications         Notification[]       @relation("UserNotifications")
+  auditLogs             AuditLog[]           @relation("UserAuditLogs")
+  assignedLeadFollowUps LeadFollowUpTask[]   @relation("AssignedLeadFollowUps")
+  createdLeadFollowUps  LeadFollowUpTask[]   @relation("CreatedLeadFollowUps")
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
 
   @@map("users")
 }
@@ -199,17 +213,51 @@ model Lead {
   brokerId String
   broker   User   @relation("BrokerLeads", fields: [brokerId], references: [id], onDelete: Restrict)
 
-  clientId  String?
-  client    User?    @relation("ClientLeads", fields: [clientId], references: [id], onDelete: SetNull)
-  revenue   Revenue?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  clientId      String?
+  client        User?              @relation("ClientLeads", fields: [clientId], references: [id], onDelete: SetNull)
+  revenue       Revenue?
+  followUpTasks LeadFollowUpTask[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
 
   @@index([propertyId])
   @@index([brokerId])
   @@index([clientId])
   @@index([status])
   @@map("leads")
+}
+
+model LeadFollowUpTask {
+  id String @id @default(uuid())
+
+  title       String
+  description String?
+
+  status   LeadFollowUpStatus   @default(PENDING)
+  priority LeadFollowUpPriority @default(MEDIUM)
+
+  dueDate     DateTime?
+  completedAt DateTime?
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  assignedToUserId String?
+  assignedToUser   User?   @relation("AssignedLeadFollowUps", fields: [assignedToUserId], references: [id], onDelete: SetNull)
+
+  createdByUserId String?
+  createdByUser   User?   @relation("CreatedLeadFollowUps", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leadId])
+  @@index([assignedToUserId])
+  @@index([createdByUserId])
+  @@index([status])
+  @@index([priority])
+  @@index([dueDate])
+  @@map("lead_follow_up_tasks")
 }
 
 model Revenue {
