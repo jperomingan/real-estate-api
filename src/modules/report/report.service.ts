@@ -73,13 +73,13 @@ export async function getReportsSummary(query: ReportQuery) {
         ...propertyFilter.values,
       ),
       prisma.$queryRawUnsafe<CountRow[]>(
-        `SELECT COUNT(*)::bigint AS count FROM "viewings" v ${viewingFilter.sql}`,
+        `SELECT COUNT(*)::bigint AS count FROM "viewing_appointments" v ${viewingFilter.sql}`,
         ...viewingFilter.values,
       ),
       prisma.$queryRawUnsafe<RevenueRow[]>(
         `
         SELECT
-          COALESCE(SUM(r."amount"), 0) AS total,
+          COALESCE(SUM(r."commissionAmount"), 0) AS total,
           COUNT(*)::bigint AS count
         FROM "revenues" r
         ${revenueFilter.sql}
@@ -179,7 +179,7 @@ export async function getViewingStatusReport(query: ReportQuery) {
     SELECT
       v."status"::text AS key,
       COUNT(*)::bigint AS count
-    FROM "viewings" v
+    FROM "viewing_appointments" v
     ${filter.sql}
     GROUP BY v."status"
     ORDER BY count DESC

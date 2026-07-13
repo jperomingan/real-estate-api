@@ -9,6 +9,7 @@ import { propertyRoutes } from "./modules/property/property.route.js";
 import { leadRoutes } from "./modules/lead/lead.route.js";
 import { revenueRoutes } from "./modules/revenue/revenue.route.js";
 import { dashboardRoutes } from "./modules/dashboard/dashboard.route.js";
+import { reportRoutes } from "./modules/report/report.route.js";
 import multipart from "@fastify/multipart";
 import fastifyStatic from "@fastify/static";
 import path from "node:path";
@@ -223,6 +224,8 @@ export async function buildApp() {
   await app.register(dashboardRoutes, {
     prefix: "/api/dashboard",
   });
+
+  await app.register(reportRoutes, { prefix: "/api/reports" });
 
   await app.register(multipart, {
     limits: {
