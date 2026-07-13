@@ -152,6 +152,11 @@ export async function buildApp() {
           name: "Dashboard",
           description: "Dashboard analytics and summary APIs",
         },
+
+        {
+          name: "Reports",
+          description: "Reports and analytics APIs",
+        },
         {
           name: "Favorites",
           description: "Saved properties APIs",
