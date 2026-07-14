@@ -141,3 +141,35 @@ export const AuditAction = {
 } as const
 
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]
+
+
+export const LeadFollowUpStatus = {
+  PENDING: 'PENDING',
+  DONE: 'DONE',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type LeadFollowUpStatus = (typeof LeadFollowUpStatus)[keyof typeof LeadFollowUpStatus]
+
+
+export const LeadFollowUpPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH'
+} as const
+
+export type LeadFollowUpPriority = (typeof LeadFollowUpPriority)[keyof typeof LeadFollowUpPriority]
+
+
+export const LeadNoteType = {
+  GENERAL: 'GENERAL',
+  CALL: 'CALL',
+  EMAIL: 'EMAIL',
+  SMS: 'SMS',
+  MEETING: 'MEETING',
+  VIEWING: 'VIEWING',
+  FOLLOW_UP: 'FOLLOW_UP',
+  STATUS_UPDATE: 'STATUS_UPDATE'
+} as const
+
+export type LeadNoteType = (typeof LeadNoteType)[keyof typeof LeadNoteType]

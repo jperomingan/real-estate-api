@@ -54,12 +54,14 @@ export const ModelName = {
   User: 'User',
   Property: 'Property',
   Lead: 'Lead',
+  LeadFollowUpTask: 'LeadFollowUpTask',
   Revenue: 'Revenue',
   PropertyImage: 'PropertyImage',
   PropertyFavorite: 'PropertyFavorite',
   ViewingAppointment: 'ViewingAppointment',
   Notification: 'Notification',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  LeadNote: 'LeadNote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -140,6 +142,24 @@ export const LeadScalarFieldEnum = {
 } as const
 
 export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+export const LeadFollowUpTaskScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  priority: 'priority',
+  dueDate: 'dueDate',
+  completedAt: 'completedAt',
+  leadId: 'leadId',
+  assignedToUserId: 'assignedToUserId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeadFollowUpTaskScalarFieldEnum = (typeof LeadFollowUpTaskScalarFieldEnum)[keyof typeof LeadFollowUpTaskScalarFieldEnum]
 
 
 export const RevenueScalarFieldEnum = {
@@ -237,6 +257,19 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const LeadNoteScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  content: 'content',
+  leadId: 'leadId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeadNoteScalarFieldEnum = (typeof LeadNoteScalarFieldEnum)[keyof typeof LeadNoteScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -125,6 +125,17 @@ enum LeadFollowUpPriority {
   HIGH
 }
 
+enum LeadNoteType {
+  GENERAL
+  CALL
+  EMAIL
+  SMS
+  MEETING
+  VIEWING
+  FOLLOW_UP
+  STATUS_UPDATE
+}
+
 model User {
   id                    String               @id @default(uuid())
   firstName             String
@@ -146,6 +157,7 @@ model User {
   auditLogs             AuditLog[]           @relation("UserAuditLogs")
   assignedLeadFollowUps LeadFollowUpTask[]   @relation("AssignedLeadFollowUps")
   createdLeadFollowUps  LeadFollowUpTask[]   @relation("CreatedLeadFollowUps")
+  createdLeadNotes      LeadNote[]           @relation("CreatedLeadNotes")
   createdAt             DateTime             @default(now())
   updatedAt             DateTime             @updatedAt
 
@@ -217,6 +229,7 @@ model Lead {
   client        User?              @relation("ClientLeads", fields: [clientId], references: [id], onDelete: SetNull)
   revenue       Revenue?
   followUpTasks LeadFollowUpTask[]
+  notes         LeadNote[]
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
 
@@ -411,4 +424,26 @@ model AuditLog {
   @@index([resourceId])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+model LeadNote {
+  id String @id @default(uuid())
+
+  type    LeadNoteType @default(GENERAL)
+  content String
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  createdByUserId String?
+  createdByUser   User?   @relation("CreatedLeadNotes", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leadId])
+  @@index([createdByUserId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("lead_notes")
 }

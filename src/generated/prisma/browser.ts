@@ -33,6 +33,11 @@ export type Property = Prisma.PropertyModel
  */
 export type Lead = Prisma.LeadModel
 /**
+ * Model LeadFollowUpTask
+ * 
+ */
+export type LeadFollowUpTask = Prisma.LeadFollowUpTaskModel
+/**
  * Model Revenue
  * 
  */
@@ -62,3 +67,8 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model LeadNote
+ * 
+ */
+export type LeadNote = Prisma.LeadNoteModel

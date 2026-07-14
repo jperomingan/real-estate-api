@@ -300,6 +300,8 @@ export type LeadWhereInput = {
   broker?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   client?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   revenue?: Prisma.XOR<Prisma.RevenueNullableScalarRelationFilter, Prisma.RevenueWhereInput> | null
+  followUpTasks?: Prisma.LeadFollowUpTaskListRelationFilter
+  notes?: Prisma.LeadNoteListRelationFilter
 }
 
 export type LeadOrderByWithRelationInput = {
@@ -322,6 +324,8 @@ export type LeadOrderByWithRelationInput = {
   broker?: Prisma.UserOrderByWithRelationInput
   client?: Prisma.UserOrderByWithRelationInput
   revenue?: Prisma.RevenueOrderByWithRelationInput
+  followUpTasks?: Prisma.LeadFollowUpTaskOrderByRelationAggregateInput
+  notes?: Prisma.LeadNoteOrderByRelationAggregateInput
 }
 
 export type LeadWhereUniqueInput = Prisma.AtLeast<{
@@ -347,6 +351,8 @@ export type LeadWhereUniqueInput = Prisma.AtLeast<{
   broker?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   client?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   revenue?: Prisma.XOR<Prisma.RevenueNullableScalarRelationFilter, Prisma.RevenueWhereInput> | null
+  followUpTasks?: Prisma.LeadFollowUpTaskListRelationFilter
+  notes?: Prisma.LeadNoteListRelationFilter
 }, "id">
 
 export type LeadOrderByWithAggregationInput = {
@@ -410,6 +416,8 @@ export type LeadCreateInput = {
   broker: Prisma.UserCreateNestedOneWithoutBrokerLeadsInput
   client?: Prisma.UserCreateNestedOneWithoutClientLeadsInput
   revenue?: Prisma.RevenueCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteCreateNestedManyWithoutLeadInput
 }
 
 export type LeadUncheckedCreateInput = {
@@ -429,6 +437,8 @@ export type LeadUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   revenue?: Prisma.RevenueUncheckedCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteUncheckedCreateNestedManyWithoutLeadInput
 }
 
 export type LeadUpdateInput = {
@@ -448,6 +458,8 @@ export type LeadUpdateInput = {
   broker?: Prisma.UserUpdateOneRequiredWithoutBrokerLeadsNestedInput
   client?: Prisma.UserUpdateOneWithoutClientLeadsNestedInput
   revenue?: Prisma.RevenueUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateInput = {
@@ -467,6 +479,8 @@ export type LeadUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revenue?: Prisma.RevenueUncheckedUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUncheckedUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadCreateManyInput = {
@@ -590,6 +604,11 @@ export type LeadMinOrderByAggregateInput = {
 
 export type LeadSumOrderByAggregateInput = {
   budget?: Prisma.SortOrder
+}
+
+export type LeadScalarRelationFilter = {
+  is?: Prisma.LeadWhereInput
+  isNot?: Prisma.LeadWhereInput
 }
 
 export type LeadNullableScalarRelationFilter = {
@@ -735,6 +754,20 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type LeadCreateNestedOneWithoutFollowUpTasksInput = {
+  create?: Prisma.XOR<Prisma.LeadCreateWithoutFollowUpTasksInput, Prisma.LeadUncheckedCreateWithoutFollowUpTasksInput>
+  connectOrCreate?: Prisma.LeadCreateOrConnectWithoutFollowUpTasksInput
+  connect?: Prisma.LeadWhereUniqueInput
+}
+
+export type LeadUpdateOneRequiredWithoutFollowUpTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.LeadCreateWithoutFollowUpTasksInput, Prisma.LeadUncheckedCreateWithoutFollowUpTasksInput>
+  connectOrCreate?: Prisma.LeadCreateOrConnectWithoutFollowUpTasksInput
+  upsert?: Prisma.LeadUpsertWithoutFollowUpTasksInput
+  connect?: Prisma.LeadWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeadUpdateToOneWithWhereWithoutFollowUpTasksInput, Prisma.LeadUpdateWithoutFollowUpTasksInput>, Prisma.LeadUncheckedUpdateWithoutFollowUpTasksInput>
+}
+
 export type LeadCreateNestedOneWithoutRevenueInput = {
   create?: Prisma.XOR<Prisma.LeadCreateWithoutRevenueInput, Prisma.LeadUncheckedCreateWithoutRevenueInput>
   connectOrCreate?: Prisma.LeadCreateOrConnectWithoutRevenueInput
@@ -749,6 +782,20 @@ export type LeadUpdateOneWithoutRevenueNestedInput = {
   delete?: Prisma.LeadWhereInput | boolean
   connect?: Prisma.LeadWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.LeadUpdateToOneWithWhereWithoutRevenueInput, Prisma.LeadUpdateWithoutRevenueInput>, Prisma.LeadUncheckedUpdateWithoutRevenueInput>
+}
+
+export type LeadCreateNestedOneWithoutNotesInput = {
+  create?: Prisma.XOR<Prisma.LeadCreateWithoutNotesInput, Prisma.LeadUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.LeadCreateOrConnectWithoutNotesInput
+  connect?: Prisma.LeadWhereUniqueInput
+}
+
+export type LeadUpdateOneRequiredWithoutNotesNestedInput = {
+  create?: Prisma.XOR<Prisma.LeadCreateWithoutNotesInput, Prisma.LeadUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.LeadCreateOrConnectWithoutNotesInput
+  upsert?: Prisma.LeadUpsertWithoutNotesInput
+  connect?: Prisma.LeadWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeadUpdateToOneWithWhereWithoutNotesInput, Prisma.LeadUpdateWithoutNotesInput>, Prisma.LeadUncheckedUpdateWithoutNotesInput>
 }
 
 export type LeadCreateWithoutBrokerInput = {
@@ -767,6 +814,8 @@ export type LeadCreateWithoutBrokerInput = {
   property?: Prisma.PropertyCreateNestedOneWithoutLeadsInput
   client?: Prisma.UserCreateNestedOneWithoutClientLeadsInput
   revenue?: Prisma.RevenueCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteCreateNestedManyWithoutLeadInput
 }
 
 export type LeadUncheckedCreateWithoutBrokerInput = {
@@ -785,6 +834,8 @@ export type LeadUncheckedCreateWithoutBrokerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   revenue?: Prisma.RevenueUncheckedCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteUncheckedCreateNestedManyWithoutLeadInput
 }
 
 export type LeadCreateOrConnectWithoutBrokerInput = {
@@ -813,6 +864,8 @@ export type LeadCreateWithoutClientInput = {
   property?: Prisma.PropertyCreateNestedOneWithoutLeadsInput
   broker: Prisma.UserCreateNestedOneWithoutBrokerLeadsInput
   revenue?: Prisma.RevenueCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteCreateNestedManyWithoutLeadInput
 }
 
 export type LeadUncheckedCreateWithoutClientInput = {
@@ -831,6 +884,8 @@ export type LeadUncheckedCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   revenue?: Prisma.RevenueUncheckedCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteUncheckedCreateNestedManyWithoutLeadInput
 }
 
 export type LeadCreateOrConnectWithoutClientInput = {
@@ -912,6 +967,8 @@ export type LeadCreateWithoutPropertyInput = {
   broker: Prisma.UserCreateNestedOneWithoutBrokerLeadsInput
   client?: Prisma.UserCreateNestedOneWithoutClientLeadsInput
   revenue?: Prisma.RevenueCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteCreateNestedManyWithoutLeadInput
 }
 
 export type LeadUncheckedCreateWithoutPropertyInput = {
@@ -930,6 +987,8 @@ export type LeadUncheckedCreateWithoutPropertyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   revenue?: Prisma.RevenueUncheckedCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteUncheckedCreateNestedManyWithoutLeadInput
 }
 
 export type LeadCreateOrConnectWithoutPropertyInput = {
@@ -958,6 +1017,102 @@ export type LeadUpdateManyWithWhereWithoutPropertyInput = {
   data: Prisma.XOR<Prisma.LeadUpdateManyMutationInput, Prisma.LeadUncheckedUpdateManyWithoutPropertyInput>
 }
 
+export type LeadCreateWithoutFollowUpTasksInput = {
+  id?: string
+  firstName: string
+  lastName?: string | null
+  email?: string | null
+  phone: string
+  message?: string | null
+  source?: $Enums.LeadSource
+  status?: $Enums.LeadStatus
+  budget?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  property?: Prisma.PropertyCreateNestedOneWithoutLeadsInput
+  broker: Prisma.UserCreateNestedOneWithoutBrokerLeadsInput
+  client?: Prisma.UserCreateNestedOneWithoutClientLeadsInput
+  revenue?: Prisma.RevenueCreateNestedOneWithoutLeadInput
+  notes?: Prisma.LeadNoteCreateNestedManyWithoutLeadInput
+}
+
+export type LeadUncheckedCreateWithoutFollowUpTasksInput = {
+  id?: string
+  firstName: string
+  lastName?: string | null
+  email?: string | null
+  phone: string
+  message?: string | null
+  source?: $Enums.LeadSource
+  status?: $Enums.LeadStatus
+  budget?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Date | string | null
+  propertyId?: string | null
+  brokerId: string
+  clientId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revenue?: Prisma.RevenueUncheckedCreateNestedOneWithoutLeadInput
+  notes?: Prisma.LeadNoteUncheckedCreateNestedManyWithoutLeadInput
+}
+
+export type LeadCreateOrConnectWithoutFollowUpTasksInput = {
+  where: Prisma.LeadWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeadCreateWithoutFollowUpTasksInput, Prisma.LeadUncheckedCreateWithoutFollowUpTasksInput>
+}
+
+export type LeadUpsertWithoutFollowUpTasksInput = {
+  update: Prisma.XOR<Prisma.LeadUpdateWithoutFollowUpTasksInput, Prisma.LeadUncheckedUpdateWithoutFollowUpTasksInput>
+  create: Prisma.XOR<Prisma.LeadCreateWithoutFollowUpTasksInput, Prisma.LeadUncheckedCreateWithoutFollowUpTasksInput>
+  where?: Prisma.LeadWhereInput
+}
+
+export type LeadUpdateToOneWithWhereWithoutFollowUpTasksInput = {
+  where?: Prisma.LeadWhereInput
+  data: Prisma.XOR<Prisma.LeadUpdateWithoutFollowUpTasksInput, Prisma.LeadUncheckedUpdateWithoutFollowUpTasksInput>
+}
+
+export type LeadUpdateWithoutFollowUpTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumLeadSourceFieldUpdateOperationsInput | $Enums.LeadSource
+  status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+  budget?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  property?: Prisma.PropertyUpdateOneWithoutLeadsNestedInput
+  broker?: Prisma.UserUpdateOneRequiredWithoutBrokerLeadsNestedInput
+  client?: Prisma.UserUpdateOneWithoutClientLeadsNestedInput
+  revenue?: Prisma.RevenueUpdateOneWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUpdateManyWithoutLeadNestedInput
+}
+
+export type LeadUncheckedUpdateWithoutFollowUpTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumLeadSourceFieldUpdateOperationsInput | $Enums.LeadSource
+  status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+  budget?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brokerId?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revenue?: Prisma.RevenueUncheckedUpdateOneWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUncheckedUpdateManyWithoutLeadNestedInput
+}
+
 export type LeadCreateWithoutRevenueInput = {
   id?: string
   firstName: string
@@ -974,6 +1129,8 @@ export type LeadCreateWithoutRevenueInput = {
   property?: Prisma.PropertyCreateNestedOneWithoutLeadsInput
   broker: Prisma.UserCreateNestedOneWithoutBrokerLeadsInput
   client?: Prisma.UserCreateNestedOneWithoutClientLeadsInput
+  followUpTasks?: Prisma.LeadFollowUpTaskCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteCreateNestedManyWithoutLeadInput
 }
 
 export type LeadUncheckedCreateWithoutRevenueInput = {
@@ -992,6 +1149,8 @@ export type LeadUncheckedCreateWithoutRevenueInput = {
   clientId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedCreateNestedManyWithoutLeadInput
+  notes?: Prisma.LeadNoteUncheckedCreateNestedManyWithoutLeadInput
 }
 
 export type LeadCreateOrConnectWithoutRevenueInput = {
@@ -1026,6 +1185,8 @@ export type LeadUpdateWithoutRevenueInput = {
   property?: Prisma.PropertyUpdateOneWithoutLeadsNestedInput
   broker?: Prisma.UserUpdateOneRequiredWithoutBrokerLeadsNestedInput
   client?: Prisma.UserUpdateOneWithoutClientLeadsNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateWithoutRevenueInput = {
@@ -1044,6 +1205,104 @@ export type LeadUncheckedUpdateWithoutRevenueInput = {
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUncheckedUpdateManyWithoutLeadNestedInput
+}
+
+export type LeadCreateWithoutNotesInput = {
+  id?: string
+  firstName: string
+  lastName?: string | null
+  email?: string | null
+  phone: string
+  message?: string | null
+  source?: $Enums.LeadSource
+  status?: $Enums.LeadStatus
+  budget?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  property?: Prisma.PropertyCreateNestedOneWithoutLeadsInput
+  broker: Prisma.UserCreateNestedOneWithoutBrokerLeadsInput
+  client?: Prisma.UserCreateNestedOneWithoutClientLeadsInput
+  revenue?: Prisma.RevenueCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskCreateNestedManyWithoutLeadInput
+}
+
+export type LeadUncheckedCreateWithoutNotesInput = {
+  id?: string
+  firstName: string
+  lastName?: string | null
+  email?: string | null
+  phone: string
+  message?: string | null
+  source?: $Enums.LeadSource
+  status?: $Enums.LeadStatus
+  budget?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Date | string | null
+  propertyId?: string | null
+  brokerId: string
+  clientId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  revenue?: Prisma.RevenueUncheckedCreateNestedOneWithoutLeadInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedCreateNestedManyWithoutLeadInput
+}
+
+export type LeadCreateOrConnectWithoutNotesInput = {
+  where: Prisma.LeadWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeadCreateWithoutNotesInput, Prisma.LeadUncheckedCreateWithoutNotesInput>
+}
+
+export type LeadUpsertWithoutNotesInput = {
+  update: Prisma.XOR<Prisma.LeadUpdateWithoutNotesInput, Prisma.LeadUncheckedUpdateWithoutNotesInput>
+  create: Prisma.XOR<Prisma.LeadCreateWithoutNotesInput, Prisma.LeadUncheckedCreateWithoutNotesInput>
+  where?: Prisma.LeadWhereInput
+}
+
+export type LeadUpdateToOneWithWhereWithoutNotesInput = {
+  where?: Prisma.LeadWhereInput
+  data: Prisma.XOR<Prisma.LeadUpdateWithoutNotesInput, Prisma.LeadUncheckedUpdateWithoutNotesInput>
+}
+
+export type LeadUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumLeadSourceFieldUpdateOperationsInput | $Enums.LeadSource
+  status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+  budget?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  property?: Prisma.PropertyUpdateOneWithoutLeadsNestedInput
+  broker?: Prisma.UserUpdateOneRequiredWithoutBrokerLeadsNestedInput
+  client?: Prisma.UserUpdateOneWithoutClientLeadsNestedInput
+  revenue?: Prisma.RevenueUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUpdateManyWithoutLeadNestedInput
+}
+
+export type LeadUncheckedUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumLeadSourceFieldUpdateOperationsInput | $Enums.LeadSource
+  status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+  budget?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  preferredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brokerId?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revenue?: Prisma.RevenueUncheckedUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadCreateManyBrokerInput = {
@@ -1096,6 +1355,8 @@ export type LeadUpdateWithoutBrokerInput = {
   property?: Prisma.PropertyUpdateOneWithoutLeadsNestedInput
   client?: Prisma.UserUpdateOneWithoutClientLeadsNestedInput
   revenue?: Prisma.RevenueUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateWithoutBrokerInput = {
@@ -1114,6 +1375,8 @@ export type LeadUncheckedUpdateWithoutBrokerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revenue?: Prisma.RevenueUncheckedUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUncheckedUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateManyWithoutBrokerInput = {
@@ -1149,6 +1412,8 @@ export type LeadUpdateWithoutClientInput = {
   property?: Prisma.PropertyUpdateOneWithoutLeadsNestedInput
   broker?: Prisma.UserUpdateOneRequiredWithoutBrokerLeadsNestedInput
   revenue?: Prisma.RevenueUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateWithoutClientInput = {
@@ -1167,6 +1432,8 @@ export type LeadUncheckedUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revenue?: Prisma.RevenueUncheckedUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUncheckedUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateManyWithoutClientInput = {
@@ -1219,6 +1486,8 @@ export type LeadUpdateWithoutPropertyInput = {
   broker?: Prisma.UserUpdateOneRequiredWithoutBrokerLeadsNestedInput
   client?: Prisma.UserUpdateOneWithoutClientLeadsNestedInput
   revenue?: Prisma.RevenueUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateWithoutPropertyInput = {
@@ -1237,6 +1506,8 @@ export type LeadUncheckedUpdateWithoutPropertyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revenue?: Prisma.RevenueUncheckedUpdateOneWithoutLeadNestedInput
+  followUpTasks?: Prisma.LeadFollowUpTaskUncheckedUpdateManyWithoutLeadNestedInput
+  notes?: Prisma.LeadNoteUncheckedUpdateManyWithoutLeadNestedInput
 }
 
 export type LeadUncheckedUpdateManyWithoutPropertyInput = {
@@ -1256,6 +1527,44 @@ export type LeadUncheckedUpdateManyWithoutPropertyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type LeadCountOutputType
+ */
+
+export type LeadCountOutputType = {
+  followUpTasks: number
+  notes: number
+}
+
+export type LeadCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  followUpTasks?: boolean | LeadCountOutputTypeCountFollowUpTasksArgs
+  notes?: boolean | LeadCountOutputTypeCountNotesArgs
+}
+
+/**
+ * LeadCountOutputType without action
+ */
+export type LeadCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LeadCountOutputType
+   */
+  select?: Prisma.LeadCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * LeadCountOutputType without action
+ */
+export type LeadCountOutputTypeCountFollowUpTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeadFollowUpTaskWhereInput
+}
+
+/**
+ * LeadCountOutputType without action
+ */
+export type LeadCountOutputTypeCountNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeadNoteWhereInput
+}
 
 
 export type LeadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1278,6 +1587,9 @@ export type LeadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   broker?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.Lead$clientArgs<ExtArgs>
   revenue?: boolean | Prisma.Lead$revenueArgs<ExtArgs>
+  followUpTasks?: boolean | Prisma.Lead$followUpTasksArgs<ExtArgs>
+  notes?: boolean | Prisma.Lead$notesArgs<ExtArgs>
+  _count?: boolean | Prisma.LeadCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lead"]>
 
 export type LeadSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1346,6 +1658,9 @@ export type LeadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   broker?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.Lead$clientArgs<ExtArgs>
   revenue?: boolean | Prisma.Lead$revenueArgs<ExtArgs>
+  followUpTasks?: boolean | Prisma.Lead$followUpTasksArgs<ExtArgs>
+  notes?: boolean | Prisma.Lead$notesArgs<ExtArgs>
+  _count?: boolean | Prisma.LeadCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LeadIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   property?: boolean | Prisma.Lead$propertyArgs<ExtArgs>
@@ -1365,6 +1680,8 @@ export type $LeadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     broker: Prisma.$UserPayload<ExtArgs>
     client: Prisma.$UserPayload<ExtArgs> | null
     revenue: Prisma.$RevenuePayload<ExtArgs> | null
+    followUpTasks: Prisma.$LeadFollowUpTaskPayload<ExtArgs>[]
+    notes: Prisma.$LeadNotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1780,6 +2097,8 @@ export interface Prisma__LeadClient<T, Null = never, ExtArgs extends runtime.Typ
   broker<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   client<T extends Prisma.Lead$clientArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lead$clientArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   revenue<T extends Prisma.Lead$revenueArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lead$revenueArgs<ExtArgs>>): Prisma.Prisma__RevenueClient<runtime.Types.Result.GetResult<Prisma.$RevenuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  followUpTasks<T extends Prisma.Lead$followUpTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lead$followUpTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadFollowUpTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notes<T extends Prisma.Lead$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lead$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2279,6 +2598,54 @@ export type Lead$revenueArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.RevenueInclude<ExtArgs> | null
   where?: Prisma.RevenueWhereInput
+}
+
+/**
+ * Lead.followUpTasks
+ */
+export type Lead$followUpTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LeadFollowUpTask
+   */
+  select?: Prisma.LeadFollowUpTaskSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LeadFollowUpTask
+   */
+  omit?: Prisma.LeadFollowUpTaskOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeadFollowUpTaskInclude<ExtArgs> | null
+  where?: Prisma.LeadFollowUpTaskWhereInput
+  orderBy?: Prisma.LeadFollowUpTaskOrderByWithRelationInput | Prisma.LeadFollowUpTaskOrderByWithRelationInput[]
+  cursor?: Prisma.LeadFollowUpTaskWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LeadFollowUpTaskScalarFieldEnum | Prisma.LeadFollowUpTaskScalarFieldEnum[]
+}
+
+/**
+ * Lead.notes
+ */
+export type Lead$notesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LeadNote
+   */
+  select?: Prisma.LeadNoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LeadNote
+   */
+  omit?: Prisma.LeadNoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeadNoteInclude<ExtArgs> | null
+  where?: Prisma.LeadNoteWhereInput
+  orderBy?: Prisma.LeadNoteOrderByWithRelationInput | Prisma.LeadNoteOrderByWithRelationInput[]
+  cursor?: Prisma.LeadNoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LeadNoteScalarFieldEnum | Prisma.LeadNoteScalarFieldEnum[]
 }
 
 /**

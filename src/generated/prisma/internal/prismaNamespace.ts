@@ -387,12 +387,14 @@ export const ModelName = {
   User: 'User',
   Property: 'Property',
   Lead: 'Lead',
+  LeadFollowUpTask: 'LeadFollowUpTask',
   Revenue: 'Revenue',
   PropertyImage: 'PropertyImage',
   PropertyFavorite: 'PropertyFavorite',
   ViewingAppointment: 'ViewingAppointment',
   Notification: 'Notification',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  LeadNote: 'LeadNote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "property" | "lead" | "revenue" | "propertyImage" | "propertyFavorite" | "viewingAppointment" | "notification" | "auditLog"
+    modelProps: "user" | "property" | "lead" | "leadFollowUpTask" | "revenue" | "propertyImage" | "propertyFavorite" | "viewingAppointment" | "notification" | "auditLog" | "leadNote"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -631,6 +633,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LeadCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LeadCountAggregateOutputType> | number
+        }
+      }
+    }
+    LeadFollowUpTask: {
+      payload: Prisma.$LeadFollowUpTaskPayload<ExtArgs>
+      fields: Prisma.LeadFollowUpTaskFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LeadFollowUpTaskFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LeadFollowUpTaskFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>
+        }
+        findFirst: {
+          args: Prisma.LeadFollowUpTaskFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LeadFollowUpTaskFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>
+        }
+        findMany: {
+          args: Prisma.LeadFollowUpTaskFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>[]
+        }
+        create: {
+          args: Prisma.LeadFollowUpTaskCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>
+        }
+        createMany: {
+          args: Prisma.LeadFollowUpTaskCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LeadFollowUpTaskCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>[]
+        }
+        delete: {
+          args: Prisma.LeadFollowUpTaskDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>
+        }
+        update: {
+          args: Prisma.LeadFollowUpTaskUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>
+        }
+        deleteMany: {
+          args: Prisma.LeadFollowUpTaskDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LeadFollowUpTaskUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LeadFollowUpTaskUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>[]
+        }
+        upsert: {
+          args: Prisma.LeadFollowUpTaskUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadFollowUpTaskPayload>
+        }
+        aggregate: {
+          args: Prisma.LeadFollowUpTaskAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLeadFollowUpTask>
+        }
+        groupBy: {
+          args: Prisma.LeadFollowUpTaskGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeadFollowUpTaskGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LeadFollowUpTaskCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeadFollowUpTaskCountAggregateOutputType> | number
         }
       }
     }
@@ -1078,6 +1154,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LeadNote: {
+      payload: Prisma.$LeadNotePayload<ExtArgs>
+      fields: Prisma.LeadNoteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LeadNoteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LeadNoteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>
+        }
+        findFirst: {
+          args: Prisma.LeadNoteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LeadNoteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>
+        }
+        findMany: {
+          args: Prisma.LeadNoteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>[]
+        }
+        create: {
+          args: Prisma.LeadNoteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>
+        }
+        createMany: {
+          args: Prisma.LeadNoteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LeadNoteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>[]
+        }
+        delete: {
+          args: Prisma.LeadNoteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>
+        }
+        update: {
+          args: Prisma.LeadNoteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>
+        }
+        deleteMany: {
+          args: Prisma.LeadNoteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LeadNoteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LeadNoteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>[]
+        }
+        upsert: {
+          args: Prisma.LeadNoteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeadNotePayload>
+        }
+        aggregate: {
+          args: Prisma.LeadNoteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLeadNote>
+        }
+        groupBy: {
+          args: Prisma.LeadNoteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeadNoteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LeadNoteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeadNoteCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1181,6 +1331,24 @@ export const LeadScalarFieldEnum = {
 export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
 
 
+export const LeadFollowUpTaskScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  priority: 'priority',
+  dueDate: 'dueDate',
+  completedAt: 'completedAt',
+  leadId: 'leadId',
+  assignedToUserId: 'assignedToUserId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeadFollowUpTaskScalarFieldEnum = (typeof LeadFollowUpTaskScalarFieldEnum)[keyof typeof LeadFollowUpTaskScalarFieldEnum]
+
+
 export const RevenueScalarFieldEnum = {
   id: 'id',
   grossSaleAmount: 'grossSaleAmount',
@@ -1276,6 +1444,19 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const LeadNoteScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  content: 'content',
+  leadId: 'leadId',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeadNoteScalarFieldEnum = (typeof LeadNoteScalarFieldEnum)[keyof typeof LeadNoteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1466,6 +1647,34 @@ export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'LeadFollowUpStatus'
+ */
+export type EnumLeadFollowUpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadFollowUpStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadFollowUpStatus[]'
+ */
+export type ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadFollowUpStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadFollowUpPriority'
+ */
+export type EnumLeadFollowUpPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadFollowUpPriority'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadFollowUpPriority[]'
+ */
+export type ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadFollowUpPriority[]'>
+    
+
+
+/**
  * Reference to a field of type 'PaymentStatus'
  */
 export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
@@ -1553,6 +1762,20 @@ export type EnumAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'AuditAction[]'
  */
 export type ListEnumAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuditAction[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadNoteType'
+ */
+export type EnumLeadNoteTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadNoteType'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadNoteType[]'
+ */
+export type ListEnumLeadNoteTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadNoteType[]'>
     
 
 
@@ -1682,12 +1905,14 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   property?: Prisma.PropertyOmit
   lead?: Prisma.LeadOmit
+  leadFollowUpTask?: Prisma.LeadFollowUpTaskOmit
   revenue?: Prisma.RevenueOmit
   propertyImage?: Prisma.PropertyImageOmit
   propertyFavorite?: Prisma.PropertyFavoriteOmit
   viewingAppointment?: Prisma.ViewingAppointmentOmit
   notification?: Prisma.NotificationOmit
   auditLog?: Prisma.AuditLogOmit
+  leadNote?: Prisma.LeadNoteOmit
 }
 
 /* Types for Logging */

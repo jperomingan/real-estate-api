@@ -318,6 +318,40 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumLeadFollowUpStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpStatus | Prisma.EnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpStatusFilter<$PrismaModel> | $Enums.LeadFollowUpStatus
+}
+
+export type EnumLeadFollowUpPriorityFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpPriority | Prisma.EnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpPriorityFilter<$PrismaModel> | $Enums.LeadFollowUpPriority
+}
+
+export type EnumLeadFollowUpStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpStatus | Prisma.EnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadFollowUpStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLeadFollowUpStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLeadFollowUpStatusFilter<$PrismaModel>
+}
+
+export type EnumLeadFollowUpPriorityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpPriority | Prisma.EnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpPriorityWithAggregatesFilter<$PrismaModel> | $Enums.LeadFollowUpPriority
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLeadFollowUpPriorityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLeadFollowUpPriorityFilter<$PrismaModel>
+}
+
 export type EnumPaymentStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.PaymentStatus | Prisma.EnumPaymentStatusFieldRefInput<$PrismaModel>
   in?: $Enums.PaymentStatus[] | Prisma.ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -492,6 +526,23 @@ export type EnumAuditActionWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAuditActionFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAuditActionFilter<$PrismaModel>
+}
+
+export type EnumLeadNoteTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadNoteType | Prisma.EnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadNoteTypeFilter<$PrismaModel> | $Enums.LeadNoteType
+}
+
+export type EnumLeadNoteTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadNoteType | Prisma.EnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadNoteTypeWithAggregatesFilter<$PrismaModel> | $Enums.LeadNoteType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLeadNoteTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLeadNoteTypeFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -811,6 +862,40 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type NestedEnumLeadFollowUpStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpStatus | Prisma.EnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpStatusFilter<$PrismaModel> | $Enums.LeadFollowUpStatus
+}
+
+export type NestedEnumLeadFollowUpPriorityFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpPriority | Prisma.EnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpPriorityFilter<$PrismaModel> | $Enums.LeadFollowUpPriority
+}
+
+export type NestedEnumLeadFollowUpStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpStatus | Prisma.EnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpStatus[] | Prisma.ListEnumLeadFollowUpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadFollowUpStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLeadFollowUpStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLeadFollowUpStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumLeadFollowUpPriorityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadFollowUpPriority | Prisma.EnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadFollowUpPriority[] | Prisma.ListEnumLeadFollowUpPriorityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadFollowUpPriorityWithAggregatesFilter<$PrismaModel> | $Enums.LeadFollowUpPriority
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLeadFollowUpPriorityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLeadFollowUpPriorityFilter<$PrismaModel>
+}
+
 export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.PaymentStatus | Prisma.EnumPaymentStatusFieldRefInput<$PrismaModel>
   in?: $Enums.PaymentStatus[] | Prisma.ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -958,6 +1043,23 @@ export type NestedEnumAuditActionWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAuditActionFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAuditActionFilter<$PrismaModel>
+}
+
+export type NestedEnumLeadNoteTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadNoteType | Prisma.EnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadNoteTypeFilter<$PrismaModel> | $Enums.LeadNoteType
+}
+
+export type NestedEnumLeadNoteTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LeadNoteType | Prisma.EnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LeadNoteType[] | Prisma.ListEnumLeadNoteTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLeadNoteTypeWithAggregatesFilter<$PrismaModel> | $Enums.LeadNoteType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLeadNoteTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLeadNoteTypeFilter<$PrismaModel>
 }
 
 
