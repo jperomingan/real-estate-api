@@ -33,6 +33,7 @@ export const leadNoteRoutes: FastifyPluginAsync = async (app) => {
     async (request, reply) => {
       const params = leadNoteLeadParamsSchema.parse(request.params);
       const body = createLeadNoteSchema.parse(request.body);
+
       const note = await createLeadNote(
         params.leadId,
         body,
@@ -83,7 +84,9 @@ export const leadNoteRoutes: FastifyPluginAsync = async (app) => {
   app.delete(
     "/lead-notes/:id",
     {
-      preHandler: [requirePermission("VIEW_DASHBOA      preHandler  async (request) => {
+      preHandler: [requirePermission("VIEW_DASHBOARD")],
+    },
+    async (request) => {
       const params = leadNoteParamsSchema.parse(request.params);
 
       return deleteLeadNote(params.id, getCurrentUser(request));

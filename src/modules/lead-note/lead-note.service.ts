@@ -78,7 +78,8 @@ export async function listLeadNotes(query: LeadNoteQuery, user: CurrentUser) {
       ? {
           leadId: query.leadId,
         }
-      :       :       : ry.type
+      : {}),
+    ...(query.type
       ? {
           type: query.type,
         }
@@ -129,9 +130,13 @@ export async function listLeadNotes(query: LeadNoteQuery, user: CurrentUser) {
   };
 }
 
-exporexpornc function gexporexpornc functiotring, user: CurrentUser) {
-  const note = awa  const note = awa  const note
-     here:      here:      her..buildVisibilityWhere(     here:        include: {
+export async function getLeadNoteById(id: string, user: CurrentUser) {
+  const note = await prisma.leadNote.findFirst({
+    where: {
+      id,
+      ...buildVisibilityWhere(user),
+    },
+    include: {
       lead: {
         select: {
           id: true,
