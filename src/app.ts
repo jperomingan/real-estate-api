@@ -7,7 +7,6 @@ import { authRoutes } from "./modules/auth/auth.route.js";
 import { adminRoutes } from "./modules/admin/admin.route.js";
 import { propertyRoutes } from "./modules/property/property.route.js";
 import { leadRoutes } from "./modules/lead/lead.route.js";
-import { leadNoteRoutes } from "./modules/lead-note/lead-note.route.js";
 import { revenueRoutes } from "./modules/revenue/revenue.route.js";
 import { dashboardRoutes } from "./modules/dashboard/dashboard.route.js";
 import { reportRoutes } from "./modules/report/report.route.js";
@@ -29,7 +28,6 @@ import { systemRoutes } from "./modules/system/system.route.js";
 import { apiMetadata } from "./config/api-metadata.js";
 import crypto from "node:crypto";
 import { requestIdPlugin } from "./plugins/request-id.js";
-import { leadFollowUpRoutes } from "./modules/lead-follow-up/lead-follow-up.route.js";
 
 export async function buildApp() {
   const app = Fastify({
@@ -91,7 +89,7 @@ export async function buildApp() {
     });
   }
 
-  await app.register(corsPlugin);
+  await corsPlugin(app);
 
   await app.register(jwt, {
     secret: env.JWT_SECRET,
@@ -210,14 +208,6 @@ export async function buildApp() {
 
   await app.register(leadRoutes, {
     prefix: "/api/leads",
-  });
-
-  await app.register(leadFollowUpRoutes, {
-    prefix: "/api",
-  });
-
-  await app.register(leadNoteRoutes, {
-    prefix: "/api",
   });
 
   await app.register(viewingRoutes, {
