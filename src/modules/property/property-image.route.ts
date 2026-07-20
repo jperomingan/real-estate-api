@@ -2,7 +2,6 @@ import { FastifyInstance } from "fastify";
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { pipeline } from "node:stream/promises";
 import { prisma } from "../../lib/prisma.js";
 import {
     deletePropertyImageParamsSchema,
@@ -13,7 +12,6 @@ import {
     propertyImageDeleteResponseSchema,
     propertyImageErrorResponseSchema,
     propertyImageSuccessResponseSchema,
-    uploadPropertyImageBodySchema,
     uploadPropertyImageParamsSchema,
 } from "./property-image.swagger.js";
 import { JwtUser } from "../permission/permission.types.js";
@@ -53,7 +51,6 @@ export async function propertyImageRoutes(app: FastifyInstance) {
                 security: [{ bearerAuth: [] }],
                 consumes: ["multipart/form-data"],
                 params: uploadPropertyImageParamsSchema,
-                body: uploadPropertyImageBodySchema,
                 response: {
                     201: propertyImageSuccessResponseSchema,
                     400: propertyImageErrorResponseSchema,
@@ -110,82 +107,126 @@ export async function propertyImageRoutes(app: FastifyInstance) {
                 });
             }
 
-            const file = await request.file();
-
-            if (!file) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message: "Image file is required.",
-                    code: "IMAGE_FILE_REQUIRED",
-                    requestId: request.id,
-                });
-            }
-
-            if (!file.mimetype.startsWith("image/")) {
-                return sendError({
-                    reply,
-                    statusCode: 400,
-                    message: "Only image files are allowed.",
-                    code: "INVALID_IMAGE_FILE",
-                    requestId: request.id,
-                });
-            }
+            let storedPath: string | null = null;
 
             try {
-                await ensureUploadDir();
+                const file =
+                    await request.file();
 
-                const extension = getFileExtension(file.filename);
-                const storedFilename = `${randomUUID()}${extension}`;
-                const storedPath = path.join(UPLOAD_DIR, storedFilename);
-
-                const fileHandle = await fs.open(storedPath, "w");
-
-                try {
-                    await pipeline(file.file, fileHandle.createWriteStream());
-                } finally {
-                    await fileHandle.close();
+                if (!file) {
+                    return sendError({
+                        reply,
+                        statusCode: 400,
+                        message: "Image file is required.",
+                        code: "IMAGE_FILE_REQUIRED",
+                        requestId: request.id,
+                    });
                 }
 
-                const currentImageCount = await prisma.propertyImage.count({
-                    where: {
-                        propertyId,
-                    },
-                });
+                if (
+                    !file.mimetype.startsWith(
+                        "image/"
+                    )
+                ) {
+                    return sendError({
+                        reply,
+                        statusCode: 400,
+                        message:
+                            "Only image files are allowed.",
+                        code: "INVALID_IMAGE_FILE",
+                        requestId: request.id,
+                    });
+                }
 
-                const imageUrl = `/uploads/properties/${storedFilename}`;
+                await ensureUploadDir();
 
-                const propertyImage = await prisma.propertyImage.create({
-                    data: {
-                        propertyId,
-                        url: imageUrl,
-                        altText: file.filename,
-                        sortOrder: currentImageCount,
-                    },
-                    select: {
-                        id: true,
-                        url: true,
-                        altText: true,
-                        sortOrder: true,
-                        propertyId: true,
-                        createdAt: true,
-                        updatedAt: true,
-                    },
-                });
+                const extension =
+                    getFileExtension(
+                        file.filename
+                    );
+
+                const storedFilename =
+                    `${randomUUID()}${extension}`;
+
+                storedPath = path.join(
+                    UPLOAD_DIR,
+                    storedFilename
+                );
+
+                const fileBuffer =
+                    await file.toBuffer();
+
+                await fs.writeFile(
+                    storedPath,
+                    fileBuffer
+                );
+
+                const currentImageCount =
+                    await prisma.propertyImage.count({
+                        where: {
+                            propertyId,
+                        },
+                    });
+
+                const imageUrl =
+                    `/uploads/properties/${storedFilename}`;
+
+                const propertyImage =
+                    await prisma.propertyImage.create({
+                        data: {
+                            propertyId,
+                            url: imageUrl,
+                            altText:
+                                file.filename,
+                            sortOrder:
+                                currentImageCount,
+                        },
+                        select: {
+                            id: true,
+                            url: true,
+                            altText: true,
+                            sortOrder: true,
+                            propertyId: true,
+                            createdAt: true,
+                            updatedAt: true,
+                        },
+                    });
 
                 return sendSuccess({
                     reply,
                     statusCode: 201,
-                    message: "Property image uploaded successfully",
+                    message:
+                        "Property image uploaded successfully",
                     data: propertyImage,
                 });
             } catch (error) {
+                if (storedPath) {
+                    try {
+                        await fs.unlink(
+                            storedPath
+                        );
+                    } catch {
+                        // Ignore cleanup failure.
+                    }
+                }
+
+                request.log.error(
+                    {
+                        error,
+                        propertyId,
+                    },
+                    "Property image upload failed"
+                );
+
                 return sendError({
                     reply,
                     statusCode: 400,
                     message:
-                        error instanceof Error ? error.message : "Failed to upload image",
-                    code: "PROPERTY_IMAGE_OPERATION_FAILED",
+                        error instanceof Error
+                            ? error.message
+                            : "Failed to upload image",
+                    code:
+                        "PROPERTY_IMAGE_OPERATION_FAILED",
                     requestId: request.id,
                 });
             }

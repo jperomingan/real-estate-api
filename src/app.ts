@@ -195,6 +195,12 @@ export async function buildApp() {
     prefix: "/api/admin",
   });
 
+  await app.register(multipart, {
+    limits: {
+      fileSize: 5 * 1024 * 1024,
+    },
+  });
+
   await app.register(propertyRoutes, {
     prefix: "/api/properties",
   });
@@ -232,12 +238,6 @@ export async function buildApp() {
   });
 
   await app.register(reportRoutes, { prefix: "/api/reports" });
-
-  await app.register(multipart, {
-    limits: {
-      fileSize: 5 * 1024 * 1024,
-    },
-  });
 
   await app.register(fastifyStatic, {
     root: path.join(process.cwd(), "uploads"),
