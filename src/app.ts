@@ -184,7 +184,7 @@ export async function buildApp() {
 
   await app.register(systemRoutes);
 
-  await app.register(corsPlugin);
+  await corsPlugin(app);
 
   // Routes must come after CORS
   await app.register(authRoutes, {

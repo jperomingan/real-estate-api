@@ -1,27 +1,61 @@
 import cors from "@fastify/cors";
 import { FastifyInstance } from "fastify";
-import { allowedOrigins, isDevelopment } from "../config/env.js";
+import {
+  allowedOrigins,
+  isDevelopment,
+} from "../config/env.js";
 
-export async function corsPlugin(app: FastifyInstance) {
-    await app.register(cors, {
-        credentials: true,
-        origin: (origin, callback) => {
-            if (!origin) {
-                callback(null, true);
-                return;
-            }
+export async function corsPlugin(
+  app: FastifyInstance,
+) {
+  await app.register(cors, {
+    credentials: true,
 
-            if (isDevelopment && origin.startsWith("http://localhost")) {
-                callback(null, true);
-                return;
-            }
+    methods: [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS",
+    ],
 
-            if (allowedOrigins.includes(origin)) {
-                callback(null, true);
-                return;
-            }
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Request-Id",
+    ],
 
-            callback(new Error(`Origin not allowed by CORS: ${origin}`), false);
-        },
-    });
+    origin: (origin, callback) => {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (
+        isDevelopment &&
+        origin.startsWith(
+          "http://localhost",
+        )
+      ) {
+        callback(null, true);
+        return;
+      }
+
+      if (
+        allowedOrigins.includes(origin)
+      ) {
+        callback(null, true);
+        return;
+      }
+
+      callback(
+        new Error(
+          `Origin not allowed by CORS: ${origin}`,
+        ),
+        false,
+      );
+    },
+  });
 }
