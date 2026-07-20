@@ -1,8 +1,10 @@
+import { Prisma, LeadSource, LeadStatus } from "../../generated/prisma/client.js";
 import { prisma } from "../../lib/prisma.js";
 import { CreateLeadInput } from "./lead.schema.js";
 import { JwtUser } from "../permission/permission.types.js";
 import { createNotification } from "../notification/notification.service.js";
 import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
+
 
 const leadSelect = {
     id: true,
@@ -123,9 +125,9 @@ export async function getLeads(
     },
     user: JwtUser
 ) {
-    const where: any = {
-        ...(query.status ? { status: query.status } : {}),
-        ...(query.source ? { source: query.source } : {}),
+    const where: Prisma.LeadWhereInput = {
+        ...(query.status ? { status: query.status as LeadStatus } : {}),
+        ...(query.source ? { source: query.source as LeadSource } : {}),
         ...(query.propertyId ? { propertyId: query.propertyId } : {}),
         ...(query.brokerId ? { brokerId: query.brokerId } : {}),
         ...(query.search
@@ -167,7 +169,7 @@ export async function getLeads(
             page: query.page,
             limit: query.limit,
             total,
-          }),
+        }),
     };
 }
 

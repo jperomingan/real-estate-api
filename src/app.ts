@@ -89,8 +89,6 @@ export async function buildApp() {
     });
   }
 
-  await corsPlugin(app);
-
   await app.register(jwt, {
     secret: env.JWT_SECRET,
   });
@@ -186,6 +184,9 @@ export async function buildApp() {
 
   await app.register(systemRoutes);
 
+  await app.register(corsPlugin);
+
+  // Routes must come after CORS
   await app.register(authRoutes, {
     prefix: "/api/auth",
   });

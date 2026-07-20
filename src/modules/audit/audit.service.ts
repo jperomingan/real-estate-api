@@ -1,6 +1,7 @@
-import { Prisma } from "../../generated/prisma/client.js";
+import { Prisma, AuditAction as PrismaAuditAction } from "../../generated/prisma/client.js";
 import { prisma } from "../../lib/prisma.js";
 import { buildPagination, getPaginationOffset } from "../../utils/pagination.js";
+
 
 type AuditAction =
     | "CREATE"
@@ -77,8 +78,8 @@ export async function getAuditLogs(query: {
     page: number;
     limit: number;
 }) {
-    const where: any = {
-        ...(query.action ? { action: query.action } : {}),
+    const where: Prisma.AuditLogWhereInput = {
+        ...(query.action ? { action: query.action as PrismaAuditAction } : {}),
         ...(query.resourceType ? { resourceType: query.resourceType } : {}),
         ...(query.resourceId ? { resourceId: query.resourceId } : {}),
         ...(query.actorUserId ? { actorUserId: query.actorUserId } : {}),
@@ -116,7 +117,7 @@ export async function getAuditLogs(query: {
             page: query.page,
             limit: query.limit,
             total,
-          }),
+        }),
     };
 }
 
