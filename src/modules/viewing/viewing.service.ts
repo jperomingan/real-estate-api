@@ -369,7 +369,7 @@ export async function getViewingAppointments(
   );
 
   const [items, total] =
-    await prisma.$transaction([
+    await Promise.all([
       prisma.viewingAppointment.findMany({
         where,
         select: viewingSelect,
