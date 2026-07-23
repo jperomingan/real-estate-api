@@ -530,7 +530,7 @@ export async function getRevenues(
     );
 
   const [items, total] =
-    await prisma.$transaction([
+    await Promise.all([
       prisma.revenue.findMany({
         where,
         select:
