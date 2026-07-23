@@ -119,7 +119,7 @@ export async function getNotifications(
 
   const skip = getPaginationOffset(query.page, query.limit);
 
-  const [items, total] = await prisma.$transaction([
+  const [items, total] = await Promise.all([
     prisma.notification.findMany({
       where,
       select: notificationSelect,
