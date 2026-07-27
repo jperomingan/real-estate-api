@@ -96,7 +96,7 @@ export async function getAuditLogs(query: {
 
     const skip = getPaginationOffset(query.page, query.limit);
 
-    const [items, total] = await prisma.$transaction([
+    const [items, total] = await Promise.all([
         prisma.auditLog.findMany({
             where,
             select: auditLogSelect,
