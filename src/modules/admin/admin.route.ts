@@ -98,7 +98,7 @@ export async function adminRoutes(app: FastifyInstance) {
 
             const skip = getPaginationOffset(page, limit);
 
-            const [users, total] = await prisma.$transaction([
+            const [users, total] = await Promise.all([
                 prisma.user.findMany({
                     where,
                     select: userSelect,
