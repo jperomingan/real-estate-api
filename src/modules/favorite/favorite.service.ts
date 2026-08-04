@@ -286,7 +286,7 @@ export async function getUserFavorites(
 
   const skip = getPaginationOffset(query.page, query.limit);
 
-  const [items, total] = await prisma.$transaction([
+  const [items, total] = await Promise.all([
     prisma.propertyFavorite.findMany({
       where,
 
